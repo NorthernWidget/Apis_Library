@@ -118,18 +118,6 @@ class Apis
          */
         String getString(bool takeNewReadings = true);
 
-        /**
-         * @brief CapitalCase version of getHeader() for backwards compatibility
-         */
-        String GetHeader();
-
-        /**
-         * @brief CapitalCase version of getString() for backwards compatibility
-         * @param[in] takeNewReadings: if `true` run `updateMeasurements` before
-         * returning values. Otherwise, just return values.
-         */
-        String GetString(bool takeNewReadings = true);
-
     private:
         //Default address
         uint8_t ADR = ADR_DEFAULT;

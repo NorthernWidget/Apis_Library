@@ -128,14 +128,3 @@ String Apis::getHeader() {
     return "Range [cm],Pitch [deg],Roll [deg],";
 }
 
-// Although Arduino standards are for functions to be camelCase, there is a 
-// legacy of CapitalCase. Therefore, to not break backwards compatibility:
-
-String Apis::GetString(bool takeNewReadings) {
-    return getString(takeNewReadings);
-}
-
-String Apis::GetHeader() {
-    return getHeader();
-}
-
