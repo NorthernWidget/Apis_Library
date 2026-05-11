@@ -33,6 +33,15 @@ License: GNU GPL v3. You should find a copy in the repository.
 #define sensitivityLow       2
 #define sensitivityMaxRange  3
 
+// Sentinel values used by all getters and getString() output:
+//   -9999  Sensor error: hardware fault, I2C failure, or out-of-range reading.
+//   -9998  Not yet measured: begin() has been called but no successful
+//          updateMeasurements() (or updateRange()/updateOrientation()) has
+//          completed. Distinct from -9999 so callers can tell the difference
+//          between "the sensor failed" and "we haven't asked yet."
+// Both sentinels apply to all measurement types: range, pitch, roll,
+// and all statistics (mean, std, sterr).
+
 // NW standard component constants for raw reading interface.
 // TODO: Move to NW template library when created.
 #ifndef NW_READING_ALL
@@ -244,22 +253,22 @@ class Apis
         uint16_t _nOrientReadings;
         bool     _orientStats;
 
-        // Stored measurements.
-        // Initialized to -9998: not yet measured (distinct from -9999 error).
+        // Stored measurements and statistics.
+        // All initialised to -9998 (not yet measured); set to -9999 on error.
         int16_t _range = -9998;
         float   _pitch = -9998;
         float   _roll  = -9998;
 
         // Range statistics
         float _rangeMean  = -9998;
-        float _rangeStd   = 0;
-        float _rangeSterr = 0;
+        float _rangeStd   = -9998;
+        float _rangeSterr = -9998;
 
         // Orientation statistics
-        float _pitchStd   = 0;
-        float _pitchSterr = 0;
-        float _rollStd    = 0;
-        float _rollSterr  = 0;
+        float _pitchStd   = -9998;
+        float _pitchSterr = -9998;
+        float _rollStd    = -9998;
+        float _rollSterr  = -9998;
 
         // Sensor sensitivity; set initially to default "balanced" mode
         uint8_t _sensitivity = sensitivityBalanced;
