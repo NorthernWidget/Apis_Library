@@ -25,4 +25,4 @@ void loop() {
 
 See [examples/](examples/) for a complete demo and Margay logger integration.
 
-**Full API reference:** https://northernwidget.github.io/Apis_Library/
+**Full API reference:** https://docs.northernwidget.com/Apis_Library/
