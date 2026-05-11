@@ -81,6 +81,10 @@ bool Apis::updateOrientation() {
     float gx = dataSet[0], gy = dataSet[1], gz = dataSet[2];
     float offsetX = dataSet[3], offsetY = dataSet[4], offsetZ = dataSet[5];
 
+    // When software I2C reads fail, the ATTiny returns 0xFF per byte. Two 0xFF
+    // bytes assembled as int16_t (0xFFFF) and right-shifted 4 gives -1 on AVR
+    // (arithmetic shift). All three axes equal to -1 is therefore the I2C bus
+    // failure signature, not a physical accelerometer reading.
     if (gx == gy && gx == gz && gx == -1) {
         _pitch = _roll = -9999;
         return false;
@@ -170,6 +174,8 @@ bool Apis::updateMeasurements() {
         _rollSterr  = (orientN > 1) ? _rollStd  / sqrt((float)orientN) : 0;
     }
 
+    // Float comparisons with -9999 are safe: the value is assigned directly,
+    // never computed, so the float representation is exact and consistent.
     return (_range != -9999) && (_pitch != -9999) && (_roll != -9999);
 }
 
