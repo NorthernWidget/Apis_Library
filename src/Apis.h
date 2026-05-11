@@ -21,6 +21,10 @@ License: GNU GPL v3. You should find a copy in the repository.
 #include <Arduino.h>
 #include <Wire.h>
 
+#ifndef M_PI
+  #define M_PI 3.14159265358979323846
+#endif
+
 #define ADR_DEFAULT 0x50 // Define default address.
 
 // Sensitivity
