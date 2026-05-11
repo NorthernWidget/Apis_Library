@@ -4,15 +4,16 @@ Apis::Apis()
 {
 }
 
-void Apis::begin(uint8_t ADR_, uint8_t Sensitivity)
+bool Apis::begin(uint8_t ADR_, uint8_t Sensitivity)
 {
     // Set address and sensitivity
     ADR = ADR_;
+    sensitivity = Sensitivity;
     Wire.begin();
     Wire.beginTransmission(ADR_);
     Wire.write(0x01);
     Wire.write(Sensitivity);
-    Wire.endTransmission();
+    return Wire.endTransmission() == 0;
 }
 
 bool Apis::updateRange() {

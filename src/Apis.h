@@ -78,8 +78,9 @@ class Apis
          * CONSIDER A SET_SENSITIVITY FUNCTION IN THE FUTURE TO ALLOW THE
          * SENSOR TO AUTOMATICALLY ADJUST THE SENSITIVITY TO RECEIVE THE BEST
          * POSSIBLE RETURN
+         * @return true if the device acknowledges on I2C, false otherwise.
          */
-        void begin(uint8_t Address_ = ADR_DEFAULT, \
+        bool begin(uint8_t Address_ = ADR_DEFAULT,
                    uint8_t sensitivity = sensitivityBalanced);
 
         /**
