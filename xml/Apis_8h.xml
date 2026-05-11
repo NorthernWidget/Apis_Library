@@ -1,0 +1,328 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="Apis_8h" kind="file" language="C++">
+    <compoundname>Apis.h</compoundname>
+    <includes local="no">Arduino.h</includes>
+    <includes local="no">Wire.h</includes>
+    <includedby refid="Apis_8cpp" local="yes">src/Apis.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>src/Apis.h</label>
+        <link refid="Apis_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Arduino.h</label>
+      </node>
+      <node id="3">
+        <label>Wire.h</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classApis" prot="public">Apis</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="Apis_8h_1ae71449b1cc6e6250b91f539153a7a0d3" prot="public" static="no">
+        <name>M_PI</name>
+        <initializer>3.14159265358979323846</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="24" column="11" bodyfile="src/Apis.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a0adff53210e44ca7d64907c867f0f7c2" prot="public" static="no">
+        <name>ADR_DEFAULT</name>
+        <initializer>0x50</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="27" column="9" bodyfile="src/Apis.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a6a8a64ac2ad0f1fe56becb152c1c3f62" prot="public" static="no">
+        <name>APIS_ERROR</name>
+        <initializer>-9999</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sentinel returned by all getters and printed by getString() when a measurement fails due to hardware fault, I2C failure, or out-of-range reading. Applies to all measurement types: range, pitch, roll, and all derived statistics (mean, std, sterr). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="59" column="9" bodyfile="src/Apis.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a6c748f2879cb477de07867b327105e20" prot="public" static="no">
+        <name>APIS_NOT_MEASURED</name>
+        <initializer>-9998</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sentinel returned by all getters and printed by getString() when begin() has been called but no successful updateMeasurements() (or updateRange()/updateOrientation()) has yet completed. Distinct from APIS_ERROR so callers can tell the difference between &quot;the sensor failed&quot; and &quot;we haven&apos;t asked yet.&quot; </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="66" column="9" bodyfile="src/Apis.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1aa6c66b67a689d8aad5485015417ff64d" prot="public" static="no">
+        <name>NW_READING_ALL</name>
+        <initializer>0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="71" column="11" bodyfile="src/Apis.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a62e9833e169b2e4da2e89503d1e9b3bf" prot="public" static="no">
+        <name>NW_READING_PRIMARY</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="72" column="11" bodyfile="src/Apis.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a7dd8f0ee8160632f305a55b08b721059" prot="public" static="no">
+        <name>NW_READING_SECONDARY</name>
+        <initializer>2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="73" column="11" bodyfile="src/Apis.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a4ac8d3e30ed50525fe041ed6b3542456" prot="public" static="no">
+        <name>NW_READING_RANGE</name>
+        <initializer>NW_READING_PRIMARY</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="76" column="9" bodyfile="src/Apis.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="Apis_8h_1a70d771c24fe58cf5091e722f80c71383" prot="public" static="no">
+        <name>NW_READING_ORIENT</name>
+        <initializer>NW_READING_SECONDARY</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="77" column="9" bodyfile="src/Apis.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="Apis_8h_1ab23e6a6769337c926145cd879fd86f84" prot="public" static="no" strong="no">
+        <type>uint8_t</type>
+        <name>SensitivityMode</name>
+        <enumvalue id="Apis_8h_1ab23e6a6769337c926145cd879fd86f84af00b23d214b3e04ce7685a5fec8022a5" prot="public">
+          <name>SENSITIVITY_BALANCED</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Default. SIG_COUNT_VAL=0x80, THRESHOLD_BYPASS=0x00. Balanced range and noise performance. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="Apis_8h_1ab23e6a6769337c926145cd879fd86f84afe156e402b14e9902908e58b954ae6bf" prot="public">
+          <name>SENSITIVITY_HIGH</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>THRESHOLD_BYPASS=0x80. Lower detection threshold; detects weaker returns at the cost of more false positives. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="Apis_8h_1ab23e6a6769337c926145cd879fd86f84ac25a530380a53a4a1fee5be34afbf05c" prot="public">
+          <name>SENSITIVITY_LOW</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>THRESHOLD_BYPASS=0xB0. Higher detection threshold; fewer false positives at the cost of reduced range. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="Apis_8h_1ab23e6a6769337c926145cd879fd86f84aba257d6fce5e46eb36d7121f2bcb48b3" prot="public">
+          <name>SENSITIVITY_MAX_RANGE</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>SIG_COUNT_VAL=0xFF. More acquisitions per measurement; longer maximum range, slower throughput. </para>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Sensitivity mode for the LiDAR Lite acquisition pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Written to firmware register 0x01 by begin(); applied on every loop() iteration when the firmware reinitialises the LiDAR Lite via InitLiDAR(). Two LiDAR Lite registers drive the behaviour:<itemizedlist>
+<listitem><para>SIG_COUNT_VAL (0x02): maximum acquisition count per measurement. Higher values average more returns, extending usable range but slowing throughput.</para>
+</listitem><listitem><para>THRESHOLD_BYPASS (0x1C): signal detection threshold. Lower values detect weaker returns (higher sensitivity, more false positives); higher values suppress weak returns (fewer false positives, less range). TODO: consider automatic mode selection based on signal quality feedback from the LiDAR Lite. </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="43" column="1" bodyfile="src/Apis.h" bodystart="43" bodyend="53"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/******************************************************************************</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">Apis.h</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"></highlight></codeline>
+<codeline lineno="4"><highlight class="comment">Library<sp/>for<sp/>the<sp/>Apis<sp/>interface<sp/>board<sp/>for<sp/>a<sp/>LiDAR<sp/>Lite<sp/>unit.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"></highlight></codeline>
+<codeline lineno="6"><highlight class="comment">Andrew<sp/>Wickert</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">Based<sp/>loosely<sp/>on<sp/>early<sp/>code<sp/>by<sp/>Bobby<sp/>Schulz,<sp/>including</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">https://github.com/NorthernWidget/Project-Apis/tree/master/Software/LiDARLite_I2CParse</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"></highlight></codeline>
+<codeline lineno="10"><highlight class="comment">Started<sp/>2020.05.01</highlight></codeline>
+<codeline lineno="11"><highlight class="comment">Hardware<sp/>located<sp/>at:</highlight></codeline>
+<codeline lineno="12"><highlight class="comment">https://github.com/NorthernWidget/Project-Apis</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"></highlight></codeline>
+<codeline lineno="14"><highlight class="comment">License:<sp/>GNU<sp/>GPL<sp/>v3.<sp/>You<sp/>should<sp/>find<sp/>a<sp/>copy<sp/>in<sp/>the<sp/>repository.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment">******************************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>Apis_h</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>Apis_h</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;Arduino.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;Wire.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>M_PI</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>M_PI<sp/>3.14159265358979323846</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ADR_DEFAULT<sp/>0x50<sp/></highlight><highlight class="comment">//<sp/>Define<sp/>default<sp/>address.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>SensitivityMode<sp/>:<sp/>uint8_t<sp/>{</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>SENSITIVITY_BALANCED<sp/><sp/>=<sp/>0,<sp/></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>SENSITIVITY_HIGH<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1,<sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>SENSITIVITY_LOW<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>2,<sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>SENSITIVITY_MAX_RANGE<sp/>=<sp/>3<sp/><sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="preprocessor">#define<sp/>APIS_ERROR<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>-9999</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="preprocessor">#define<sp/>APIS_NOT_MEASURED<sp/>-9998</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="comment">//<sp/>NW<sp/>standard<sp/>component<sp/>constants<sp/>for<sp/>raw<sp/>reading<sp/>interface.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="comment">//<sp/>TODO:<sp/>Move<sp/>to<sp/>NW<sp/>template<sp/>library<sp/>when<sp/>created.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>NW_READING_ALL</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>NW_READING_ALL<sp/><sp/><sp/><sp/><sp/><sp/><sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>NW_READING_PRIMARY<sp/><sp/><sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>NW_READING_SECONDARY<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Apis-specific<sp/>aliases</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NW_READING_RANGE<sp/><sp/>NW_READING_PRIMARY</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NW_READING_ORIENT<sp/>NW_READING_SECONDARY</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96" refid="classApis" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classApis" kindref="compound">Apis</ref></highlight></codeline>
+<codeline lineno="97"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classApis" kindref="compound">Apis</ref>(uint16_t<sp/>nRangeReadings<sp/>=<sp/>1,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>rangeStats<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/>nOrientReadings<sp/>=<sp/>1,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>orientStats<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classApis_1aba7e5f1321f935e623593aabb9ad0000" kindref="member">begin</ref>(uint8_t<sp/>address<sp/>=<sp/>ADR_DEFAULT,</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SensitivityMode<sp/>sensitivity<sp/>=<sp/>SENSITIVITY_BALANCED);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Configuration<sp/>setters<sp/>---</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1a32b3cb6ffb97a383b28689cd26070552" kindref="member">setNRangeReadings</ref>(uint16_t<sp/>n);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1a09971a358d18af5ccd4c48627867c55e" kindref="member">setRangeStats</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>enable);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1ac22ea692312681deb6617e53fb981a78" kindref="member">setNOrientReadings</ref>(uint16_t<sp/>n);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1a870ebacd3880d0bf5a7dc45ebb50d393" kindref="member">setOrientStats</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>enable);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1ac2bc557f643e09039f8bacb2eaae18fb" kindref="member">setRangefinderSensitivity</ref>(SensitivityMode<sp/>mode);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classApis_1a58129d38075f5c274d9fb23f0937d779" kindref="member">updateRange</ref>();</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classApis_1a5f3edfb393fa0f7069e9aedeb35938c3" kindref="member">updateOrientation</ref>();</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classApis_1acf99958ddc5af54b2df173a040339dad" kindref="member">updateMeasurements</ref>();</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Single-value<sp/>getters<sp/>---</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>int16_t<sp/><ref refid="classApis_1a544fbcce448c7aeecada9ee6c7787249" kindref="member">getRange</ref>();</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1a869ff37d7fe17f1a54771f02ba9f0784" kindref="member">getRoll</ref>();</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1ae8b1d1a59abab5dfd5d2f691cb7c8c0f" kindref="member">getPitch</ref>();</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Statistics<sp/>getters<sp/>---</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1a9eaa99ce9c0329e821d426a060166210" kindref="member">getRangeMean</ref>();</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1a65acf8f0093e6b5537f401eeba972077" kindref="member">getRangeStd</ref>();</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1afc37967c1111dd168ec4b865e971646c" kindref="member">getRangeSterr</ref>();</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1acf427c44fddc8dd842b64af648df48cb" kindref="member">getPitchStd</ref>();</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1a4a273369b0bcb3cc3d1cceae541c5061" kindref="member">getPitchSterr</ref>();</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1ad28fcc698aa7669eb1ee79a13f789a8b" kindref="member">getRollStd</ref>();</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="classApis_1a3a4d20f5a956c9cc527c3337dd4e2bf5" kindref="member">getRollSterr</ref>();</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>String<sp/><ref refid="classApis_1a69932db165067ad63819e201aeffaf1d" kindref="member">getHeader</ref>();</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>String<sp/><ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>takeNewReadings<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Raw<sp/>reading<sp/>interface<sp/>(NW<sp/>standard)<sp/>---</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1a9aaca11b8d727ba8e2fb480ca630cfc5" kindref="member">beginRawReadings</ref>(uint8_t<sp/>component<sp/>=<sp/>NW_READING_ALL);</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"></highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/><ref refid="classApis_1a8f2b588cee5ef4d029911dd2e757fb58" kindref="member">takeRawReading</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>buf,<sp/>uint16_t<sp/>offset);</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classApis_1aca52f03b98eb0183f21c40617b8741af" kindref="member">endRawReadings</ref>();</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"></highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_waitUntilReady();</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"></highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>I2C<sp/>address</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/>_adr<sp/>=<sp/>ADR_DEFAULT;</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"></highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Configuration</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/>_nRangeReadings;</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>_rangeStats;</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/>_nOrientReadings;</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>_orientStats;</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"></highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Stored<sp/>measurements<sp/>and<sp/>statistics.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>All<sp/>initialised<sp/>to<sp/>APIS_NOT_MEASURED;<sp/>set<sp/>to<sp/>APIS_ERROR<sp/>on<sp/>error.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>int16_t<sp/>_range<sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><sp/><sp/>_pitch<sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><sp/><sp/>_roll<sp/><sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"></highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Range<sp/>statistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_rangeMean<sp/><sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_rangeStd<sp/><sp/><sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_rangeSterr<sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"></highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Orientation<sp/>statistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_pitchStd<sp/><sp/><sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_pitchSterr<sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_rollStd<sp/><sp/><sp/><sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_rollSterr<sp/><sp/>=<sp/>APIS_NOT_MEASURED;</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"></highlight></codeline>
+<codeline lineno="297"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Sensor<sp/>sensitivity;<sp/>set<sp/>initially<sp/>to<sp/>default<sp/>&quot;balanced&quot;<sp/>mode</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SensitivityMode<sp/>_sensitivity<sp/>=<sp/>SENSITIVITY_BALANCED;</highlight></codeline>
+<codeline lineno="299"><highlight class="normal"></highlight></codeline>
+<codeline lineno="300"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>True<sp/>after<sp/>begin();<sp/>cleared<sp/>after<sp/>_waitUntilReady()<sp/>fires<sp/>once.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="301"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>_needsStartupDelay<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="302"><highlight class="normal"></highlight></codeline>
+<codeline lineno="303"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Raw<sp/>reading<sp/>state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="304"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/>_rawComponent<sp/>=<sp/>NW_READING_ALL;</highlight></codeline>
+<codeline lineno="305"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="306"><highlight class="normal"></highlight></codeline>
+<codeline lineno="307"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="src/Apis.h"/>
+  </compounddef>
+</doxygen>

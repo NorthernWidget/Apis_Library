@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="md_README" kind="page">
+    <compoundname>md_README</compoundname>
+    <title>Summary</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_README_1autotoc_md1"/> Members | Descriptions <linebreak/>
+ -----------------------------<mdash/>|------------------------------------------<mdash/> <computeroutput>define</computeroutput>`ADR_DEFAULT` | <computeroutput>define</computeroutput>`sensitivityBalanced` | <computeroutput>define</computeroutput>`sensitivityHigh` | <computeroutput>define</computeroutput>`sensitivityLow` | <computeroutput>define</computeroutput>`sensitivityMaxRange` | <computeroutput>class</computeroutput>`SymbiontLiDAR` | Arduino library for the Symbiont board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).</para>
+<sect1 id="md_README_1autotoc_md2">
+<title>Members</title>
+<sect3 id="md_README_1autotoc_md3">
+<title>&lt;tt&gt;define&lt;/tt&gt;@ref &quot;SymbiontLiDAR_8h_1a0adff53210e44ca7d64907c867f0f7c2&quot; &quot;`ADR_DEFAULT`&quot;</title>
+</sect3>
+<sect3 id="md_README_1autotoc_md4">
+<title>&lt;tt&gt;define&lt;/tt&gt;@ref &quot;SymbiontLiDAR_8h_1ac5f84af277667e482a5c7da45bd05279&quot; &quot;`sensitivityBalanced`&quot;</title>
+</sect3>
+<sect3 id="md_README_1autotoc_md5">
+<title>&lt;tt&gt;define&lt;/tt&gt;@ref &quot;SymbiontLiDAR_8h_1a0eb3f50ee661ddbb02c717f0c7de7103&quot; &quot;`sensitivityHigh`&quot;</title>
+</sect3>
+<sect3 id="md_README_1autotoc_md6">
+<title>&lt;tt&gt;define&lt;/tt&gt;@ref &quot;SymbiontLiDAR_8h_1ae15ccf3e0b28d824d29aa6a5a576b406&quot; &quot;`sensitivityLow`&quot;</title>
+</sect3>
+<sect3 id="md_README_1autotoc_md7">
+<title>&lt;tt&gt;define&lt;/tt&gt;@ref &quot;SymbiontLiDAR_8h_1ac5d85ad8b1ed6450af2dca73d8cce8bb&quot; &quot;`sensitivityMaxRange`&quot;</title>
+</sect3>
+</sect1>
+<sect1 id="md_README_1autotoc_md8">
+<title>class &lt;tt&gt;SymbiontLiDAR&lt;/tt&gt;</title>
+<para>Arduino library for the Symbiont board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).</para>
+<para>Interface with the SymbiontLiDAR module.</para>
+<para>Library to communicate with the SymbiontLiDAR module, which connects to a LiDAR Lite rangefinder.The Symbiont is equipped with capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is palced on a cliff a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the Symbiont is essential, and the Symbiont therefore acts as a buffer to protect the data logger from raw sensor failures.</para>
+<para><ulink url="https://zenodo.org/badge/latestdoi/260392682"><image type="html" name="https://zenodo.org/badge/260392682.svg" alt="DOI" inline="yes"></image>
+</ulink></para>
+<sect2 id="md_README_1autotoc_md9">
+<title>Summary</title>
+<para><table rows="11" cols="2"><row>
+<entry thead="yes"><para>Members   </para>
+</entry><entry thead="yes"><para>Descriptions    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public</computeroutput>`SymbiontLiDAR`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>Instantiate SymbiontLiDAR object.    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public void</computeroutput>`begin`<computeroutput>(uint8_t Address_,uint8_t sensitivity)</computeroutput>   </para>
+</entry><entry thead="no"><para>Begin communications with the Symbiont using a prescribed address.    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public bool</computeroutput>`updateMeasurements`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>Measure range [cm], roll [deg] and pitch [deg]. Returns &quot;0&quot; if sensors read error values; else returns &quot;1&quot;.    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public float</computeroutput>`getRange`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>Return range [cm].    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public float</computeroutput>`getRoll`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>Return roll [deg].    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public float</computeroutput>`getPitch`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>Return pitch [deg].    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public String</computeroutput>`getHeader`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>Return a comma-separated header: &quot;Range [cm],Pitch [deg],Roll [deg],&quot;.    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public String</computeroutput>`getString`<computeroutput>(bool takeNewReadings)</computeroutput>   </para>
+</entry><entry thead="no"><para>Return comma-separated data values.    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public String</computeroutput>`GetHeader`<computeroutput>()</computeroutput>   </para>
+</entry><entry thead="no"><para>CapitalCase version of getHeader() for backwards compatibility.    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>public String</computeroutput>`GetString`<computeroutput>(bool takeNewReadings)</computeroutput>   </para>
+</entry><entry thead="no"><para>CapitalCase version of getString() for backwards compatibility.   </para>
+</entry></row>
+</table>
+</para>
+</sect2>
+<sect2 id="md_README_1autotoc_md10">
+<title>Members</title>
+<sect4 id="md_README_1autotoc_md11">
+<title>&lt;tt&gt;public&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1af16b0ce31efd8892bfc42ed9f1f13317&quot; &quot;`SymbiontLiDAR`&quot;&lt;tt&gt;()&lt;/tt&gt;</title>
+<para>Instantiate SymbiontLiDAR object.</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md12">
+<title>&lt;tt&gt;public void&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1ad5d076629b619e6b17cb2b68bf459366&quot; &quot;`begin`&quot;&lt;tt&gt;(uint8_t Address_,uint8_t sensitivity)&lt;/tt&gt;</title>
+<para>Begin communications with the Symbiont using a prescribed address.</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md13">
+<title>Parameters</title>
+<para><itemizedlist>
+<listitem><para><computeroutput>Addresss_</computeroutput> default 0x50 DOES NOT YET USE A VARIABLE ADDRESS! DOES NOT MATTER WHAT YOU WRITE HERE. THIS DEFAULT ADDRESS CURRENTLY CLASHES WITH HAAR&apos;S DEFAULT!</para>
+</listitem><listitem><para><computeroutput>sensitivity.</computeroutput> Options are: sensitivityBalanced (0) sensitivityHigh (1) sensitivityLow (2) sensitivityMaxRange (3) Default value: sensitivityBalanced (0) THIS IS ALSO NOT YET IMPLEMENTED IN FIRMWARE! JUST STAYS AT DEFAULT (SENSITIVITY_BALANCED = 0) CONSIDER A SET_SENSITIVITY FUNCTION IN THE FUTURE TO ALLOW THE SENSOR TO AUTOMATICALLY ADJUST THE SENSITIVITY TO RECEIVE THE BEST POSSIBLE RETURN</para>
+</listitem></itemizedlist>
+</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md14">
+<title>&lt;tt&gt;public bool&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1a5bdfb70ff9bd1f02804667c698c0cf87&quot; &quot;`updateMeasurements`&quot;&lt;tt&gt;()&lt;/tt&gt;</title>
+<para>Measure range [cm], roll [deg] and pitch [deg]. Returns &quot;0&quot; if sensors read error values; else returns &quot;1&quot;.</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md15">
+<title>&lt;tt&gt;public float&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1abdd716a0f55526d57f31b853f41280cb&quot; &quot;`getRange`&quot;&lt;tt&gt;()&lt;/tt&gt;</title>
+<para>Return range [cm].</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md16">
+<title>&lt;tt&gt;public float&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1a3ed32c762addeec50be410aca132e16e&quot; &quot;`getRoll`&quot;&lt;tt&gt;()&lt;/tt&gt;</title>
+<para>Return roll [deg].</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md17">
+<title>&lt;tt&gt;public float&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1ad06bac488cb930345d023903e74844a3&quot; &quot;`getPitch`&quot;&lt;tt&gt;()&lt;/tt&gt;</title>
+<para>Return pitch [deg].</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md18">
+<title>&lt;tt&gt;public String&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6&quot; &quot;`getHeader`&quot;&lt;tt&gt;()&lt;/tt&gt;</title>
+<para>Return a comma-separated header: &quot;Range [cm],Pitch [deg],Roll [deg],&quot;.</para>
+</sect4>
+<sect4 id="md_README_1autotoc_md19">
+<title>&lt;tt&gt;public String&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a&quot; &quot;`getString`&quot;&lt;tt&gt;(bool takeNewReadings)&lt;/tt&gt;</title>
+<para>Return comma-separated data values.</para>
+<para>This is the most likely function (alongside getHeader) for an end user to use. Values are returned as: String(Range) + &quot;,&quot; + String(Pitch) + &quot;,&quot; + String(Roll) + &quot;,&quot; Error values are &quot;-9999&quot; (sensor error) and &quot;-9998&quot; (no measurement yet taken&quot;) 
+@paragraph autotoc_md20 Parameters
+* &lt;tt&gt;takeNewReadings&lt;/tt&gt; if &lt;tt&gt;true&lt;/tt&gt; run &lt;tt&gt;updateMeasurements&lt;/tt&gt; before returning values. Otherwise, just return values.
+
+@paragraph autotoc_md21 &lt;tt&gt;public String&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1a4c83d0aa98cc37aa76cff14a7ccc9e61&quot; &quot;`GetHeader`&quot;&lt;tt&gt;()&lt;/tt&gt;
+
+CapitalCase version of @ref &quot;classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6&quot; &quot;getHeader()&quot; for backwards compatibility.
+
+@paragraph autotoc_md22 &lt;tt&gt;public String&lt;/tt&gt;@ref &quot;classSymbiontLiDAR_1ab25a1819d9246ffec7c0512622e1f51b&quot; &quot;`GetString`&quot;&lt;tt&gt;(bool takeNewReadings)&lt;/tt&gt;
+
+CapitalCase version of @ref &quot;classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a&quot; &quot;getString()&quot; for backwards compatibility.
+
+@paragraph autotoc_md23 Parameters
+* &lt;tt&gt;takeNewReadings&lt;/tt&gt; if &lt;tt&gt;true&lt;/tt&gt; run &lt;tt&gt;updateMeasurements&lt;/tt&gt; before returning values. Otherwise, just return values.
+
+Generated by &lt;a href=&quot;<ulink url="https://sourcey.com/moxygen">https://sourcey.com/moxygen</ulink>" &gt;Moxygen </para>
+</sect4>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>

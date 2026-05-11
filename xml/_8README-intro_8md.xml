@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="_8README-intro_8md" kind="file" language="Markdown">
+    <compoundname>.README-intro.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Apis_Library</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4572371.svg)](https://doi.org/10.5281/zenodo.4572371)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Arduino<sp/>library<sp/>for<sp/>the<sp/>[Apis](https://github.com/NorthernWidget/Project-Apis)<sp/>LiDAR<sp/>rangefinder<sp/>board.<sp/>Apis<sp/>manages<sp/>power<sp/>supply,<sp/>firmware<sp/>watchdog,<sp/>and<sp/>I2C<sp/>communication<sp/>for<sp/>a<sp/>LiDAR<sp/>Lite<sp/>unit,<sp/>and<sp/>reads<sp/>a<sp/>MEMS<sp/>accelerometer<sp/>to<sp/>report<sp/>pitch<sp/>and<sp/>roll<sp/>—<sp/>useful<sp/>when<sp/>the<sp/>sensor<sp/>is<sp/>not<sp/>mounted<sp/>level.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Installation:**<sp/>included<sp/>in<sp/>[NorthernWidget-libraries](https://github.com/NorthernWidget/NorthernWidget-libraries).<sp/>Also<sp/>available<sp/>via<sp/>the<sp/>Arduino<sp/>Library<sp/>Manager.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;Apis.h&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Apis<sp/>rangefinder;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">void<sp/>setup()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Serial.begin(9600);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>rangefinder.begin();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Serial.println(rangefinder.getHeader());</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">void<sp/>loop()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Serial.println(rangefinder.getString());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>delay(1000);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">See<sp/>[examples/](examples/)<sp/>for<sp/>a<sp/>complete<sp/>demo<sp/>and<sp/>Margay<sp/>logger<sp/>integration.<sp/>Full<sp/>API<sp/>reference<sp/>follows.</highlight></codeline>
+<codeline></codeline>
+    </programlisting>
+    <location file=".README-intro.md"/>
+  </compounddef>
+</doxygen>

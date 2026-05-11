@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>Apis_Library</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="index_1md__8README-intro"/> <ulink url="https://doi.org/10.5281/zenodo.4572371"><image type="html" name="https://zenodo.org/badge/DOI/10.5281/zenodo.4572371.svg" alt="DOI" inline="yes"></image>
+</ulink></para>
+<para>Arduino library for the <ulink url="https://github.com/NorthernWidget/Project-Apis">Apis</ulink> LiDAR rangefinder board. <ref refid="classApis" kindref="compound">Apis</ref> manages power supply, firmware watchdog, and I2C communication for a LiDAR Lite unit, and reads a MEMS accelerometer to report pitch and roll — useful when the sensor is not mounted level.</para>
+<para><bold>Installation:</bold> included in <ulink url="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</ulink>. Also available via the Arduino Library Manager.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&lt;Apis.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classApis" kindref="compound">Apis</ref><sp/>rangefinder;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>setup()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Serial.<ref refid="classApis_1aba7e5f1321f935e623593aabb9ad0000" kindref="member">begin</ref>(9600);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>rangefinder.<ref refid="classApis_1aba7e5f1321f935e623593aabb9ad0000" kindref="member">begin</ref>();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Serial.println(rangefinder.<ref refid="classApis_1a69932db165067ad63819e201aeffaf1d" kindref="member">getHeader</ref>());</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>loop()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Serial.println(rangefinder.<ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString</ref>());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>delay(1000);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>See <ulink url="examples/">examples/</ulink> for a complete demo and Margay logger integration. Full API reference follows. </para>
+    </detaileddescription>
+    <location file=".README-intro.md"/>
+  </compounddef>
+</doxygen>

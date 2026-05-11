@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="README_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Summary</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/>Members<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Descriptions<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">--------------------------------|---------------------------------------------</highlight></codeline>
+<codeline><highlight class="normal">`define<sp/>`[`ADR_DEFAULT`](#SymbiontLiDAR_8h_1a0adff53210e44ca7d64907c867f0f7c2)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">`define<sp/>`[`sensitivityBalanced`](#SymbiontLiDAR_8h_1ac5f84af277667e482a5c7da45bd05279)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">`define<sp/>`[`sensitivityHigh`](#SymbiontLiDAR_8h_1a0eb3f50ee661ddbb02c717f0c7de7103)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">`define<sp/>`[`sensitivityLow`](#SymbiontLiDAR_8h_1ae15ccf3e0b28d824d29aa6a5a576b406)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">`define<sp/>`[`sensitivityMaxRange`](#SymbiontLiDAR_8h_1ac5d85ad8b1ed6450af2dca73d8cce8bb)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">`class<sp/>`[`SymbiontLiDAR`](#classSymbiontLiDAR)<sp/>|<sp/>Arduino<sp/>library<sp/>for<sp/>the<sp/>Symbiont<sp/>board,<sp/>which<sp/>manages<sp/>a<sp/>LiDAR<sp/>Lite<sp/>unit<sp/>(roll/pitch,<sp/>firmware<sp/>lock/reset,<sp/>power<sp/>supply).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Members</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`define<sp/>`[`ADR_DEFAULT`](#SymbiontLiDAR_8h_1a0adff53210e44ca7d64907c867f0f7c2)<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`define<sp/>`[`sensitivityBalanced`](#SymbiontLiDAR_8h_1ac5f84af277667e482a5c7da45bd05279)<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`define<sp/>`[`sensitivityHigh`](#SymbiontLiDAR_8h_1a0eb3f50ee661ddbb02c717f0c7de7103)<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`define<sp/>`[`sensitivityLow`](#SymbiontLiDAR_8h_1ae15ccf3e0b28d824d29aa6a5a576b406)<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`define<sp/>`[`sensitivityMaxRange`](#SymbiontLiDAR_8h_1ac5d85ad8b1ed6450af2dca73d8cce8bb)<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>class<sp/>`SymbiontLiDAR`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Arduino<sp/>library<sp/>for<sp/>the<sp/>Symbiont<sp/>board,<sp/>which<sp/>manages<sp/>a<sp/>LiDAR<sp/>Lite<sp/>unit<sp/>(roll/pitch,<sp/>firmware<sp/>lock/reset,<sp/>power<sp/>supply).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Interface<sp/>with<sp/>the<sp/>[SymbiontLiDAR](#classSymbiontLiDAR)<sp/>module.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Library<sp/>to<sp/>communicate<sp/>with<sp/>the<sp/>[SymbiontLiDAR](#classSymbiontLiDAR)<sp/>module,<sp/>which<sp/>connects<sp/>to<sp/>a<sp/>LiDAR<sp/>Lite<sp/>rangefinder.The<sp/>Symbiont<sp/>is<sp/>equipped<sp/>with<sp/>capacitors<sp/>to<sp/>handle<sp/>the<sp/>large<sp/>burst<sp/>power<sp/>draw<sp/>from<sp/>the<sp/>LiDAR<sp/>Lite,<sp/>a<sp/>MEMS<sp/>accelerometer<sp/>to<sp/>note<sp/>its<sp/>orientation,<sp/>a<sp/>magnet<sp/>to<sp/>note<sp/>a<sp/>known<sp/>orientation<sp/>(often,<sp/>but<sp/>not<sp/>necessarily,<sp/>horizontal)<sp/>and<sp/>the<sp/>ability<sp/>to<sp/>absorb<sp/>occasional<sp/>firmware<sp/>issues<sp/>that<sp/>lead<sp/>to<sp/>system<sp/>hangs.<sp/>The<sp/>leveling<sp/>helps<sp/>the<sp/>user<sp/>to<sp/>calculate,<sp/>for<sp/>example,<sp/>a<sp/>water<sp/>level<sp/>when<sp/>the<sp/>sensor<sp/>is<sp/>palced<sp/>on<sp/>a<sp/>cliff<sp/>a<sp/>tree<sp/>next<sp/>to<sp/>the<sp/>river<sp/>but<sp/>does<sp/>not<sp/>have<sp/>water<sp/>below<sp/>it.<sp/>The<sp/>level<sp/>loses<sp/>absolute<sp/>accuracy<sp/>when<sp/>near<sp/>plumb,<sp/>so<sp/>a<sp/>Hall-effect<sp/>sensor<sp/>connected<sp/>to<sp/>the<sp/>magnet<sp/>allows<sp/>the<sp/>user<sp/>to<sp/>set<sp/>a<sp/>zero<sp/>value,<sp/>thereby<sp/>correcting<sp/>for<sp/>this.<sp/>Managing<sp/>failures<sp/>of<sp/>the<sp/>LiDAR<sp/>Lite<sp/>within<sp/>the<sp/>Symbiont<sp/>is<sp/>essential,<sp/>and<sp/>the<sp/>Symbiont<sp/>therefore<sp/>acts<sp/>as<sp/>a<sp/>buffer<sp/>to<sp/>protect<sp/>the<sp/>data<sp/>logger<sp/>from<sp/>raw<sp/>sensor<sp/>failures.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[![DOI](https://zenodo.org/badge/260392682.svg)](https://zenodo.org/badge/latestdoi/260392682)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Summary</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/>Members<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Descriptions<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">--------------------------------|---------------------------------------------</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/><sp/>`[`SymbiontLiDAR`](#classSymbiontLiDAR_1af16b0ce31efd8892bfc42ed9f1f13317)`()`<sp/>|<sp/>Instantiate<sp/>[SymbiontLiDAR](#classSymbiontLiDAR)<sp/>object.</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>void<sp/>`[`begin`](#classSymbiontLiDAR_1ad5d076629b619e6b17cb2b68bf459366)`(uint8_t<sp/>Address_,uint8_t<sp/>sensitivity)`<sp/>|<sp/>Begin<sp/>communications<sp/>with<sp/>the<sp/>Symbiont<sp/>using<sp/>a<sp/>prescribed<sp/>address.</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>bool<sp/>`[`updateMeasurements`](#classSymbiontLiDAR_1a5bdfb70ff9bd1f02804667c698c0cf87)`()`<sp/>|<sp/>Measure<sp/>range<sp/>[cm],<sp/>roll<sp/>[deg]<sp/>and<sp/>pitch<sp/>[deg].<sp/>Returns<sp/>&quot;0&quot;<sp/>if<sp/>sensors<sp/>read<sp/>error<sp/>values;<sp/>else<sp/>returns<sp/>&quot;1&quot;.</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>float<sp/>`[`getRange`](#classSymbiontLiDAR_1abdd716a0f55526d57f31b853f41280cb)`()`<sp/>|<sp/>Return<sp/>range<sp/>[cm].</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>float<sp/>`[`getRoll`](#classSymbiontLiDAR_1a3ed32c762addeec50be410aca132e16e)`()`<sp/>|<sp/>Return<sp/>roll<sp/>[deg].</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>float<sp/>`[`getPitch`](#classSymbiontLiDAR_1ad06bac488cb930345d023903e74844a3)`()`<sp/>|<sp/>Return<sp/>pitch<sp/>[deg].</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>String<sp/>`[`getHeader`](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6)`()`<sp/>|<sp/>Return<sp/>a<sp/>comma-separated<sp/>header:<sp/>&quot;Range<sp/>[cm],Pitch<sp/>[deg],Roll<sp/>[deg],&quot;.</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>String<sp/>`[`getString`](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a)`(bool<sp/>takeNewReadings)`<sp/>|<sp/>Return<sp/>comma-separated<sp/>data<sp/>values.</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>String<sp/>`[`GetHeader`](#classSymbiontLiDAR_1a4c83d0aa98cc37aa76cff14a7ccc9e61)`()`<sp/>|<sp/>CapitalCase<sp/>version<sp/>of<sp/>[getHeader()](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6)<sp/>for<sp/>backwards<sp/>compatibility.</highlight></codeline>
+<codeline><highlight class="normal">`public<sp/>String<sp/>`[`GetString`](#classSymbiontLiDAR_1ab25a1819d9246ffec7c0512622e1f51b)`(bool<sp/>takeNewReadings)`<sp/>|<sp/>CapitalCase<sp/>version<sp/>of<sp/>[getString()](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a)<sp/>for<sp/>backwards<sp/>compatibility.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Members</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/><sp/>`[`SymbiontLiDAR`](#classSymbiontLiDAR_1af16b0ce31efd8892bfc42ed9f1f13317)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Instantiate<sp/>[SymbiontLiDAR](#classSymbiontLiDAR)<sp/>object.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>void<sp/>`[`begin`](#classSymbiontLiDAR_1ad5d076629b619e6b17cb2b68bf459366)`(uint8_t<sp/>Address_,uint8_t<sp/>sensitivity)`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Begin<sp/>communications<sp/>with<sp/>the<sp/>Symbiont<sp/>using<sp/>a<sp/>prescribed<sp/>address.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>Parameters</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`Addresss_`<sp/>default<sp/>0x50<sp/>DOES<sp/>NOT<sp/>YET<sp/>USE<sp/>A<sp/>VARIABLE<sp/>ADDRESS!<sp/>DOES<sp/>NOT<sp/>MATTER<sp/>WHAT<sp/>YOU<sp/>WRITE<sp/>HERE.<sp/>THIS<sp/>DEFAULT<sp/>ADDRESS<sp/>CURRENTLY<sp/>CLASHES<sp/>WITH<sp/>HAAR&apos;S<sp/>DEFAULT!<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`sensitivity.`<sp/>Options<sp/>are:<sp/>sensitivityBalanced<sp/>(0)<sp/>sensitivityHigh<sp/>(1)<sp/>sensitivityLow<sp/>(2)<sp/>sensitivityMaxRange<sp/>(3)<sp/>Default<sp/>value:<sp/>sensitivityBalanced<sp/>(0)<sp/>THIS<sp/>IS<sp/>ALSO<sp/>NOT<sp/>YET<sp/>IMPLEMENTED<sp/>IN<sp/>FIRMWARE!<sp/>JUST<sp/>STAYS<sp/>AT<sp/>DEFAULT<sp/>(SENSITIVITY_BALANCED<sp/>=<sp/>0)<sp/>CONSIDER<sp/>A<sp/>SET_SENSITIVITY<sp/>FUNCTION<sp/>IN<sp/>THE<sp/>FUTURE<sp/>TO<sp/>ALLOW<sp/>THE<sp/>SENSOR<sp/>TO<sp/>AUTOMATICALLY<sp/>ADJUST<sp/>THE<sp/>SENSITIVITY<sp/>TO<sp/>RECEIVE<sp/>THE<sp/>BEST<sp/>POSSIBLE<sp/>RETURN</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>bool<sp/>`[`updateMeasurements`](#classSymbiontLiDAR_1a5bdfb70ff9bd1f02804667c698c0cf87)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Measure<sp/>range<sp/>[cm],<sp/>roll<sp/>[deg]<sp/>and<sp/>pitch<sp/>[deg].<sp/>Returns<sp/>&quot;0&quot;<sp/>if<sp/>sensors<sp/>read<sp/>error<sp/>values;<sp/>else<sp/>returns<sp/>&quot;1&quot;.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>float<sp/>`[`getRange`](#classSymbiontLiDAR_1abdd716a0f55526d57f31b853f41280cb)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Return<sp/>range<sp/>[cm].</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>float<sp/>`[`getRoll`](#classSymbiontLiDAR_1a3ed32c762addeec50be410aca132e16e)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Return<sp/>roll<sp/>[deg].</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>float<sp/>`[`getPitch`](#classSymbiontLiDAR_1ad06bac488cb930345d023903e74844a3)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Return<sp/>pitch<sp/>[deg].</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>String<sp/>`[`getHeader`](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Return<sp/>a<sp/>comma-separated<sp/>header:<sp/>&quot;Range<sp/>[cm],Pitch<sp/>[deg],Roll<sp/>[deg],&quot;.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>String<sp/>`[`getString`](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a)`(bool<sp/>takeNewReadings)`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Return<sp/>comma-separated<sp/>data<sp/>values.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>the<sp/>most<sp/>likely<sp/>function<sp/>(alongside<sp/>getHeader)<sp/>for<sp/>an<sp/>end<sp/>user<sp/>to<sp/>use.<sp/>Values<sp/>are<sp/>returned<sp/>as:<sp/>String(Range)<sp/>+<sp/>&quot;,&quot;<sp/>+<sp/>String(Pitch)<sp/>+<sp/>&quot;,&quot;<sp/>+<sp/>String(Roll)<sp/>+<sp/>&quot;,&quot;<sp/>Error<sp/>values<sp/>are<sp/>&quot;-9999&quot;<sp/>(sensor<sp/>error)<sp/>and<sp/>&quot;-9998&quot;<sp/>(no<sp/>measurement<sp/>yet<sp/>taken&quot;)<sp/></highlight></codeline>
+<codeline><highlight class="normal">####<sp/>Parameters</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`takeNewReadings`<sp/>if<sp/>`true`<sp/>run<sp/>`updateMeasurements`<sp/>before<sp/>returning<sp/>values.<sp/>Otherwise,<sp/>just<sp/>return<sp/>values.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>String<sp/>`[`GetHeader`](#classSymbiontLiDAR_1a4c83d0aa98cc37aa76cff14a7ccc9e61)`()`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">CapitalCase<sp/>version<sp/>of<sp/>[getHeader()](#classSymbiontLiDAR_1a3637c11f25bc19257458a1947f67cdb6)<sp/>for<sp/>backwards<sp/>compatibility.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>`public<sp/>String<sp/>`[`GetString`](#classSymbiontLiDAR_1ab25a1819d9246ffec7c0512622e1f51b)`(bool<sp/>takeNewReadings)`<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">CapitalCase<sp/>version<sp/>of<sp/>[getString()](#classSymbiontLiDAR_1a856384a2e8afac718a88c9b22ad7338a)<sp/>for<sp/>backwards<sp/>compatibility.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>Parameters</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`takeNewReadings`<sp/>if<sp/>`true`<sp/>run<sp/>`updateMeasurements`<sp/>before<sp/>returning<sp/>values.<sp/>Otherwise,<sp/>just<sp/>return<sp/>values.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Generated<sp/>by<sp/>[Moxygen](https://sourcey.com/moxygen)</highlight></codeline>
+    </programlisting>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,904 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classApis" kind="class" language="C++" prot="public">
+    <compoundname>Apis</compoundname>
+    <includes refid="Apis_8h" local="no">Apis.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classApis_1a396838b17868944a7e30bbbce9e26078" prot="private" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t Apis::_adr</definition>
+        <argsstring></argsstring>
+        <name>_adr</name>
+        <qualifiedname>Apis::_adr</qualifiedname>
+        <initializer>= ADR_DEFAULT</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="272" column="17" bodyfile="src/Apis.h" bodystart="272" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a08a93d8c79eaf50d510814201bfce04c" prot="private" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t Apis::_nRangeReadings</definition>
+        <argsstring></argsstring>
+        <name>_nRangeReadings</name>
+        <qualifiedname>Apis::_nRangeReadings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="275" column="18" bodyfile="src/Apis.h" bodystart="275" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a92f8e9c08986ba45a3dfd9f32a3c2c88" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Apis::_rangeStats</definition>
+        <argsstring></argsstring>
+        <name>_rangeStats</name>
+        <qualifiedname>Apis::_rangeStats</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="276" column="18" bodyfile="src/Apis.h" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a9ee744619d5950b71fc9eb9a8167ebad" prot="private" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t Apis::_nOrientReadings</definition>
+        <argsstring></argsstring>
+        <name>_nOrientReadings</name>
+        <qualifiedname>Apis::_nOrientReadings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="277" column="18" bodyfile="src/Apis.h" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1ae5e77744172a1bf37b934412d52bbc7c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Apis::_orientStats</definition>
+        <argsstring></argsstring>
+        <name>_orientStats</name>
+        <qualifiedname>Apis::_orientStats</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="278" column="18" bodyfile="src/Apis.h" bodystart="278" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a29fafa811b42794692e8262df7b7795b" prot="private" static="no" mutable="no">
+        <type>int16_t</type>
+        <definition>int16_t Apis::_range</definition>
+        <argsstring></argsstring>
+        <name>_range</name>
+        <qualifiedname>Apis::_range</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="282" column="17" bodyfile="src/Apis.h" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a5ed63c32185bf182a026b15a4c42e58a" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_pitch</definition>
+        <argsstring></argsstring>
+        <name>_pitch</name>
+        <qualifiedname>Apis::_pitch</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="283" column="17" bodyfile="src/Apis.h" bodystart="283" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1afa3266a42ec2ab6a0b56b56431653b95" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_roll</definition>
+        <argsstring></argsstring>
+        <name>_roll</name>
+        <qualifiedname>Apis::_roll</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="284" column="17" bodyfile="src/Apis.h" bodystart="284" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a1254f056e5c85f8bf1bcd850a109344f" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_rangeMean</definition>
+        <argsstring></argsstring>
+        <name>_rangeMean</name>
+        <qualifiedname>Apis::_rangeMean</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="287" column="15" bodyfile="src/Apis.h" bodystart="287" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a00a39d4f70511d9d85ea9332ff3a9646" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_rangeStd</definition>
+        <argsstring></argsstring>
+        <name>_rangeStd</name>
+        <qualifiedname>Apis::_rangeStd</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="288" column="15" bodyfile="src/Apis.h" bodystart="288" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1aae2774cf993a1d076609fe23ad69e80e" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_rangeSterr</definition>
+        <argsstring></argsstring>
+        <name>_rangeSterr</name>
+        <qualifiedname>Apis::_rangeSterr</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="289" column="15" bodyfile="src/Apis.h" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a4d5e7c9a673bf87c1e379906220983b8" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_pitchStd</definition>
+        <argsstring></argsstring>
+        <name>_pitchStd</name>
+        <qualifiedname>Apis::_pitchStd</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="292" column="15" bodyfile="src/Apis.h" bodystart="292" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1aac1c6f711a2faf1151c0a40ce81a9f13" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_pitchSterr</definition>
+        <argsstring></argsstring>
+        <name>_pitchSterr</name>
+        <qualifiedname>Apis::_pitchSterr</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="293" column="15" bodyfile="src/Apis.h" bodystart="293" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1aa7a8e19d9c604da0b5b1ae8b0f0e65fd" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_rollStd</definition>
+        <argsstring></argsstring>
+        <name>_rollStd</name>
+        <qualifiedname>Apis::_rollStd</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="294" column="15" bodyfile="src/Apis.h" bodystart="294" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1aeb4580e9cc80ab8e1894af51f2ee23ae" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Apis::_rollSterr</definition>
+        <argsstring></argsstring>
+        <name>_rollSterr</name>
+        <qualifiedname>Apis::_rollSterr</qualifiedname>
+        <initializer>= APIS_NOT_MEASURED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="295" column="15" bodyfile="src/Apis.h" bodystart="295" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a1391fde076846939ccb1ee80e9ffa98f" prot="private" static="no" mutable="no">
+        <type>SensitivityMode</type>
+        <definition>SensitivityMode Apis::_sensitivity</definition>
+        <argsstring></argsstring>
+        <name>_sensitivity</name>
+        <qualifiedname>Apis::_sensitivity</qualifiedname>
+        <initializer>= SENSITIVITY_BALANCED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="298" column="25" bodyfile="src/Apis.h" bodystart="298" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1a4cbcf29cece0fafe23d37c38a167e7a8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Apis::_needsStartupDelay</definition>
+        <argsstring></argsstring>
+        <name>_needsStartupDelay</name>
+        <qualifiedname>Apis::_needsStartupDelay</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="301" column="14" bodyfile="src/Apis.h" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classApis_1acb24565507689af96441461c1b1e3a4f" prot="private" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t Apis::_rawComponent</definition>
+        <argsstring></argsstring>
+        <name>_rawComponent</name>
+        <qualifiedname>Apis::_rawComponent</qualifiedname>
+        <initializer>= NW_READING_ALL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="304" column="17" bodyfile="src/Apis.h" bodystart="304" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classApis_1a9e688923aa1f69e3e830d757f6a15085" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Apis::Apis</definition>
+        <argsstring>(uint16_t nRangeReadings=1, bool rangeStats=false, uint16_t nOrientReadings=1, bool orientStats=false)</argsstring>
+        <name>Apis</name>
+        <qualifiedname>Apis::Apis</qualifiedname>
+        <param>
+          <type>uint16_t</type>
+          <declname>nRangeReadings</declname>
+          <defval>1</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>rangeStats</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>nOrientReadings</declname>
+          <defval>1</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>orientStats</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Instantiate <ref refid="classApis" kindref="compound">Apis</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nRangeReadings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of range readings to average (default 1). Paul et al. (2020, WRR, doi:10.1029/2019WR026810) found ~1000 readings needed for stable mean convergence under field conditions. Uses Welford&apos;s online algorithm: O(1) memory regardless of count. FIX: Independent readings require firmware support for on-demand triggering; current firmware caches the value each loop (~200 ms). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rangeStats</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If true, <ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString()</ref> includes range std and sterr. Only meaningful when nRangeReadings &gt; 1. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nOrientReadings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of orientation readings to average (default 1). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>orientStats</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If true, <ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString()</ref> includes orientation std and sterr. Only meaningful when nOrientReadings &gt; 1. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="116" column="9" bodyfile="src/Apis.cpp" bodystart="3" bodyend="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1aba7e5f1321f935e623593aabb9ad0000" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Apis::begin</definition>
+        <argsstring>(uint8_t address=ADR_DEFAULT, SensitivityMode sensitivity=SENSITIVITY_BALANCED)</argsstring>
+        <name>begin</name>
+        <qualifiedname>Apis::begin</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>address</declname>
+          <defval>ADR_DEFAULT</defval>
+        </param>
+        <param>
+          <type>SensitivityMode</type>
+          <declname>sensitivity</declname>
+          <defval>SENSITIVITY_BALANCED</defval>
+        </param>
+        <briefdescription>
+<para>Begin communications with the <ref refid="classApis" kindref="compound">Apis</ref> using a prescribed address. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>address</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>I2C address (default ADR_DEFAULT = 0x50). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="warning"><para>Address selection is not yet implemented in firmware; this parameter is accepted but ignored. The device always uses its fixed firmware address. The default (0x50) also clashes with Haar&apos;s default address. Both issues will be resolved in a future firmware update. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sensitivity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>One of the SensitivityMode values (default SENSITIVITY_BALANCED). Written to firmware register 0x01 and applied each firmware loop() iteration. See SensitivityMode for descriptions of each mode. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if the device acknowledges on I2C, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="134" column="14" bodyfile="src/Apis.cpp" bodystart="10" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a32b3cb6ffb97a383b28689cd26070552" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::setNRangeReadings</definition>
+        <argsstring>(uint16_t n)</argsstring>
+        <name>setNRangeReadings</name>
+        <qualifiedname>Apis::setNRangeReadings</qualifiedname>
+        <param>
+          <type>uint16_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>Set number of range readings to average. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="139" column="14" bodyfile="src/Apis.cpp" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a09971a358d18af5ccd4c48627867c55e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::setRangeStats</definition>
+        <argsstring>(bool enable)</argsstring>
+        <name>setRangeStats</name>
+        <qualifiedname>Apis::setRangeStats</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+        </param>
+        <briefdescription>
+<para>Enable or disable range std and sterr in <ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString()</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="141" column="14" bodyfile="src/Apis.cpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1ac22ea692312681deb6617e53fb981a78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::setNOrientReadings</definition>
+        <argsstring>(uint16_t n)</argsstring>
+        <name>setNOrientReadings</name>
+        <qualifiedname>Apis::setNOrientReadings</qualifiedname>
+        <param>
+          <type>uint16_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+<para>Set number of orientation readings to average. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="143" column="14" bodyfile="src/Apis.cpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a870ebacd3880d0bf5a7dc45ebb50d393" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::setOrientStats</definition>
+        <argsstring>(bool enable)</argsstring>
+        <name>setOrientStats</name>
+        <qualifiedname>Apis::setOrientStats</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+        </param>
+        <briefdescription>
+<para>Enable or disable orientation std and sterr in <ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString()</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="145" column="14" bodyfile="src/Apis.cpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1ac2bc557f643e09039f8bacb2eaae18fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::setRangefinderSensitivity</definition>
+        <argsstring>(SensitivityMode mode)</argsstring>
+        <name>setRangefinderSensitivity</name>
+        <qualifiedname>Apis::setRangefinderSensitivity</qualifiedname>
+        <param>
+          <type>SensitivityMode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Change the rangefinder sensitivity mode after <ref refid="classApis_1aba7e5f1321f935e623593aabb9ad0000" kindref="member">begin()</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes the new mode to firmware register 0x01; the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <ref refid="classApis_1aba7e5f1321f935e623593aabb9ad0000" kindref="member">begin()</ref>; if called before, Wire is uninitialised and the transmission fails silently. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>One of the SensitivityMode values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="154" column="14" bodyfile="src/Apis.cpp" bodystart="27" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a58129d38075f5c274d9fb23f0937d779" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Apis::updateRange</definition>
+        <argsstring>()</argsstring>
+        <name>updateRange</name>
+        <qualifiedname>Apis::updateRange</qualifiedname>
+        <briefdescription>
+<para>Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Returns false if the sensor returns an error value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="161" column="14" bodyfile="src/Apis.cpp" bodystart="35" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a5f3edfb393fa0f7069e9aedeb35938c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Apis::updateOrientation</definition>
+        <argsstring>()</argsstring>
+        <name>updateOrientation</name>
+        <qualifiedname>Apis::updateOrientation</qualifiedname>
+        <briefdescription>
+<para>Measure pitch [deg] and roll [deg] only, without ranging. Intended for rapid repeated orientation readings (e.g. for averaging). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms). Returns false if the sensor returns an error value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="170" column="14" bodyfile="src/Apis.cpp" bodystart="64" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1acf99958ddc5af54b2df173a040339dad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Apis::updateMeasurements</definition>
+        <argsstring>()</argsstring>
+        <name>updateMeasurements</name>
+        <qualifiedname>Apis::updateMeasurements</qualifiedname>
+        <briefdescription>
+<para>Measure range [cm], roll [deg] and pitch [deg]. Uses Welford&apos;s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively. Returns false if any sensor returns an error value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="178" column="14" bodyfile="src/Apis.cpp" bodystart="130" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a544fbcce448c7aeecada9ee6c7787249" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int16_t</type>
+        <definition>int16_t Apis::getRange</definition>
+        <argsstring>()</argsstring>
+        <name>getRange</name>
+        <qualifiedname>Apis::getRange</qualifiedname>
+        <briefdescription>
+<para>Return range mean [cm], rounded to nearest cm. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="182" column="17" bodyfile="src/Apis.cpp" bodystart="189" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a869ff37d7fe17f1a54771f02ba9f0784" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getRoll</definition>
+        <argsstring>()</argsstring>
+        <name>getRoll</name>
+        <qualifiedname>Apis::getRoll</qualifiedname>
+        <briefdescription>
+<para>Return roll mean [deg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="184" column="15" bodyfile="src/Apis.cpp" bodystart="194" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1ae8b1d1a59abab5dfd5d2f691cb7c8c0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getPitch</definition>
+        <argsstring>()</argsstring>
+        <name>getPitch</name>
+        <qualifiedname>Apis::getPitch</qualifiedname>
+        <briefdescription>
+<para>Return pitch mean [deg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="186" column="15" bodyfile="src/Apis.cpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a9eaa99ce9c0329e821d426a060166210" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getRangeMean</definition>
+        <argsstring>()</argsstring>
+        <name>getRangeMean</name>
+        <qualifiedname>Apis::getRangeMean</qualifiedname>
+        <briefdescription>
+<para>Return range mean [cm] as float. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="190" column="15" bodyfile="src/Apis.cpp" bodystart="204" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a65acf8f0093e6b5537f401eeba972077" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getRangeStd</definition>
+        <argsstring>()</argsstring>
+        <name>getRangeStd</name>
+        <qualifiedname>Apis::getRangeStd</qualifiedname>
+        <briefdescription>
+<para>Return range standard deviation [cm]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="192" column="15" bodyfile="src/Apis.cpp" bodystart="205" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1afc37967c1111dd168ec4b865e971646c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getRangeSterr</definition>
+        <argsstring>()</argsstring>
+        <name>getRangeSterr</name>
+        <qualifiedname>Apis::getRangeSterr</qualifiedname>
+        <briefdescription>
+<para>Return range standard error [cm]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="194" column="15" bodyfile="src/Apis.cpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1acf427c44fddc8dd842b64af648df48cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getPitchStd</definition>
+        <argsstring>()</argsstring>
+        <name>getPitchStd</name>
+        <qualifiedname>Apis::getPitchStd</qualifiedname>
+        <briefdescription>
+<para>Return pitch standard deviation [deg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="196" column="15" bodyfile="src/Apis.cpp" bodystart="207" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a4a273369b0bcb3cc3d1cceae541c5061" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getPitchSterr</definition>
+        <argsstring>()</argsstring>
+        <name>getPitchSterr</name>
+        <qualifiedname>Apis::getPitchSterr</qualifiedname>
+        <briefdescription>
+<para>Return pitch standard error [deg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="198" column="15" bodyfile="src/Apis.cpp" bodystart="208" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1ad28fcc698aa7669eb1ee79a13f789a8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getRollStd</definition>
+        <argsstring>()</argsstring>
+        <name>getRollStd</name>
+        <qualifiedname>Apis::getRollStd</qualifiedname>
+        <briefdescription>
+<para>Return roll standard deviation [deg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="200" column="15" bodyfile="src/Apis.cpp" bodystart="209" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a3a4d20f5a956c9cc527c3337dd4e2bf5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float Apis::getRollSterr</definition>
+        <argsstring>()</argsstring>
+        <name>getRollSterr</name>
+        <qualifiedname>Apis::getRollSterr</qualifiedname>
+        <briefdescription>
+<para>Return roll standard error [deg]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="202" column="15" bodyfile="src/Apis.cpp" bodystart="210" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a69932db165067ad63819e201aeffaf1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>String</type>
+        <definition>String Apis::getHeader</definition>
+        <argsstring>()</argsstring>
+        <name>getHeader</name>
+        <qualifiedname>Apis::getHeader</qualifiedname>
+        <briefdescription>
+<para>Return a comma-separated header matching <ref refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" kindref="member">getString()</ref> output. Includes statistics columns when rangeStats or orientStats are enabled and nReadings &gt; 1. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="209" column="16" bodyfile="src/Apis.cpp" bodystart="228" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>String</type>
+        <definition>String Apis::getString</definition>
+        <argsstring>(bool takeNewReadings=true)</argsstring>
+        <name>getString</name>
+        <qualifiedname>Apis::getString</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>takeNewReadings</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Return comma-separated data values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is the most likely function (alongside getHeader) for an end user to use. Always includes: Range [cm], Pitch [deg], Roll [deg]. Appends range std and sterr when rangeStats is true and nRangeReadings &gt; 1. Appends orientation std and sterr when orientStats is true and nOrientReadings &gt; 1. Error values are APIS_ERROR (-9999) for sensor errors and APIS_NOT_MEASURED (-9998) when no measurement has yet been taken. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>takeNewReadings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if true, run <ref refid="classApis_1acf99958ddc5af54b2df173a040339dad" kindref="member">updateMeasurements()</ref> before returning values. Otherwise, return stored values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="225" column="16" bodyfile="src/Apis.cpp" bodystart="212" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a9aaca11b8d727ba8e2fb480ca630cfc5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::beginRawReadings</definition>
+        <argsstring>(uint8_t component=NW_READING_ALL)</argsstring>
+        <name>beginRawReadings</name>
+        <qualifiedname>Apis::beginRawReadings</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>component</declname>
+          <defval>NW_READING_ALL</defval>
+        </param>
+        <briefdescription>
+<para>Prepare for raw reading collection. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>NW_READING_ALL, NW_READING_RANGE (primary), or NW_READING_ORIENT (secondary). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="233" column="14" bodyfile="src/Apis.cpp" bodystart="241" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1a8f2b588cee5ef4d029911dd2e757fb58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint16_t</type>
+        <definition>uint16_t Apis::takeRawReading</definition>
+        <argsstring>(char *buf, uint16_t offset)</argsstring>
+        <name>takeRawReading</name>
+        <qualifiedname>Apis::takeRawReading</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>uint16_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Take one raw reading and write CSV data into buf at offset. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL. Each value followed by a comma. Max bytes written per call: 7 (RANGE), 18 (ORIENT), 25 (ALL). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>buf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Caller-managed destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Starting write position in buf. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>New offset after writing. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="244" column="18" bodyfile="src/Apis.cpp" bodystart="245" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="classApis_1aca52f03b98eb0183f21c40617b8741af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::endRawReadings</definition>
+        <argsstring>()</argsstring>
+        <name>endRawReadings</name>
+        <qualifiedname>Apis::endRawReadings</qualifiedname>
+        <briefdescription>
+<para>End raw reading collection. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="247" column="14" bodyfile="src/Apis.cpp" bodystart="267" bodyend="269"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classApis_1ab4b725f9bcac17c8fcb33a6a1690c810" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Apis::_waitUntilReady</definition>
+        <argsstring>()</argsstring>
+        <name>_waitUntilReady</name>
+        <qualifiedname>Apis::_waitUntilReady</qualifiedname>
+        <briefdescription>
+<para>Poll Reg[0] until firmware signals ready, or 150 ms elapses. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Power-on startup sequence (from board power arriving):<orderedlist>
+<listitem><para>TLV61220 boost converter starts immediately (EN tied to VIN+); outputs stable 5V within ~2 ms. No firmware action needed.</para>
+</listitem><listitem><para>MIC5365 LDO derives 3.3V from the 5V rail; ATTiny1634 starts.</para>
+</listitem><listitem><para>Firmware setup(): delay(10) -&gt; POWER_SW high (MIC2544 enables, 680 uF cap charges at ~227 mA over ~15 ms) -&gt; delay(100) -&gt; ENABLE high -&gt; InitAccel() -&gt; InitLiDAR(). Total: ~115 ms.</para>
+</listitem><listitem><para>Wire.begin() is called early in setup(), so the ATTiny is I2C-addressable before it has finished initialising the LiDAR. A library call arriving during this window would find the sensor not yet ready. New firmware (Issue #15) sets Reg[0]=1 after InitLiDAR() completes, allowing the library to exit the poll immediately rather than waiting a fixed time. Old firmware leaves Reg[0]=0 always; the 150 ms timeout then covers the full firmware startup with margin. See: <ulink url="https://github.com/NorthernWidget/Project-Apis/issues/15">https://github.com/NorthernWidget/Project-Apis/issues/15</ulink> </para>
+</listitem></orderedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Apis.h" line="269" column="14" bodyfile="src/Apis.cpp" bodystart="109" bodyend="128"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Arduino library for the <ref refid="classApis" kindref="compound">Apis</ref> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply). </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Library to communicate with the <ref refid="classApis" kindref="compound">Apis</ref> module, which connects to a LiDAR Lite rangefinder. The <ref refid="classApis" kindref="compound">Apis</ref> is equipped with capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is placed on a cliff or a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the <ref refid="classApis" kindref="compound">Apis</ref> is essential, and the <ref refid="classApis" kindref="compound">Apis</ref> therefore acts as a buffer to protect the data logger from raw sensor failures. </para>
+    </detaileddescription>
+    <location file="src/Apis.h" line="96" column="1" bodyfile="src/Apis.h" bodystart="97" bodyend="305"/>
+    <listofallmembers>
+      <member refid="classApis_1a396838b17868944a7e30bbbce9e26078" prot="private" virt="non-virtual"><scope>Apis</scope><name>_adr</name></member>
+      <member refid="classApis_1a4cbcf29cece0fafe23d37c38a167e7a8" prot="private" virt="non-virtual"><scope>Apis</scope><name>_needsStartupDelay</name></member>
+      <member refid="classApis_1a9ee744619d5950b71fc9eb9a8167ebad" prot="private" virt="non-virtual"><scope>Apis</scope><name>_nOrientReadings</name></member>
+      <member refid="classApis_1a08a93d8c79eaf50d510814201bfce04c" prot="private" virt="non-virtual"><scope>Apis</scope><name>_nRangeReadings</name></member>
+      <member refid="classApis_1ae5e77744172a1bf37b934412d52bbc7c" prot="private" virt="non-virtual"><scope>Apis</scope><name>_orientStats</name></member>
+      <member refid="classApis_1a5ed63c32185bf182a026b15a4c42e58a" prot="private" virt="non-virtual"><scope>Apis</scope><name>_pitch</name></member>
+      <member refid="classApis_1a4d5e7c9a673bf87c1e379906220983b8" prot="private" virt="non-virtual"><scope>Apis</scope><name>_pitchStd</name></member>
+      <member refid="classApis_1aac1c6f711a2faf1151c0a40ce81a9f13" prot="private" virt="non-virtual"><scope>Apis</scope><name>_pitchSterr</name></member>
+      <member refid="classApis_1a29fafa811b42794692e8262df7b7795b" prot="private" virt="non-virtual"><scope>Apis</scope><name>_range</name></member>
+      <member refid="classApis_1a1254f056e5c85f8bf1bcd850a109344f" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rangeMean</name></member>
+      <member refid="classApis_1a92f8e9c08986ba45a3dfd9f32a3c2c88" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rangeStats</name></member>
+      <member refid="classApis_1a00a39d4f70511d9d85ea9332ff3a9646" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rangeStd</name></member>
+      <member refid="classApis_1aae2774cf993a1d076609fe23ad69e80e" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rangeSterr</name></member>
+      <member refid="classApis_1acb24565507689af96441461c1b1e3a4f" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rawComponent</name></member>
+      <member refid="classApis_1afa3266a42ec2ab6a0b56b56431653b95" prot="private" virt="non-virtual"><scope>Apis</scope><name>_roll</name></member>
+      <member refid="classApis_1aa7a8e19d9c604da0b5b1ae8b0f0e65fd" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rollStd</name></member>
+      <member refid="classApis_1aeb4580e9cc80ab8e1894af51f2ee23ae" prot="private" virt="non-virtual"><scope>Apis</scope><name>_rollSterr</name></member>
+      <member refid="classApis_1a1391fde076846939ccb1ee80e9ffa98f" prot="private" virt="non-virtual"><scope>Apis</scope><name>_sensitivity</name></member>
+      <member refid="classApis_1ab4b725f9bcac17c8fcb33a6a1690c810" prot="private" virt="non-virtual"><scope>Apis</scope><name>_waitUntilReady</name></member>
+      <member refid="classApis_1a9e688923aa1f69e3e830d757f6a15085" prot="public" virt="non-virtual"><scope>Apis</scope><name>Apis</name></member>
+      <member refid="classApis_1aba7e5f1321f935e623593aabb9ad0000" prot="public" virt="non-virtual"><scope>Apis</scope><name>begin</name></member>
+      <member refid="classApis_1a9aaca11b8d727ba8e2fb480ca630cfc5" prot="public" virt="non-virtual"><scope>Apis</scope><name>beginRawReadings</name></member>
+      <member refid="classApis_1aca52f03b98eb0183f21c40617b8741af" prot="public" virt="non-virtual"><scope>Apis</scope><name>endRawReadings</name></member>
+      <member refid="classApis_1a69932db165067ad63819e201aeffaf1d" prot="public" virt="non-virtual"><scope>Apis</scope><name>getHeader</name></member>
+      <member refid="classApis_1ae8b1d1a59abab5dfd5d2f691cb7c8c0f" prot="public" virt="non-virtual"><scope>Apis</scope><name>getPitch</name></member>
+      <member refid="classApis_1acf427c44fddc8dd842b64af648df48cb" prot="public" virt="non-virtual"><scope>Apis</scope><name>getPitchStd</name></member>
+      <member refid="classApis_1a4a273369b0bcb3cc3d1cceae541c5061" prot="public" virt="non-virtual"><scope>Apis</scope><name>getPitchSterr</name></member>
+      <member refid="classApis_1a544fbcce448c7aeecada9ee6c7787249" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRange</name></member>
+      <member refid="classApis_1a9eaa99ce9c0329e821d426a060166210" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRangeMean</name></member>
+      <member refid="classApis_1a65acf8f0093e6b5537f401eeba972077" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRangeStd</name></member>
+      <member refid="classApis_1afc37967c1111dd168ec4b865e971646c" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRangeSterr</name></member>
+      <member refid="classApis_1a869ff37d7fe17f1a54771f02ba9f0784" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRoll</name></member>
+      <member refid="classApis_1ad28fcc698aa7669eb1ee79a13f789a8b" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRollStd</name></member>
+      <member refid="classApis_1a3a4d20f5a956c9cc527c3337dd4e2bf5" prot="public" virt="non-virtual"><scope>Apis</scope><name>getRollSterr</name></member>
+      <member refid="classApis_1ace3a3910fa5c0959b41bb3c4f06115a2" prot="public" virt="non-virtual"><scope>Apis</scope><name>getString</name></member>
+      <member refid="classApis_1ac22ea692312681deb6617e53fb981a78" prot="public" virt="non-virtual"><scope>Apis</scope><name>setNOrientReadings</name></member>
+      <member refid="classApis_1a32b3cb6ffb97a383b28689cd26070552" prot="public" virt="non-virtual"><scope>Apis</scope><name>setNRangeReadings</name></member>
+      <member refid="classApis_1a870ebacd3880d0bf5a7dc45ebb50d393" prot="public" virt="non-virtual"><scope>Apis</scope><name>setOrientStats</name></member>
+      <member refid="classApis_1ac2bc557f643e09039f8bacb2eaae18fb" prot="public" virt="non-virtual"><scope>Apis</scope><name>setRangefinderSensitivity</name></member>
+      <member refid="classApis_1a09971a358d18af5ccd4c48627867c55e" prot="public" virt="non-virtual"><scope>Apis</scope><name>setRangeStats</name></member>
+      <member refid="classApis_1a8f2b588cee5ef4d029911dd2e757fb58" prot="public" virt="non-virtual"><scope>Apis</scope><name>takeRawReading</name></member>
+      <member refid="classApis_1acf99958ddc5af54b2df173a040339dad" prot="public" virt="non-virtual"><scope>Apis</scope><name>updateMeasurements</name></member>
+      <member refid="classApis_1a5f3edfb393fa0f7069e9aedeb35938c3" prot="public" virt="non-virtual"><scope>Apis</scope><name>updateOrientation</name></member>
+      <member refid="classApis_1a58129d38075f5c274d9fb23f0937d779" prot="public" virt="non-virtual"><scope>Apis</scope><name>updateRange</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
