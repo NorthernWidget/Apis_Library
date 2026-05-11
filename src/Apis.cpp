@@ -40,91 +40,62 @@ bool Apis::updateRange() {
     return true;
 }
 
-bool Apis::updateMeasurements(){
-
-    // Time for cap to settle or something
+bool Apis::updateMeasurements(uint8_t nReadings) {
+    // Allow capacitor to settle before first reading
     delay(200);
 
-    // Some of Bobby's unimplemented code to time out if a reading is not taken
-    //const unsigned long timeout = 200; //Wait up to 200ms for a new reading
-    //unsigned long localTime = millis(); //Keep track of local time for timeout
+    // Take nReadings range measurements and average successful ones
+    float rangeSum = 0;
+    uint8_t nSuccess = 0;
+    for (uint8_t i = 0; i < nReadings; i++) {
+        if (updateRange()) {
+            rangeSum += Range;
+            nSuccess++;
+        }
+    }
+    Range = (nSuccess > 0) ? (int16_t)(rangeSum / nSuccess) : -9999;
 
-    // Temporary values and arrays to hold data during I2C parsing.
-    // Initialize at 0 as default failure value
-    // Perhaps we should reset these to 0 within the loop?
+    // Read accelerometer gX/Y/Z (0x04-0x09) and offsets (0x0A-0x0F)
     uint8_t Data1 = 0;
     uint8_t Data2 = 0;
-    int16_t DataSet[7];
-    
-    for(int i = 0; i < 7; i++) {
-          Wire.beginTransmission(ADR);
-          Wire.write(2*i + 2);
-          Wire.endTransmission();
-          Wire.requestFrom(ADR, 1);
-          Data1 = Wire.read();
+    int16_t DataSet[6];
 
-          Wire.beginTransmission(ADR);
-          Wire.write(2*i + 3);
-          Wire.endTransmission();
-          Wire.requestFrom(ADR, 1);
-          Data2 = Wire.read();
-          
-          // Store data in array
-          // Could save memory by replacing this with if/else
-          // for different individual variables
-          DataSet[i] = ((Data2 << 8) | Data1);
+    for (int i = 0; i < 6; i++) {
+        Wire.beginTransmission(ADR);
+        Wire.write(2*i + 4);
+        Wire.endTransmission();
+        Wire.requestFrom(ADR, 1);
+        Data1 = Wire.read();
+
+        Wire.beginTransmission(ADR);
+        Wire.write(2*i + 5);
+        Wire.endTransmission();
+        Wire.requestFrom(ADR, 1);
+        Data2 = Wire.read();
+
+        DataSet[i] = ((Data2 << 8) | Data1);
     }
 
-    // Takes up memory but makes code easier to read. Could be more efficient.
-    // Perhaps use pointers, or just comments?
-  
-    // Measured laser range in centimeters
-    Range = DataSet[0];
+    float gX = DataSet[0];
+    float gY = DataSet[1];
+    float gZ = DataSet[2];
+    float OffsetX = DataSet[3];
+    float OffsetY = DataSet[4];
+    float OffsetZ = DataSet[5];
 
-    //Convert g vals to floats for math
-    float gX = DataSet[1];
-    float gY = DataSet[2];
-    float gZ = DataSet[3];
-
-    float OffsetX = DataSet[4];
-    float OffsetY = DataSet[5];
-    float OffsetZ = DataSet[6];
-
-    // Calculate roll/pitch and parse errors
-    // Error return value = -9999.
-
-    // Errors in range if <0
-    if (Range < 0) {
-        Range = -9999;
-    }
-
-    // Errors in g if all -1
-    if(gX == gY && gX == gZ && gX == -1) {  
+    if (gX == gY && gX == gZ && gX == -1) {
         Pitch = -9999;
         Roll = -9999;
+    } else if (OffsetX == OffsetY && OffsetX == OffsetZ && OffsetX == 0) {
+        Pitch = atan(-gX/gZ) * 180. / M_PI;
+        Roll = atan(gY / sqrt(pow(gX, 2) + pow(gZ, 2))) * 180. / M_PI;
+    } else {
+        Pitch = (atan(-gX/gZ) - atan(-OffsetX/OffsetZ)) * 180. / M_PI;
+        Roll = (atan(gY / sqrt(pow(gX, 2) + pow(gZ, 2)))
+               - atan(OffsetY / sqrt(pow(OffsetX, 2) + pow(OffsetZ, 2)))) * 180. / M_PI;
     }
-    // If no errors, continue!
-    // Orientation: roll and pitch
-    else if( OffsetX == OffsetY && OffsetX == OffsetZ && OffsetX == 0 ) {
-        // Do not include angle calc for offset when offset is 0
-        // (Results in NAN value)
-        Pitch = atan(-gX/gZ)*180./3.14;
-        Roll = atan( gY / (sqrt( pow(gX, 2) + pow(gZ, 2) )) )*180./3.14;
-    }
-    else {
-        Pitch = ( atan(-gX/gZ) - atan(-OffsetX/OffsetZ) ) * 180./3.14;
-        Roll = ( atan(gY / (sqrt( pow(gX, 2) + pow(gZ, 2) )) ) - \
-                 - atan(OffsetY \
-                         / (sqrt( pow(OffsetX, 2) + pow(OffsetZ, 2) )) ) ) \
-                 * 180./3.14;
-    }
-    
-    if ( (Range == -9999) || (Roll == -9999) || (Pitch == -9999) ){
-        return false;
-    }
-    else {
-        return true;
-    }
+
+    return (Range != -9999) && (Pitch != -9999) && (Roll != -9999);
 }
 
 float Apis::getRoll() {
@@ -137,7 +108,7 @@ float Apis::getPitch() {
     return Pitch;
 }
 
-float Apis::getRange() {
+int16_t Apis::getRange() {
     // Distance in cm
     return Range;
 }

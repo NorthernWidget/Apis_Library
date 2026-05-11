@@ -91,14 +91,16 @@ class Apis
 
         /**
          * @brief Measure range [cm], roll [deg] and pitch [deg].
+         * @param nReadings Number of range readings to average (default 1).
+         * Multiple readings require firmware support for on-demand triggering.
          * Returns false if any sensor returns an error value.
          */
-        bool updateMeasurements();
+        bool updateMeasurements(uint8_t nReadings = 1);
 
         /**
          * @brief Return range [cm]
          */
-        float getRange();
+        int16_t getRange();
 
         /**
          * @brief Return roll [deg]
@@ -137,7 +139,7 @@ class Apis
         // Initialize at a non-error value; just one that indicates that
         // they are unset (will be returned if requested before measurement
         // is taken)
-        float Range = -9998;
+        int16_t Range = -9998;
         float Pitch = -9998;
         float Roll = -9998;
 
