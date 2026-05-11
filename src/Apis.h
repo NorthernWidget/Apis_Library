@@ -43,7 +43,7 @@ License: GNU GPL v3. You should find a copy in the repository.
  * (often, but not necessarily, horizontal)  and the ability to absorb
  * occasional firmware issues that lead to system hangs.
  * The leveling helps the user to calculate, for example, a water level
- * when the sensor is palced on a cliff a tree next to the river but does not
+ * when the sensor is placed on a cliff or a tree next to the river but does not
  * have water below it. The level loses absolute accuracy when near plumb, so
  * a Hall-effect sensor connected to the magnet allows the user to set a zero
  * value, thereby correcting for this. Managing failures of the LiDAR Lite
