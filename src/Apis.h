@@ -4,9 +4,8 @@ Apis.h
 Library for the Apis interface board for a LiDAR Lite unit.
 
 Andrew Wickert
-Based on code by Bobby Schulz
-In particular: https://github.com/NorthernWidget/Project-Apis/tree/master/Software/LiDARLite_I2CParse
-and based loosely around Bobby Schulz' general functions for sensor libraries.
+Based loosely on early code by Bobby Schulz, including
+https://github.com/NorthernWidget/Project-Apis/tree/master/Software/LiDARLite_I2CParse
 
 Started 2020.05.01
 Hardware located at:
@@ -78,7 +77,6 @@ enum SensitivityMode : uint8_t {
 #define NW_READING_ORIENT NW_READING_SECONDARY
 
 /**
- * @class Apis Class to Interface with the Apis module for a laser rangefinder.
  * @brief Arduino library for the Apis board, which manages a LiDAR Lite
  * unit (roll/pitch, firmware lock/reset, power supply).
  * @details Library to communicate with the Apis module, which
@@ -122,7 +120,7 @@ class Apis
          * @brief Begin communications with the Apis using a prescribed
          * address.
          * @param address I2C address (default ADR_DEFAULT = 0x50).
-         * @warning Address selection is not yet implemented in firmware —
+         * @warning Address selection is not yet implemented in firmware;
          *          this parameter is accepted but ignored. The device always
          *          uses its fixed firmware address. The default (0x50) also
          *          clashes with Haar's default address. Both issues will be
@@ -149,7 +147,7 @@ class Apis
          * @brief Change the rangefinder sensitivity mode after begin().
          * @details Writes the new mode to firmware register 0x01; the firmware
          * applies it on the next loop() iteration via InitLiDAR(). Must be
-         * called after begin() — if called before, Wire is uninitialised and
+         * called after begin(); if called before, Wire is uninitialised and
          * the transmission fails silently.
          * @param mode One of the SensitivityMode values.
          */
@@ -255,9 +253,9 @@ class Apis
          *   1. TLV61220 boost converter starts immediately (EN tied to VIN+);
          *      outputs stable 5V within ~2 ms. No firmware action needed.
          *   2. MIC5365 LDO derives 3.3V from the 5V rail; ATTiny1634 starts.
-         *   3. Firmware setup(): delay(10) → POWER_SW high (MIC2544 enables,
-         *      680 µF cap charges at ~227 mA over ~15 ms) → delay(100) →
-         *      ENABLE high → InitAccel() → InitLiDAR(). Total: ~115 ms.
+         *   3. Firmware setup(): delay(10) -> POWER_SW high (MIC2544 enables,
+         *      680 uF cap charges at ~227 mA over ~15 ms) -> delay(100) ->
+         *      ENABLE high -> InitAccel() -> InitLiDAR(). Total: ~115 ms.
          *   4. Wire.begin() is called early in setup(), so the ATTiny is
          *      I2C-addressable before it has finished initialising the LiDAR.
          *      A library call arriving during this window would find the sensor

@@ -109,8 +109,8 @@ bool Apis::updateOrientation() {
 void Apis::_waitUntilReady() {
     // Poll Reg[0] until the firmware signals ready (1) or 150 ms elapse.
     // The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +
-    // 680 µF cap charge (~15 ms at MIC2544 current limit) + delay(100) +
-    // ENABLE high + InitAccel + InitLiDAR ≈ 115 ms, with margin.
+    // 680 uF cap charge (~15 ms at MIC2544 current limit) + delay(100) +
+    // ENABLE high + InitAccel + InitLiDAR ~= 115 ms, with margin.
     // The TLV61220 boost converter is always on (EN tied to VIN+) and produces
     // stable 5V before the ATTiny starts, so no converter startup is added here.
     // Old firmware leaves Reg[0]=0 always and times out; new firmware
