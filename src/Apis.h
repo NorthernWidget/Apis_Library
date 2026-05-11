@@ -53,14 +53,18 @@ enum SensitivityMode : uint8_t {
                                ///<   longer maximum range, slower throughput.
 };
 
-// Sentinel values used by all getters and getString() output:
-//   -9999  Sensor error: hardware fault, I2C failure, or out-of-range reading.
-//   -9998  Not yet measured: begin() has been called but no successful
-//          updateMeasurements() (or updateRange()/updateOrientation()) has
-//          completed. Distinct from -9999 so callers can tell the difference
-//          between "the sensor failed" and "we haven't asked yet."
-// Both sentinels apply to all measurement types: range, pitch, roll,
-// and all statistics (mean, std, sterr).
+/// Sentinel returned by all getters and printed by getString() when a
+/// measurement fails due to hardware fault, I2C failure, or out-of-range
+/// reading. Applies to all measurement types: range, pitch, roll, and all
+/// derived statistics (mean, std, sterr).
+#define APIS_ERROR        -9999
+
+/// Sentinel returned by all getters and printed by getString() when begin()
+/// has been called but no successful updateMeasurements() (or
+/// updateRange()/updateOrientation()) has yet completed. Distinct from
+/// APIS_ERROR so callers can tell the difference between "the sensor failed"
+/// and "we haven't asked yet."
+#define APIS_NOT_MEASURED -9998
 
 // NW standard component constants for raw reading interface.
 // TODO: Move to NW template library when created.
@@ -119,10 +123,12 @@ class Apis
         /**
          * @brief Begin communications with the Apis using a prescribed
          * address.
-         * @param address default 0x50
-         * DOES NOT YET USE A VARIABLE ADDRESS!
-         * DOES NOT MATTER WHAT YOU WRITE HERE.
-         * THIS DEFAULT ADDRESS CURRENTLY CLASHES WITH HAAR'S DEFAULT!
+         * @param address I2C address (default ADR_DEFAULT = 0x50).
+         * @warning Address selection is not yet implemented in firmware —
+         *          this parameter is accepted but ignored. The device always
+         *          uses its fixed firmware address. The default (0x50) also
+         *          clashes with Haar's default address. Both issues will be
+         *          resolved in a future firmware update.
          * @param sensitivity One of the SensitivityMode values
          * (default SENSITIVITY_BALANCED). Written to firmware register 0x01
          * and applied each firmware loop() iteration. See SensitivityMode
@@ -215,8 +221,8 @@ class Apis
          * nRangeReadings > 1.
          * Appends orientation std and sterr when orientStats is true and
          * nOrientReadings > 1.
-         * Error values are "-9999" (sensor error) and "-9998" (no measurement
-         * yet taken).
+         * Error values are APIS_ERROR (-9999) for sensor errors and
+         * APIS_NOT_MEASURED (-9998) when no measurement has yet been taken.
          * @param takeNewReadings if true, run updateMeasurements() before
          * returning values. Otherwise, return stored values.
          */
