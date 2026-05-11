@@ -15,6 +15,31 @@ void Apis::begin(uint8_t ADR_, uint8_t Sensitivity)
     Wire.endTransmission();
 }
 
+bool Apis::updateRange() {
+    uint8_t Data1 = 0;
+    uint8_t Data2 = 0;
+
+    Wire.beginTransmission(ADR);
+    Wire.write(0x02);
+    Wire.endTransmission();
+    Wire.requestFrom(ADR, 1);
+    Data1 = Wire.read();
+
+    Wire.beginTransmission(ADR);
+    Wire.write(0x03);
+    Wire.endTransmission();
+    Wire.requestFrom(ADR, 1);
+    Data2 = Wire.read();
+
+    Range = (int16_t)((Data2 << 8) | Data1);
+
+    if (Range < 0) {
+        Range = -9999;
+        return false;
+    }
+    return true;
+}
+
 bool Apis::updateMeasurements(){
 
     // Time for cap to settle or something

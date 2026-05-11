@@ -83,8 +83,15 @@ class Apis
                    uint8_t sensitivity = sensitivityBalanced);
 
         /**
+         * @brief Measure range [cm] only, without reading the accelerometer.
+         * Intended for rapid repeated range readings (e.g. for averaging).
+         * Returns false if the sensor returns an error value.
+         */
+        bool updateRange();
+
+        /**
          * @brief Measure range [cm], roll [deg] and pitch [deg].
-         * Returns "0" if sensors read error values; else returns "1".
+         * Returns false if any sensor returns an error value.
          */
         bool updateMeasurements();
 
