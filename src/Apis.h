@@ -27,11 +27,31 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 #define ADR_DEFAULT 0x50 // Define default address.
 
-// Sensitivity
-#define sensitivityBalanced  0
-#define sensitivityHigh      1
-#define sensitivityLow       2
-#define sensitivityMaxRange  3
+/**
+ * @brief Sensitivity mode for the LiDAR Lite acquisition pipeline.
+ * @details Written to firmware register 0x01 by begin(); applied on every
+ * loop() iteration when the firmware reinitialises the LiDAR Lite via
+ * InitLiDAR(). Two LiDAR Lite registers drive the behaviour:
+ *   - SIG_COUNT_VAL (0x02): maximum acquisition count per measurement.
+ *     Higher values average more returns, extending usable range but
+ *     slowing throughput.
+ *   - THRESHOLD_BYPASS (0x1C): signal detection threshold. Lower values
+ *     detect weaker returns (higher sensitivity, more false positives);
+ *     higher values suppress weak returns (fewer false positives, less range).
+ * TODO: consider a setSensitivity() function and/or automatic mode selection
+ * based on signal quality feedback from the LiDAR Lite.
+ */
+enum SensitivityMode : uint8_t {
+    SENSITIVITY_BALANCED  = 0, ///< Default. SIG_COUNT_VAL=0x80, THRESHOLD_BYPASS=0x00.
+                               ///<   Balanced range and noise performance.
+    SENSITIVITY_HIGH      = 1, ///< THRESHOLD_BYPASS=0x80. Lower detection threshold;
+                               ///<   detects weaker returns at the cost of more
+                               ///<   false positives.
+    SENSITIVITY_LOW       = 2, ///< THRESHOLD_BYPASS=0xB0. Higher detection threshold;
+                               ///<   fewer false positives at the cost of reduced range.
+    SENSITIVITY_MAX_RANGE = 3  ///< SIG_COUNT_VAL=0xFF. More acquisitions per measurement;
+                               ///<   longer maximum range, slower throughput.
+};
 
 // Sentinel values used by all getters and getString() output:
 //   -9999  Sensor error: hardware fault, I2C failure, or out-of-range reading.
@@ -103,21 +123,14 @@ class Apis
          * DOES NOT YET USE A VARIABLE ADDRESS!
          * DOES NOT MATTER WHAT YOU WRITE HERE.
          * THIS DEFAULT ADDRESS CURRENTLY CLASHES WITH HAAR'S DEFAULT!
-         * @param sensitivity Options are:
-         * sensitivityBalanced (0)
-         * sensitivityHigh (1)
-         * sensitivityLow (2)
-         * sensitivityMaxRange (3)
-         * Default value: sensitivityBalanced (0)
-         * THIS IS ALSO NOT YET IMPLEMENTED IN FIRMWARE! JUST STAYS AT DEFAULT
-         * (SENSITIVITY_BALANCED = 0)
-         * CONSIDER A SET_SENSITIVITY FUNCTION IN THE FUTURE TO ALLOW THE
-         * SENSOR TO AUTOMATICALLY ADJUST THE SENSITIVITY TO RECEIVE THE BEST
-         * POSSIBLE RETURN
+         * @param sensitivity One of the SensitivityMode values
+         * (default SENSITIVITY_BALANCED). Written to firmware register 0x01
+         * and applied each firmware loop() iteration. See SensitivityMode
+         * for descriptions of each mode.
          * @return true if the device acknowledges on I2C, false otherwise.
          */
         bool begin(uint8_t address = ADR_DEFAULT,
-                   uint8_t sensitivity = sensitivityBalanced);
+                   SensitivityMode sensitivity = SENSITIVITY_BALANCED);
 
         // --- Configuration setters ---
         /** @brief Set number of range readings to average. */
@@ -271,7 +284,7 @@ class Apis
         float _rollSterr  = -9998;
 
         // Sensor sensitivity; set initially to default "balanced" mode
-        uint8_t _sensitivity = sensitivityBalanced;
+        SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
 
         // True after begin(); cleared after _waitUntilReady() fires once.
         bool _needsStartupDelay = true;

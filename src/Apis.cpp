@@ -8,7 +8,7 @@ Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
 {
 }
 
-bool Apis::begin(uint8_t address, uint8_t sensitivity)
+bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
 {
     _adr = address;
     _sensitivity = sensitivity;
@@ -16,7 +16,7 @@ bool Apis::begin(uint8_t address, uint8_t sensitivity)
     Wire.begin();
     Wire.beginTransmission(_adr);
     Wire.write(0x01);
-    Wire.write(_sensitivity);
+    Wire.write((uint8_t)_sensitivity);
     return Wire.endTransmission() == 0;
 }
 
