@@ -256,7 +256,10 @@ uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
             dtostrf(_roll, 1, 2, tmp);
             offset += snprintf(buf + offset, 10, "%s,", tmp);
         } else {
-            offset += snprintf(buf + offset, 13, "%d,%d,", APIS_ERROR, APIS_ERROR);
+            offset += snprintf(buf + offset, 13, "-9999,-9999,"); // APIS_ERROR twice; string
+                                                                  // literal used because the
+                                                                  // buffer size (13) is tied to
+                                                                  // the digit count of -9999.
         }
     }
     return offset;
