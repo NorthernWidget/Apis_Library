@@ -56,7 +56,7 @@ bool Apis::updateRange() {
     _range = (int16_t)((data2 << 8) | data1);
 
     if (_range < 0) {
-        _range = -9999;
+        _range = APIS_ERROR;
         return false;
     }
     return true;
@@ -94,7 +94,7 @@ bool Apis::updateOrientation() {
     // (arithmetic shift). All three axes equal to -1 is therefore the I2C bus
     // failure signature, not a physical accelerometer reading.
     if (gx == gy && gx == gz && gx == -1) {
-        _pitch = _roll = -9999;
+        _pitch = _roll = APIS_ERROR;
         return false;
     } else if (offsetX == offsetY && offsetX == offsetZ && offsetX == 0) {
         _pitch = atan(-gx/gz) * 180. / M_PI;
@@ -144,8 +144,8 @@ bool Apis::updateMeasurements() {
     }
 
     if (rangeN == 0) {
-        _range = -9999;
-        _rangeMean = _rangeStd = _rangeSterr = -9999;
+        _range = APIS_ERROR;
+        _rangeMean = _rangeStd = _rangeSterr = APIS_ERROR;
     } else {
         _rangeMean = rangeMean;
         _range     = (int16_t)rangeMean;
@@ -171,8 +171,8 @@ bool Apis::updateMeasurements() {
     }
 
     if (orientN == 0) {
-        _pitch = _roll = -9999;
-        _pitchStd = _pitchSterr = _rollStd = _rollSterr = -9999;
+        _pitch = _roll = APIS_ERROR;
+        _pitchStd = _pitchSterr = _rollStd = _rollSterr = APIS_ERROR;
     } else {
         _pitch = pitchMean;
         _roll  = rollMean;
@@ -182,9 +182,9 @@ bool Apis::updateMeasurements() {
         _rollSterr  = (orientN > 1) ? _rollStd  / sqrt((float)orientN) : 0;
     }
 
-    // Float comparisons with -9999 are safe: the value is assigned directly,
+    // Float comparisons with APIS_ERROR are safe: the value is assigned directly,
     // never computed, so the float representation is exact and consistent.
-    return (_range != -9999) && (_pitch != -9999) && (_roll != -9999);
+    return (_range != APIS_ERROR) && (_pitch != APIS_ERROR) && (_roll != APIS_ERROR);
 }
 
 int16_t Apis::getRange() {
@@ -256,7 +256,7 @@ uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
             dtostrf(_roll, 1, 2, tmp);
             offset += snprintf(buf + offset, 10, "%s,", tmp);
         } else {
-            offset += snprintf(buf + offset, 13, "-9999,-9999,");
+            offset += snprintf(buf + offset, 13, "%d,%d,", APIS_ERROR, APIS_ERROR);
         }
     }
     return offset;

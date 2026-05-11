@@ -282,21 +282,21 @@ class Apis
         bool     _orientStats;
 
         // Stored measurements and statistics.
-        // All initialised to -9998 (not yet measured); set to -9999 on error.
-        int16_t _range = -9998;
-        float   _pitch = -9998;
-        float   _roll  = -9998;
+        // All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.
+        int16_t _range = APIS_NOT_MEASURED;
+        float   _pitch = APIS_NOT_MEASURED;
+        float   _roll  = APIS_NOT_MEASURED;
 
         // Range statistics
-        float _rangeMean  = -9998;
-        float _rangeStd   = -9998;
-        float _rangeSterr = -9998;
+        float _rangeMean  = APIS_NOT_MEASURED;
+        float _rangeStd   = APIS_NOT_MEASURED;
+        float _rangeSterr = APIS_NOT_MEASURED;
 
         // Orientation statistics
-        float _pitchStd   = -9998;
-        float _pitchSterr = -9998;
-        float _rollStd    = -9998;
-        float _rollSterr  = -9998;
+        float _pitchStd   = APIS_NOT_MEASURED;
+        float _pitchSterr = APIS_NOT_MEASURED;
+        float _rollStd    = APIS_NOT_MEASURED;
+        float _rollSterr  = APIS_NOT_MEASURED;
 
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
