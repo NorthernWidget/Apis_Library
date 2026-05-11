@@ -94,8 +94,6 @@ enum SensitivityMode : uint8_t {
  * value, thereby correcting for this. Managing failures of the LiDAR Lite
  * within the Apis is essential, and the Apis therefore acts as a
  * buffer to protect the data logger from raw sensor failures.
- *
- * \verbatim [![DOI](https://zenodo.org/badge/260392682.svg)](https://zenodo.org/badge/latestdoi/260392682) \endverbatim
  */
 class Apis
 {
