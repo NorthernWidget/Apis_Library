@@ -1,0 +1,24 @@
+remote_theme: mmistakes/minimal-mistakes
+plugins:
+  - jekyll-remote-theme
+
+title: "Apis Library"
+description: "Arduino library for the Apis LiDAR rangefinder board"
+baseurl: "/Apis_Library"
+url: "https://docs.northernwidget.com"
+
+minimal_mistakes_skin: "default"
+
+author:
+  name: "Northern Widget"
+  url: "https://northernwidget.com"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: single
+      toc: true
+      toc_sticky: true
+      sidebar:
+        nav: api
