@@ -38,8 +38,8 @@ License: GNU GPL v3. You should find a copy in the repository.
  *   - THRESHOLD_BYPASS (0x1C): signal detection threshold. Lower values
  *     detect weaker returns (higher sensitivity, more false positives);
  *     higher values suppress weak returns (fewer false positives, less range).
- * TODO: consider a setSensitivity() function and/or automatic mode selection
- * based on signal quality feedback from the LiDAR Lite.
+ * TODO: consider automatic mode selection based on signal quality feedback
+ * from the LiDAR Lite.
  */
 enum SensitivityMode : uint8_t {
     SENSITIVITY_BALANCED  = 0, ///< Default. SIG_COUNT_VAL=0x80, THRESHOLD_BYPASS=0x00.
@@ -141,6 +141,15 @@ class Apis
         void setNOrientReadings(uint16_t n);
         /** @brief Enable or disable orientation std and sterr in getString(). */
         void setOrientStats(bool enable);
+        /**
+         * @brief Change the rangefinder sensitivity mode after begin().
+         * @details Writes the new mode to firmware register 0x01; the firmware
+         * applies it on the next loop() iteration via InitLiDAR(). Must be
+         * called after begin() — if called before, Wire is uninitialised and
+         * the transmission fails silently.
+         * @param mode One of the SensitivityMode values.
+         */
+        void setRangefinderSensitivity(SensitivityMode mode);
 
         /**
          * @brief Measure range [cm] only, without reading the accelerometer.

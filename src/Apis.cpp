@@ -25,6 +25,14 @@ void Apis::setRangeStats(bool enable)      { _rangeStats = enable; }
 void Apis::setNOrientReadings(uint16_t n) { _nOrientReadings = n; }
 void Apis::setOrientStats(bool enable)     { _orientStats = enable; }
 
+void Apis::setRangefinderSensitivity(SensitivityMode mode) {
+    _sensitivity = mode;
+    Wire.beginTransmission(_adr);
+    Wire.write(0x01);
+    Wire.write((uint8_t)_sensitivity);
+    Wire.endTransmission();
+}
+
 bool Apis::updateRange() {
     if (_needsStartupDelay) {
         _waitUntilReady();
