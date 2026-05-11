@@ -1,0 +1,54 @@
+#######################################
+# Syntax Coloring Map for Apis_Library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Apis	KEYWORD1
+SensitivityMode	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+setNRangeReadings	KEYWORD2
+setRangeStats	KEYWORD2
+setNOrientReadings	KEYWORD2
+setOrientStats	KEYWORD2
+setRangefinderSensitivity	KEYWORD2
+updateRange	KEYWORD2
+updateOrientation	KEYWORD2
+updateMeasurements	KEYWORD2
+getRange	KEYWORD2
+getRoll	KEYWORD2
+getPitch	KEYWORD2
+getRangeMean	KEYWORD2
+getRangeStd	KEYWORD2
+getRangeSterr	KEYWORD2
+getPitchStd	KEYWORD2
+getPitchSterr	KEYWORD2
+getRollStd	KEYWORD2
+getRollSterr	KEYWORD2
+getHeader	KEYWORD2
+getString	KEYWORD2
+beginRawReadings	KEYWORD2
+takeRawReading	KEYWORD2
+endRawReadings	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+ADR_DEFAULT	LITERAL1
+SENSITIVITY_BALANCED	LITERAL1
+SENSITIVITY_HIGH	LITERAL1
+SENSITIVITY_LOW	LITERAL1
+SENSITIVITY_MAX_RANGE	LITERAL1
+NW_READING_ALL	LITERAL1
+NW_READING_PRIMARY	LITERAL1
+NW_READING_SECONDARY	LITERAL1
+NW_READING_RANGE	LITERAL1
+NW_READING_ORIENT	LITERAL1
