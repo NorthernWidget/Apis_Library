@@ -305,7 +305,7 @@ class Apis
         bool _needsStartupDelay = true;
 
         // Raw reading state
-        uint8_t _rawComponent;
+        uint8_t _rawComponent = NW_READING_ALL;
 };
 
 #endif

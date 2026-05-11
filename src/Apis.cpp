@@ -3,8 +3,7 @@
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
            uint16_t nOrientReadings, bool orientStats)
     : _nRangeReadings(nRangeReadings), _rangeStats(rangeStats),
-      _nOrientReadings(nOrientReadings), _orientStats(orientStats),
-      _rawComponent(NW_READING_ALL)
+      _nOrientReadings(nOrientReadings), _orientStats(orientStats)
 {
 }
 
