@@ -1,6 +1,7 @@
-remote_theme: mmistakes/minimal-mistakes
+theme: minimal-mistakes-jekyll
 plugins:
-  - jekyll-remote-theme
+  - jekyll-include-cache
+  - jekyll-seo-tag
 
 title: "Apis Library"
 description: "Arduino library for the Apis LiDAR rangefinder board"

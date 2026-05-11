@@ -36,8 +36,7 @@ jobs:
       - name: Add Minimal Mistakes front matter
         run: |
           python3 - <<'EOF'
-          import os, re
-
+          import os
           site_dir = "_site"
           for root, dirs, files in os.walk(site_dir):
               for fname in files:
@@ -46,13 +45,12 @@ jobs:
                   fpath = os.path.join(root, fname)
                   with open(fpath) as f:
                       content = f.read()
+                  insert = "layout: single\ntoc: true\ntoc_sticky: true\nsidebar:\n  nav: api\n"
                   if content.startswith("---\n"):
-                      # Insert MM keys before closing ---
                       close = content.index("\n---\n", 4) + 1
-                      insert = "layout: single\ntoc: true\ntoc_sticky: true\nsidebar:\n  nav: api\n"
                       content = content[:close] + insert + content[close:]
                   else:
-                      content = "---\nlayout: single\ntoc: true\ntoc_sticky: true\nsidebar:\n  nav: api\n---\n\n" + content
+                      content = "---\n" + insert + "---\n\n" + content
                   with open(fpath, "w") as f:
                       f.write(content)
           EOF
@@ -60,11 +58,22 @@ jobs:
       - name: Copy Jekyll support files
         run: |
           cp _docs/_config.yml _site/_config.yml
+          cp _docs/Gemfile _site/Gemfile
           cp -r _docs/_data _site/_data
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install Jekyll dependencies
+        run: cd _site && bundle install
+
+      - name: Build Jekyll site
+        run: cd _site && bundle exec jekyll build --destination ../_built
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          enable_jekyll: true
+          publish_dir: ./_built
