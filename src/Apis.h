@@ -214,6 +214,27 @@ class Apis
         void endRawReadings();
 
     private:
+        /**
+         * @brief Poll Reg[0] until firmware signals ready, or 150 ms elapses.
+         * @details Power-on startup sequence (from board power arriving):
+         *   1. TLV61220 boost converter starts immediately (EN tied to VIN+);
+         *      outputs stable 5V within ~2 ms. No firmware action needed.
+         *   2. MIC5365 LDO derives 3.3V from the 5V rail; ATTiny1634 starts.
+         *   3. Firmware setup(): delay(10) → POWER_SW high (MIC2544 enables,
+         *      680 µF cap charges at ~227 mA over ~15 ms) → delay(100) →
+         *      ENABLE high → InitAccel() → InitLiDAR(). Total: ~115 ms.
+         *   4. Wire.begin() is called early in setup(), so the ATTiny is
+         *      I2C-addressable before it has finished initialising the LiDAR.
+         *      A library call arriving during this window would find the sensor
+         *      not yet ready.
+         * New firmware (Issue #15) sets Reg[0]=1 after InitLiDAR() completes,
+         * allowing the library to exit the poll immediately rather than waiting
+         * a fixed time. Old firmware leaves Reg[0]=0 always; the 150 ms timeout
+         * then covers the full firmware startup with margin.
+         * See: https://github.com/NorthernWidget-Skunkworks/Project-Symbiont-LiDAR/issues/15
+         */
+        void _waitUntilReady();
+
         // I2C address
         uint8_t _adr = ADR_DEFAULT;
 
@@ -242,6 +263,9 @@ class Apis
 
         // Sensor sensitivity; set initially to default "balanced" mode
         uint8_t _sensitivity = sensitivityBalanced;
+
+        // True after begin(); cleared after _waitUntilReady() fires once.
+        bool _needsStartupDelay = true;
 
         // Raw reading state
         uint8_t _rawComponent;

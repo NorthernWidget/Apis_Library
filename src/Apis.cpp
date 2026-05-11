@@ -12,6 +12,7 @@ bool Apis::begin(uint8_t address, uint8_t sensitivity)
 {
     _adr = address;
     _sensitivity = sensitivity;
+    _needsStartupDelay = true;
     Wire.begin();
     Wire.beginTransmission(_adr);
     Wire.write(0x01);
@@ -86,9 +87,32 @@ bool Apis::updateOrientation() {
     return true;
 }
 
+void Apis::_waitUntilReady() {
+    // Poll Reg[0] until the firmware signals ready (1) or 150 ms elapse.
+    // The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +
+    // 680 µF cap charge (~15 ms at MIC2544 current limit) + delay(100) +
+    // ENABLE high + InitAccel + InitLiDAR ≈ 115 ms, with margin.
+    // The TLV61220 boost converter is always on (EN tied to VIN+) and produces
+    // stable 5V before the ATTiny starts, so no converter startup is added here.
+    // Old firmware leaves Reg[0]=0 always and times out; new firmware
+    // (github.com/NorthernWidget-Skunkworks/Project-Symbiont-LiDAR/issues/15)
+    // sets Reg[0]=1 after InitLiDAR(), allowing an early exit.
+    uint32_t start = millis();
+    while (millis() - start < 150) {
+        Wire.beginTransmission(_adr);
+        Wire.write(0x00);
+        Wire.endTransmission();
+        Wire.requestFrom(_adr, 1);
+        if (Wire.read() == 1) return;
+        delay(5);
+    }
+}
+
 bool Apis::updateMeasurements() {
-    // Allow capacitor to settle before first reading
-    delay(200);
+    if (_needsStartupDelay) {
+        _waitUntilReady();
+        _needsStartupDelay = false;
+    }
 
     // Welford's online algorithm for range mean, std, sterr
     float rangeM2 = 0, rangeMean = 0;
