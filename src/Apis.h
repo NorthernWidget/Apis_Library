@@ -5,12 +5,12 @@ Library for the Apis interface board for a LiDAR Lite unit.
 
 Andrew Wickert
 Based on code by Bobby Schulz
-In particular: https://github.com/NorthernWidget-Skunkworks/Project-Symbiont-LiDAR/tree/master/Software/LiDARLite_I2CParse
+In particular: https://github.com/NorthernWidget/Project-Apis/tree/master/Software/LiDARLite_I2CParse
 and based loosely around Bobby Schulz' general functions for sensor libraries.
 
 Started 2020.05.01
 Hardware located at:
-https://github.com/NorthernWidget-Skunkworks/Project-Symbiont-LIDAR
+https://github.com/NorthernWidget/Project-Apis
 
 License: GNU GPL v3. You should find a copy in the repository.
 ******************************************************************************/
@@ -240,7 +240,7 @@ class Apis
          * allowing the library to exit the poll immediately rather than waiting
          * a fixed time. Old firmware leaves Reg[0]=0 always; the 150 ms timeout
          * then covers the full firmware startup with margin.
-         * See: https://github.com/NorthernWidget-Skunkworks/Project-Symbiont-LiDAR/issues/15
+         * See: https://github.com/NorthernWidget/Project-Apis/issues/15
          */
         void _waitUntilReady();
 

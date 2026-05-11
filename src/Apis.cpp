@@ -107,7 +107,7 @@ void Apis::_waitUntilReady() {
     // The TLV61220 boost converter is always on (EN tied to VIN+) and produces
     // stable 5V before the ATTiny starts, so no converter startup is added here.
     // Old firmware leaves Reg[0]=0 always and times out; new firmware
-    // (github.com/NorthernWidget-Skunkworks/Project-Symbiont-LiDAR/issues/15)
+    // (github.com/NorthernWidget/Project-Apis/issues/15)
     // sets Reg[0]=1 after InitLiDAR(), allowing an early exit.
     uint32_t start = millis();
     while (millis() - start < 150) {
