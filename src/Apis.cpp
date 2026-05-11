@@ -26,6 +26,10 @@ void Apis::setNOrientReadings(uint16_t n) { _nOrientReadings = n; }
 void Apis::setOrientStats(bool enable)     { _orientStats = enable; }
 
 bool Apis::updateRange() {
+    if (_needsStartupDelay) {
+        _waitUntilReady();
+        _needsStartupDelay = false;
+    }
     uint8_t data1 = 0;
     uint8_t data2 = 0;
 
@@ -51,6 +55,10 @@ bool Apis::updateRange() {
 }
 
 bool Apis::updateOrientation() {
+    if (_needsStartupDelay) {
+        _waitUntilReady();
+        _needsStartupDelay = false;
+    }
     uint8_t data1 = 0, data2 = 0;
     int16_t dataSet[6];
 
@@ -109,11 +117,6 @@ void Apis::_waitUntilReady() {
 }
 
 bool Apis::updateMeasurements() {
-    if (_needsStartupDelay) {
-        _waitUntilReady();
-        _needsStartupDelay = false;
-    }
-
     // Welford's online algorithm for range mean, std, sterr
     float rangeM2 = 0, rangeMean = 0;
     uint16_t rangeN = 0;
