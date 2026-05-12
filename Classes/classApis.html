@@ -1,0 +1,686 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>Apis - Apis Library</title>
+<meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
+
+
+  <meta name="author" content="Northern Widget">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Apis Library">
+<meta property="og:title" content="Apis">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Classes/classApis.html">
+
+
+  <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Classes/classApis.html">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/Apis_Library/feed.xml" type="application/atom+xml" rel="alternate" title="Apis Library Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/Apis_Library/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/Apis_Library/">
+          Apis Library
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/"
+                
+                
+              >Quick-Start Guide</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      
+      
+        <li>
+          
+            <a href="/Apis_Library/Apis_Library/"><span class="nav__sub-title">Overview</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Apis_Library/Classes/classApis/"><span class="nav__sub-title">Apis Class</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Apis_Library/Files/"><span class="nav__sub-title">Files</span></a>
+          
+
+          
+        </li>
+      
+    
+  </ul>
+</nav>
+
+    
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Apis">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://docs.northernwidget.com/Apis_Library/Classes/classApis.html" itemprop="url">Apis
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#apis">Apis</a><ul><li><a href="#public-functions">Public Functions</a></li><li><a href="#detailed-description">Detailed Description</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-apis">function Apis</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-setnrangereadings">function setNRangeReadings</a></li><li><a href="#function-setrangestats">function setRangeStats</a></li><li><a href="#function-setnorientreadings">function setNOrientReadings</a></li><li><a href="#function-setorientstats">function setOrientStats</a></li><li><a href="#function-setrangefindersensitivity">function setRangefinderSensitivity</a></li><li><a href="#function-updaterange">function updateRange</a></li><li><a href="#function-updateorientation">function updateOrientation</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getrange">function getRange</a></li><li><a href="#function-getroll">function getRoll</a></li><li><a href="#function-getpitch">function getPitch</a></li><li><a href="#function-getrangemean">function getRangeMean</a></li><li><a href="#function-getrangestd">function getRangeStd</a></li><li><a href="#function-getrangesterr">function getRangeSterr</a></li><li><a href="#function-getpitchstd">function getPitchStd</a></li><li><a href="#function-getpitchsterr">function getPitchSterr</a></li><li><a href="#function-getrollstd">function getRollStd</a></li><li><a href="#function-getrollsterr">function getRollSterr</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-beginrawreadings">function beginRawReadings</a></li><li><a href="#function-takerawreading">function takeRawReading</a></li><li><a href="#function-endrawreadings">function endRawReadings</a></li></ul></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <h1 id="apis">Apis</h1>
+
+<p>Arduino library for the <a href="">Apis</a> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).  <a href="#detailed-description">More…</a></p>
+
+<p><code class="language-plaintext highlighter-rouge">#include &lt;Apis.h&gt;</code></p>
+
+<h2 id="public-functions">Public Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-apis">Apis</a></strong>(uint16_t nRangeReadings =1, bool rangeStats =false, uint16_t nOrientReadings =1, bool orientStats =false)<br />Instantiate <a href="/Apis_Library/Classes/classApis/">Apis</a> object.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-begin">begin</a></strong>(uint8_t address =ADR_DEFAULT, SensitivityMode sensitivity =SENSITIVITY_BALANCED)<br />Begin communications with the <a href="/Apis_Library/Classes/classApis/">Apis</a> using a prescribed address.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setnrangereadings">setNRangeReadings</a></strong>(uint16_t n)<br />Set number of range readings to average.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setrangestats">setRangeStats</a></strong>(bool enable)<br />Enable or disable range std and sterr in <a href="">getString()</a>.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setnorientreadings">setNOrientReadings</a></strong>(uint16_t n)<br />Set number of orientation readings to average.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setorientstats">setOrientStats</a></strong>(bool enable)<br />Enable or disable orientation std and sterr in <a href="">getString()</a>.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setrangefindersensitivity">setRangefinderSensitivity</a></strong>(SensitivityMode mode)<br />Change the rangefinder sensitivity mode after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange</a></strong>()<br />Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Returns false if the sensor returns an error value.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation</a></strong>()<br />Measure pitch [deg] and roll [deg] only, without ranging. Intended for rapid repeated orientation readings (e.g. for averaging). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms). Returns false if the sensor returns an error value.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements</a></strong>()<br />Measure range [cm], roll [deg] and pitch [deg]. Uses Welford’s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively. Returns false if any sensor returns an error value.</td>
+    </tr>
+    <tr>
+      <td>int16_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrange">getRange</a></strong>()<br />Return range mean [cm], rounded to nearest cm.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getroll">getRoll</a></strong>()<br />Return roll mean [deg].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getpitch">getPitch</a></strong>()<br />Return pitch mean [deg].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrangemean">getRangeMean</a></strong>()<br />Return range mean [cm] as float.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrangestd">getRangeStd</a></strong>()<br />Return range standard deviation [cm].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrangesterr">getRangeSterr</a></strong>()<br />Return range standard error [cm].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getpitchstd">getPitchStd</a></strong>()<br />Return pitch standard deviation [deg].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getpitchsterr">getPitchSterr</a></strong>()<br />Return pitch standard error [deg].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrollstd">getRollStd</a></strong>()<br />Return roll standard deviation [deg].</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrollsterr">getRollSterr</a></strong>()<br />Return roll standard error [deg].</td>
+    </tr>
+    <tr>
+      <td>String</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getheader">getHeader</a></strong>()<br />Return a comma-separated header matching <a href="">getString()</a> output. Includes statistics columns when rangeStats or orientStats are enabled and nReadings &gt; 1.</td>
+    </tr>
+    <tr>
+      <td>String</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getstring">getString</a></strong>(bool takeNewReadings =true)<br />Return comma-separated data values.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-beginrawreadings">beginRawReadings</a></strong>(uint8_t component =NW_READING_ALL)<br />Prepare for raw reading collection.</td>
+    </tr>
+    <tr>
+      <td>uint16_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-takerawreading">takeRawReading</a></strong>(char * buf, uint16_t offset)<br />Take one raw reading and write CSV data into buf at offset. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL. Each value followed by a comma. Max bytes written per call: 7 (RANGE), 18 (ORIENT), 25 (ALL).</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-endrawreadings">endRawReadings</a></strong>()<br />End raw reading collection.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="detailed-description">Detailed Description</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Apis</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Arduino library for the <a href="">Apis</a> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).</p>
+
+<p>Library to communicate with the <a href="/Apis_Library/Classes/classApis/">Apis</a> module, which connects to a LiDAR Lite rangefinder. The <a href="/Apis_Library/Classes/classApis/">Apis</a> is equipped with capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is placed on a cliff or a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the <a href="/Apis_Library/Classes/classApis/">Apis</a> is essential, and the <a href="/Apis_Library/Classes/classApis/">Apis</a> therefore acts as a buffer to protect the data logger from raw sensor failures.</p>
+
+<h2 id="public-functions-documentation">Public Functions Documentation</h2>
+
+<h3 id="function-apis">function Apis</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Apis</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">nRangeReadings</span> <span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="kt">bool</span> <span class="n">rangeStats</span> <span class="o">=</span><span class="nb">false</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">nOrientReadings</span> <span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="kt">bool</span> <span class="n">orientStats</span> <span class="o">=</span><span class="nb">false</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Instantiate <a href="/Apis_Library/Classes/classApis/">Apis</a> object.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>nRangeReadings</strong> Number of range readings to average (default 1). Paul et al. (2020, WRR, doi:10.1029/2019WR026810) found ~1000 readings needed for stable mean convergence under field conditions. Uses Welford’s online algorithm: O(1) memory regardless of count. FIX: Independent readings require firmware support for on-demand triggering; current firmware caches the value each loop (~200 ms).</li>
+  <li><strong>rangeStats</strong> If true, <a href="/Apis_Library/Classes/classApis/#function-getstring">getString()</a> includes range std and sterr. Only meaningful when nRangeReadings &gt; 1.</li>
+  <li><strong>nOrientReadings</strong> Number of orientation readings to average (default 1). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms).</li>
+  <li><strong>orientStats</strong> If true, <a href="/Apis_Library/Classes/classApis/#function-getstring">getString()</a> includes orientation std and sterr. Only meaningful when nOrientReadings &gt; 1.</li>
+</ul>
+
+<h3 id="function-begin">function begin</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">begin</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">address</span> <span class="o">=</span><span class="n">ADR_DEFAULT</span><span class="p">,</span>
+    <span class="n">SensitivityMode</span> <span class="n">sensitivity</span> <span class="o">=</span><span class="n">SENSITIVITY_BALANCED</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Begin communications with the <a href="/Apis_Library/Classes/classApis/">Apis</a> using a prescribed address.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>address</strong> I2C address (default ADR_DEFAULT = 0x50).</li>
+  <li><strong>sensitivity</strong> One of the SensitivityMode values (default SENSITIVITY_BALANCED). Written to firmware register 0x01 and applied each firmware loop() iteration. See SensitivityMode for descriptions of each mode.</li>
+</ul>
+
+<p><strong>Return</strong>: true if the device acknowledges on I2C, false otherwise.</p>
+
+<p><strong>Warning</strong>: Address selection is not yet implemented in firmware; this parameter is accepted but ignored. The device always uses its fixed firmware address. The default (0x50) also clashes with Haar’s default address. Both issues will be resolved in a future firmware update.</p>
+
+<h3 id="function-setnrangereadings">function setNRangeReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setNRangeReadings</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Set number of range readings to average.</p>
+
+<h3 id="function-setrangestats">function setRangeStats</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setRangeStats</span><span class="p">(</span>
+    <span class="kt">bool</span> <span class="n">enable</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Enable or disable range std and sterr in <a href="">getString()</a>.</p>
+
+<h3 id="function-setnorientreadings">function setNOrientReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setNOrientReadings</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Set number of orientation readings to average.</p>
+
+<h3 id="function-setorientstats">function setOrientStats</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setOrientStats</span><span class="p">(</span>
+    <span class="kt">bool</span> <span class="n">enable</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Enable or disable orientation std and sterr in <a href="">getString()</a>.</p>
+
+<h3 id="function-setrangefindersensitivity">function setRangefinderSensitivity</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setRangefinderSensitivity</span><span class="p">(</span>
+    <span class="n">SensitivityMode</span> <span class="n">mode</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Change the rangefinder sensitivity mode after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>mode</strong> One of the SensitivityMode values.</li>
+</ul>
+
+<p>Writes the new mode to firmware register 0x01; the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
+
+<h3 id="function-updaterange">function updateRange</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateRange</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Returns false if the sensor returns an error value.</p>
+
+<h3 id="function-updateorientation">function updateOrientation</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateOrientation</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Measure pitch [deg] and roll [deg] only, without ranging. Intended for rapid repeated orientation readings (e.g. for averaging). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms). Returns false if the sensor returns an error value.</p>
+
+<h3 id="function-updatemeasurements">function updateMeasurements</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateMeasurements</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Measure range [cm], roll [deg] and pitch [deg]. Uses Welford’s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively. Returns false if any sensor returns an error value.</p>
+
+<h3 id="function-getrange">function getRange</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int16_t</span> <span class="n">getRange</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return range mean [cm], rounded to nearest cm.</p>
+
+<h3 id="function-getroll">function getRoll</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRoll</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return roll mean [deg].</p>
+
+<h3 id="function-getpitch">function getPitch</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getPitch</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return pitch mean [deg].</p>
+
+<h3 id="function-getrangemean">function getRangeMean</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRangeMean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return range mean [cm] as float.</p>
+
+<h3 id="function-getrangestd">function getRangeStd</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRangeStd</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return range standard deviation [cm].</p>
+
+<h3 id="function-getrangesterr">function getRangeSterr</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRangeSterr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return range standard error [cm].</p>
+
+<h3 id="function-getpitchstd">function getPitchStd</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getPitchStd</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return pitch standard deviation [deg].</p>
+
+<h3 id="function-getpitchsterr">function getPitchSterr</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getPitchSterr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return pitch standard error [deg].</p>
+
+<h3 id="function-getrollstd">function getRollStd</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRollStd</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return roll standard deviation [deg].</p>
+
+<h3 id="function-getrollsterr">function getRollSterr</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRollSterr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return roll standard error [deg].</p>
+
+<h3 id="function-getheader">function getHeader</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">getHeader</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return a comma-separated header matching <a href="">getString()</a> output. Includes statistics columns when rangeStats or orientStats are enabled and nReadings &gt; 1.</p>
+
+<h3 id="function-getstring">function getString</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">String</span> <span class="n">getString</span><span class="p">(</span>
+    <span class="kt">bool</span> <span class="n">takeNewReadings</span> <span class="o">=</span><span class="nb">true</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Return comma-separated data values.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>takeNewReadings</strong> if true, run <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> before returning values. Otherwise, return stored values.</li>
+</ul>
+
+<p>This is the most likely function (alongside getHeader) for an end user to use. Always includes: Range [cm], Pitch [deg], Roll [deg]. Appends range std and sterr when rangeStats is true and nRangeReadings &gt; 1. Appends orientation std and sterr when orientStats is true and nOrientReadings &gt; 1. Error values are APIS_ERROR (-9999) for sensor errors and APIS_NOT_MEASURED (-9998) when no measurement has yet been taken.</p>
+
+<h3 id="function-beginrawreadings">function beginRawReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">beginRawReadings</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">NW_READING_ALL</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Prepare for raw reading collection.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>component</strong> NW_READING_ALL, NW_READING_RANGE (primary), or NW_READING_ORIENT (secondary).</li>
+</ul>
+
+<h3 id="function-takerawreading">function takeRawReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">takeRawReading</span><span class="p">(</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">offset</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Take one raw reading and write CSV data into buf at offset. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL. Each value followed by a comma. Max bytes written per call: 7 (RANGE), 18 (ORIENT), 25 (ALL).</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>buf</strong> Caller-managed destination buffer.</li>
+  <li><strong>offset</strong> Starting write position in buf.</li>
+</ul>
+
+<p><strong>Return</strong>: New offset after writing.</p>
+
+<h3 id="function-endrawreadings">function endRawReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">endRawReadings</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>End raw reading collection.</p>
+
+<hr />
+
+<p>Updated on 2026-05-12 at 00:00:21 +0000</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+
+
+        
+
+
+
+      </footer>
+
+      
+
+      
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/Apis_Library/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://docs.northernwidget.com">Apis Library</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/Apis_Library/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

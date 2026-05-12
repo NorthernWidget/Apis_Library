@@ -1,0 +1,580 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>src/Apis.cpp - Apis Library</title>
+<meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
+
+
+  <meta name="author" content="Northern Widget">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Apis Library">
+<meta property="og:title" content="src/Apis.cpp">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Files/Apis_8cpp.html">
+
+
+  <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Files/Apis_8cpp.html">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/Apis_Library/feed.xml" type="application/atom+xml" rel="alternate" title="Apis Library Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/Apis_Library/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/Apis_Library/">
+          Apis Library
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/"
+                
+                
+              >Quick-Start Guide</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      
+      
+        <li>
+          
+            <a href="/Apis_Library/Apis_Library/"><span class="nav__sub-title">Overview</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Apis_Library/Classes/classApis/"><span class="nav__sub-title">Apis Class</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Apis_Library/Files/"><span class="nav__sub-title">Files</span></a>
+          
+
+          
+        </li>
+      
+    
+  </ul>
+</nav>
+
+    
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="src/Apis.cpp">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://docs.northernwidget.com/Apis_Library/Files/Apis_8cpp.html" itemprop="url">src/Apis.cpp
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#srcapiscpp">src/Apis.cpp</a><ul><li><a href="#source-code">Source code</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <h1 id="srcapiscpp">src/Apis.cpp</h1>
+
+<h2 id="source-code">Source code</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"Apis.h"</span><span class="cp">
+</span>
+<span class="n">Apis</span><span class="o">::</span><span class="n">Apis</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nRangeReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">rangeStats</span><span class="p">,</span>
+           <span class="kt">uint16_t</span> <span class="n">nOrientReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">orientStats</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">_nRangeReadings</span><span class="p">(</span><span class="n">nRangeReadings</span><span class="p">),</span> <span class="n">_rangeStats</span><span class="p">(</span><span class="n">rangeStats</span><span class="p">),</span>
+      <span class="n">_nOrientReadings</span><span class="p">(</span><span class="n">nOrientReadings</span><span class="p">),</span> <span class="n">_orientStats</span><span class="p">(</span><span class="n">orientStats</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">address</span><span class="p">,</span> <span class="n">SensitivityMode</span> <span class="n">sensitivity</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_adr</span> <span class="o">=</span> <span class="n">address</span><span class="p">;</span>
+    <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">sensitivity</span><span class="p">;</span>
+    <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x01</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNRangeReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span>  <span class="p">{</span> <span class="n">_nRangeReadings</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setRangeStats</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">)</span>      <span class="p">{</span> <span class="n">_rangeStats</span> <span class="o">=</span> <span class="n">enable</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNOrientReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="n">_nOrientReadings</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setOrientStats</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">)</span>     <span class="p">{</span> <span class="n">_orientStats</span> <span class="o">=</span> <span class="n">enable</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setRangefinderSensitivity</span><span class="p">(</span><span class="n">SensitivityMode</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">mode</span><span class="p">;</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x01</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateRange</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_needsStartupDelay</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_waitUntilReady</span><span class="p">();</span>
+        <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">uint8_t</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">uint8_t</span> <span class="n">data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x02</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x03</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+    <span class="n">_range</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">_range</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateOrientation</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_needsStartupDelay</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_waitUntilReady</span><span class="p">();</span>
+        <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">uint8_t</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int16_t</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+        <span class="n">dataSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">float</span> <span class="n">gx</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gz</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="kt">float</span> <span class="n">offsetX</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">offsetY</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">offsetZ</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+
+    <span class="c1">// When software I2C reads fail, the ATTiny returns 0xFF per byte. Two 0xFF</span>
+    <span class="c1">// bytes assembled as int16_t (0xFFFF) and right-shifted 4 gives -1 on AVR</span>
+    <span class="c1">// (arithmetic shift). All three axes equal to -1 is therefore the I2C bus</span>
+    <span class="c1">// failure signature, not a physical accelerometer reading.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gx</span> <span class="o">==</span> <span class="n">gy</span> <span class="o">&amp;&amp;</span> <span class="n">gx</span> <span class="o">==</span> <span class="n">gz</span> <span class="o">&amp;&amp;</span> <span class="n">gx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetY</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetZ</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="o">-</span><span class="n">gx</span><span class="o">/</span><span class="n">gz</span><span class="p">)</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
+        <span class="n">_roll</span>  <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="n">gy</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="n">gx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">gz</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="p">(</span><span class="n">atan</span><span class="p">(</span><span class="o">-</span><span class="n">gx</span><span class="o">/</span><span class="n">gz</span><span class="p">)</span> <span class="o">-</span> <span class="n">atan</span><span class="p">(</span><span class="o">-</span><span class="n">offsetX</span><span class="o">/</span><span class="n">offsetZ</span><span class="p">))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
+        <span class="n">_roll</span>  <span class="o">=</span> <span class="p">(</span><span class="n">atan</span><span class="p">(</span><span class="n">gy</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="n">gx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">gz</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+                <span class="o">-</span> <span class="n">atan</span><span class="p">(</span><span class="n">offsetY</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="n">offsetX</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">offsetZ</span><span class="p">,</span> <span class="mi">2</span><span class="p">))))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_waitUntilReady</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Poll Reg[0] until the firmware signals ready (1) or 150 ms elapse.</span>
+    <span class="c1">// The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +</span>
+    <span class="c1">// 680 uF cap charge (~15 ms at MIC2544 current limit) + delay(100) +</span>
+    <span class="c1">// ENABLE high + InitAccel + InitLiDAR ~= 115 ms, with margin.</span>
+    <span class="c1">// The TLV61220 boost converter is always on (EN tied to VIN+) and produces</span>
+    <span class="c1">// stable 5V before the ATTiny starts, so no converter startup is added here.</span>
+    <span class="c1">// Old firmware leaves Reg[0]=0 always and times out; new firmware</span>
+    <span class="c1">// (github.com/NorthernWidget/Project-Apis/issues/15)</span>
+    <span class="c1">// sets Reg[0]=1 after InitLiDAR(), allowing an early exit.</span>
+    <span class="kt">uint32_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">150</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x00</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="n">delay</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateMeasurements</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Welford's online algorithm for range mean, std, sterr</span>
+    <span class="kt">float</span> <span class="n">rangeM2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rangeMean</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">uint16_t</span> <span class="n">rangeN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_nRangeReadings</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">updateRange</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">rangeN</span><span class="o">++</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">_range</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">rangeMean</span><span class="p">;</span>
+            <span class="n">rangeMean</span> <span class="o">+=</span> <span class="n">delta</span> <span class="o">/</span> <span class="n">rangeN</span><span class="p">;</span>
+            <span class="n">rangeM2</span>   <span class="o">+=</span> <span class="n">delta</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">rangeMean</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_rangeMean</span> <span class="o">=</span> <span class="n">_rangeStd</span> <span class="o">=</span> <span class="n">_rangeSterr</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">_rangeMean</span> <span class="o">=</span> <span class="n">rangeMean</span><span class="p">;</span>
+        <span class="n">_range</span>     <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">rangeMean</span><span class="p">;</span>
+        <span class="n">_rangeStd</span>   <span class="o">=</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">rangeM2</span> <span class="o">/</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">_rangeSterr</span> <span class="o">=</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">_rangeStd</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">rangeN</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Welford's online algorithm for orientation mean, std, sterr</span>
+    <span class="kt">float</span> <span class="n">pitchM2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rollM2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pitchMean</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rollMean</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">uint16_t</span> <span class="n">orientN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_nOrientReadings</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">updateOrientation</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">orientN</span><span class="o">++</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">dp</span> <span class="o">=</span> <span class="n">_pitch</span> <span class="o">-</span> <span class="n">pitchMean</span><span class="p">;</span>
+            <span class="n">pitchMean</span> <span class="o">+=</span> <span class="n">dp</span> <span class="o">/</span> <span class="n">orientN</span><span class="p">;</span>
+            <span class="n">pitchM2</span>   <span class="o">+=</span> <span class="n">dp</span> <span class="o">*</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">-</span> <span class="n">pitchMean</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">dr</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">-</span> <span class="n">rollMean</span><span class="p">;</span>
+            <span class="n">rollMean</span> <span class="o">+=</span> <span class="n">dr</span> <span class="o">/</span> <span class="n">orientN</span><span class="p">;</span>
+            <span class="n">rollM2</span>   <span class="o">+=</span> <span class="n">dr</span> <span class="o">*</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">-</span> <span class="n">rollMean</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_pitchStd</span> <span class="o">=</span> <span class="n">_pitchSterr</span> <span class="o">=</span> <span class="n">_rollStd</span> <span class="o">=</span> <span class="n">_rollSterr</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">pitchMean</span><span class="p">;</span>
+        <span class="n">_roll</span>  <span class="o">=</span> <span class="n">rollMean</span><span class="p">;</span>
+        <span class="n">_pitchStd</span>   <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pitchM2</span> <span class="o">/</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">_pitchSterr</span> <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">_pitchStd</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">orientN</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">_rollStd</span>    <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">rollM2</span>  <span class="o">/</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">_rollSterr</span>  <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">_rollStd</span>  <span class="o">/</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">orientN</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Float comparisons with APIS_ERROR are safe: the value is assigned directly,</span>
+    <span class="c1">// never computed, so the float representation is exact and consistent.</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">_range</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRange</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Distance in cm (rounded mean when nRangeReadings &gt; 1)</span>
+    <span class="k">return</span> <span class="n">_range</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRoll</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Roll in degrees</span>
+    <span class="k">return</span> <span class="n">_roll</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getPitch</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Pitch in degrees</span>
+    <span class="k">return</span> <span class="n">_pitch</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeMean</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_rangeMean</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeStd</span><span class="p">()</span>   <span class="p">{</span> <span class="k">return</span> <span class="n">_rangeStd</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeSterr</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_rangeSterr</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getPitchStd</span><span class="p">()</span>   <span class="p">{</span> <span class="k">return</span> <span class="n">_pitchStd</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getPitchSterr</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_pitchSterr</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRollStd</span><span class="p">()</span>    <span class="p">{</span> <span class="k">return</span> <span class="n">_rollStd</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRollSterr</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_rollSterr</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getString</span><span class="p">(</span><span class="kt">bool</span> <span class="n">takeNewReadings</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">takeNewReadings</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">updateMeasurements</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">String</span><span class="p">(</span><span class="n">_range</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rangeStats</span> <span class="o">&amp;&amp;</span> <span class="n">_nRangeReadings</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">_rangeStd</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">_rangeSterr</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">_pitch</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">_roll</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_orientStats</span> <span class="o">&amp;&amp;</span> <span class="n">_nOrientReadings</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">_pitchStd</span><span class="p">)</span>   <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">_pitchSterr</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span>
+           <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">_rollStd</span><span class="p">)</span>    <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">_rollSterr</span><span class="p">)</span>  <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getHeader</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">String</span> <span class="n">h</span> <span class="o">=</span> <span class="s">"Range [cm],"</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rangeStats</span> <span class="o">&amp;&amp;</span> <span class="n">_nRangeReadings</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">h</span> <span class="o">+=</span> <span class="s">"Range std [cm],Range sterr [cm],"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">h</span> <span class="o">+=</span> <span class="s">"Pitch [deg],Roll [deg],"</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_orientStats</span> <span class="o">&amp;&amp;</span> <span class="n">_nOrientReadings</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">h</span> <span class="o">+=</span> <span class="s">"Pitch std [deg],Pitch sterr [deg],"</span>
+             <span class="s">"Roll std [deg],Roll sterr [deg],"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">h</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">beginRawReadings</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_rawComponent</span> <span class="o">=</span> <span class="n">component</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">takeRawReading</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">offset</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_RANGE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">updateRange</span><span class="p">();</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s">"%d,"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_range</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_ORIENT</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">updateOrientation</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">dtostrf</span><span class="p">(</span><span class="n">_pitch</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">"%s,"</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+            <span class="n">dtostrf</span><span class="p">(</span><span class="n">_roll</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">"%s,"</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="s">"-9999,-9999,"</span><span class="p">);</span> <span class="c1">// APIS_ERROR twice; string</span>
+                                                                  <span class="c1">// literal used because the</span>
+                                                                  <span class="c1">// buffer size (13) is tied to</span>
+                                                                  <span class="c1">// the digit count of -9999.</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">offset</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">endRawReadings</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// No cleanup required currently</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>Updated on 2026-05-12 at 00:00:21 +0000</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+
+
+        
+
+
+
+      </footer>
+
+      
+
+      
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/Apis_Library/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://docs.northernwidget.com">Apis Library</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/Apis_Library/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
