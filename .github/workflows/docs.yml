@@ -33,26 +33,45 @@ jobs:
             --output _site \
             --config .doxybook/config.json
 
+      - name: Show Doxybook2 output structure
+        run: find _site -name "*.md" | sort
+
       - name: Add Minimal Mistakes front matter
         run: |
           python3 - <<'EOF'
           import os
+
           site_dir = "_site"
+          insert_lines = [
+              "layout: single\n",
+              "render_with_liquid: false\n",
+              "toc: true\n",
+              "toc_sticky: true\n",
+              "sidebar:\n",
+              "  nav: api\n",
+          ]
+
           for root, dirs, files in os.walk(site_dir):
               for fname in files:
                   if not fname.endswith(".md"):
                       continue
                   fpath = os.path.join(root, fname)
                   with open(fpath) as f:
-                      content = f.read()
-                  insert = "layout: single\ntoc: true\ntoc_sticky: true\nsidebar:\n  nav: api\n"
-                  if content.startswith("---\n"):
-                      close = content.index("\n---\n", 4) + 1
-                      content = content[:close] + insert + content[close:]
+                      lines = f.readlines()
+
+                  if lines and lines[0].strip() == "---":
+                      for i, line in enumerate(lines[1:], 1):
+                          if line.strip() == "---":
+                              lines[i:i] = insert_lines
+                              break
+                      else:
+                          lines = ["---\n"] + insert_lines + ["---\n\n"] + lines
                   else:
-                      content = "---\n" + insert + "---\n\n" + content
+                      lines = ["---\n"] + insert_lines + ["---\n\n"] + lines
+
                   with open(fpath, "w") as f:
-                      f.write(content)
+                      f.writelines(lines)
+                  print(f"Processed: {fpath}")
           EOF
 
       - name: Use README as index page
