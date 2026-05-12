@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: Apis_Library
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - family-names: Wickert
+    given-names: Andrew
+    orcid: "https://orcid.org/0000-0002-9545-3365"
+  - family-names: Schulz
+    given-names: Bobby
+    orcid: "https://orcid.org/0000-0002-9272-4756"
+repository-code: https://github.com/NorthernWidget/Apis_Library
+url: https://docs.northernwidget.com/Apis_Library/
+abstract: "Arduino library for the Apis LiDAR rangefinder board. Apis manages power
+  supply, firmware watchdog, and I2C communication for a LiDAR Lite unit, and reads
+  a MEMS accelerometer to report pitch and roll — useful when the sensor is not mounted
+  level."
+keywords:
+  - Arduino
+  - LiDAR
+  - rangefinder
+  - environmental monitoring
+  - open-source
+license: GPL-3.0
+version: 0.0.0
+date-released: '2021-03-02'
+doi: 10.5281/zenodo.4572371
