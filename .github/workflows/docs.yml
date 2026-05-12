@@ -64,7 +64,7 @@ jobs:
                       for i, line in enumerate(lines[1:], 1):
                           if line.strip() == "---":
                               lines[i:i] = insert_lines
-                              fm_end = i + len(insert_lines)
+                              fm_end = i + len(insert_lines) + 1
                               break
                       else:
                           lines = ["---\n"] + insert_lines + ["---\n\n"] + lines
