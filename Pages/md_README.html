@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 
 
-<!-- begin _includes/seo.html --><title>Classes - Apis Library</title>
+<!-- begin _includes/seo.html --><title>Apis_Library - Apis Library</title>
 <meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
 
 
@@ -26,8 +26,8 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Apis Library">
-<meta property="og:title" content="Classes">
-<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Classes/index_classes.html">
+<meta property="og:title" content="Apis_Library">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Pages/md_README.html">
 
 
   <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
@@ -45,7 +45,7 @@
 
 
 
-<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Classes/index_classes.html">
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Pages/md_README.html">
 
 
 
@@ -193,7 +193,7 @@
 
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Classes">
+    <meta itemprop="headline" content="Apis_Library">
     
     
     
@@ -202,7 +202,7 @@
       
         <header>
           <h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="https://docs.northernwidget.com/Apis_Library/Classes/index_classes.html" itemprop="url">Classes
+            <a href="https://docs.northernwidget.com/Apis_Library/Pages/md_README.html" itemprop="url">Apis_Library
 </a>
           </h1>
           
@@ -217,15 +217,38 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#classes">Classes</a></li></ul>
+              <ul class="toc__menu"><li><a href="#apis_library">Apis_Library</a></li></ul>
             </nav>
           </aside>
         
-        <h1 id="classes">Classes</h1>
+        <h1 id="apis_library">Apis_Library</h1>
 
-<ul>
-  <li><strong>class <a href="/Apis_Library/Classes/classApis/">Apis</a></strong> <br />Arduino library for the <a href="">Apis</a> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).</li>
-</ul>
+<p><a href="https://doi.org/10.5281/zenodo.4572371"><img src="/Apis_Library/images/https://zenodo.org/badge/DOI/10.5281/zenodo.4572371.svg" alt="https://zenodo.org/badge/DOI/10.5281/zenodo.4572371.svg" /></a></p>
+
+<p>Arduino library for the <a href="https://github.com/NorthernWidget/Project-Apis">Apis</a> LiDAR rangefinder board. <a href="/Apis_Library/Classes/classApis/">Apis</a> manages power supply, firmware watchdog, and I2C communication for a LiDAR Lite unit, and reads a MEMS accelerometer to report pitch and roll — useful when the sensor is not mounted level.</p>
+
+<p><strong>Installation:</strong> included in <a href="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</a>. Also available via the Arduino Library Manager.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include</span> <span class="cpf">&lt;Apis.h&gt;</span><span class="cp">
+</span>
+<span class="n">Apis</span> <span class="n">rangefinder</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+    <span class="n">rangefinder</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">rangefinder</span><span class="p">.</span><span class="n">getHeader</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">rangefinder</span><span class="p">.</span><span class="n">getString</span><span class="p">());</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>See <a href="examples/">examples/</a> for a complete demo and Margay logger integration.</p>
+
+<p><strong>Full API reference:</strong><a href="https://docs.northernwidget.com/Apis_Library/">https://docs.northernwidget.com/Apis_Library/</a></p>
 
 <hr />
 
