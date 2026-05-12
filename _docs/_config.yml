@@ -7,6 +7,7 @@ title: "Apis Library"
 description: "Arduino library for the Apis LiDAR rangefinder board"
 baseurl: "/Apis_Library"
 url: "https://docs.northernwidget.com"
+permalink: /:path/
 
 minimal_mistakes_skin: "default"
 
@@ -19,6 +20,7 @@ defaults:
       path: ""
     values:
       layout: single
+      render_with_liquid: false
       toc: true
       toc_sticky: true
       sidebar:

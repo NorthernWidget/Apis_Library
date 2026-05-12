@@ -3,5 +3,7 @@ api:
     url: /
   - title: "Apis Class"
     url: /Classes/classApis/
+  - title: "Classes"
+    url: /Classes/index_classes/
   - title: "Files"
-    url: /Files/
+    url: /Files/index_files/
