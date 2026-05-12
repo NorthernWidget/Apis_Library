@@ -20,7 +20,6 @@ defaults:
       path: ""
     values:
       layout: single
-      render_with_liquid: false
       toc: true
       toc_sticky: true
       sidebar:
