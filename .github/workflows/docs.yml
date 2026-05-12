@@ -60,14 +60,31 @@ jobs:
                       lines = f.readlines()
 
                   if lines and lines[0].strip() == "---":
+                      fm_end = None
                       for i, line in enumerate(lines[1:], 1):
                           if line.strip() == "---":
                               lines[i:i] = insert_lines
+                              fm_end = i + len(insert_lines)
                               break
                       else:
                           lines = ["---\n"] + insert_lines + ["---\n\n"] + lines
+                          fm_end = 1 + len(insert_lines) + 1
                   else:
                       lines = ["---\n"] + insert_lines + ["---\n\n"] + lines
+                      fm_end = 1 + len(insert_lines) + 1
+
+                  # Strip the first heading from the body (duplicates front matter title
+                  # rendered by Minimal Mistakes layout)
+                  if fm_end is not None:
+                      i = fm_end
+                      while i < len(lines) and lines[i].strip() == "":
+                          i += 1
+                      if i + 1 < len(lines) and set(lines[i + 1].strip()) <= {"="}  and lines[i + 1].strip():
+                          # setext H1: title line + ==== underline
+                          del lines[i:i + 2]
+                      elif i < len(lines) and lines[i].startswith("# "):
+                          # ATX H1
+                          del lines[i]
 
                   with open(fpath, "w") as f:
                       f.writelines(lines)
