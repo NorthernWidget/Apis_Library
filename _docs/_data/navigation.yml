@@ -1,7 +1,7 @@
 api:
   - title: "Overview"
-    url: /Apis_Library/
+    url: /
   - title: "Apis Class"
-    url: /Apis_Library/Classes/classApis/
+    url: /Classes/classApis/
   - title: "Files"
-    url: /Apis_Library/Files/
+    url: /Files/

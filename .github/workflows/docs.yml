@@ -55,6 +55,11 @@ jobs:
                       f.write(content)
           EOF
 
+      - name: Use README as index page
+        run: |
+          printf -- "---\nlayout: single\ntoc: false\nsidebar:\n  nav: api\n---\n\n" > _site/index.md
+          cat README.md >> _site/index.md
+
       - name: Copy Jekyll support files
         run: |
           cp _docs/_config.yml _site/_config.yml
