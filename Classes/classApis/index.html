@@ -225,7 +225,7 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#detailed-description">Detailed Description</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-apis">function Apis</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-setnrangereadings">function setNRangeReadings</a></li><li><a href="#function-setrangestats">function setRangeStats</a></li><li><a href="#function-setnorientreadings">function setNOrientReadings</a></li><li><a href="#function-setorientstats">function setOrientStats</a></li><li><a href="#function-setrangefindersensitivity">function setRangefinderSensitivity</a></li><li><a href="#function-updaterange">function updateRange</a></li><li><a href="#function-updateorientation">function updateOrientation</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getrange">function getRange</a></li><li><a href="#function-getroll">function getRoll</a></li><li><a href="#function-getpitch">function getPitch</a></li><li><a href="#function-getrangemean">function getRangeMean</a></li><li><a href="#function-getrangestd">function getRangeStd</a></li><li><a href="#function-getrangesterr">function getRangeSterr</a></li><li><a href="#function-getpitchstd">function getPitchStd</a></li><li><a href="#function-getpitchsterr">function getPitchSterr</a></li><li><a href="#function-getrollstd">function getRollStd</a></li><li><a href="#function-getrollsterr">function getRollSterr</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-beginrawreadings">function beginRawReadings</a></li><li><a href="#function-takerawreading">function takeRawReading</a></li><li><a href="#function-endrawreadings">function endRawReadings</a></li></ul></li></ul>
+              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#detailed-description">Detailed Description</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-apis">function Apis</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-setnrangereadings">function setNRangeReadings</a></li><li><a href="#function-setrangestats">function setRangeStats</a></li><li><a href="#function-setnorientreadings">function setNOrientReadings</a></li><li><a href="#function-setorientstats">function setOrientStats</a></li><li><a href="#function-setrangefindersensitivity">function setRangefinderSensitivity</a></li><li><a href="#function-seti2caddress">function setI2CAddress</a></li><li><a href="#function-updaterange">function updateRange</a></li><li><a href="#function-updateorientation">function updateOrientation</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getrange">function getRange</a></li><li><a href="#function-getroll">function getRoll</a></li><li><a href="#function-getpitch">function getPitch</a></li><li><a href="#function-getsignalstrength">function getSignalStrength</a></li><li><a href="#function-getrangemean">function getRangeMean</a></li><li><a href="#function-getrangestd">function getRangeStd</a></li><li><a href="#function-getrangesterr">function getRangeSterr</a></li><li><a href="#function-getpitchstd">function getPitchStd</a></li><li><a href="#function-getpitchsterr">function getPitchSterr</a></li><li><a href="#function-getrollstd">function getRollStd</a></li><li><a href="#function-getrollsterr">function getRollSterr</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-beginrawreadings">function beginRawReadings</a></li><li><a href="#function-takerawreading">function takeRawReading</a></li><li><a href="#function-endrawreadings">function endRawReadings</a></li></ul></li></ul>
             </nav>
           </aside>
         
@@ -272,8 +272,12 @@
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-setrangefindersensitivity">setRangefinderSensitivity</a></strong>(SensitivityMode mode)<br />Change the rangefinder sensitivity mode after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>.</td>
     </tr>
     <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-seti2caddress">setI2CAddress</a></strong>(uint8_t newAddress)<br />Write a new I2C address to the device.</td>
+    </tr>
+    <tr>
       <td>bool</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange</a></strong>()<br />Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Returns false if the sensor returns an error value.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange</a></strong>()<br />Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Also updates the cached signal strength (see <a href="">getSignalStrength()</a>). Returns false if the sensor returns an error value.</td>
     </tr>
     <tr>
       <td>bool</td>
@@ -294,6 +298,10 @@
     <tr>
       <td>float</td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getpitch">getPitch</a></strong>()<br />Return pitch mean [deg].</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getsignalstrength">getSignalStrength</a></strong>()<br />Return the most recently cached LiDAR Lite signal strength.</td>
     </tr>
     <tr>
       <td>float</td>
@@ -392,12 +400,12 @@
 
 <ul>
   <li><strong>address</strong> I2C address (default ADR_DEFAULT = 0x50).</li>
-  <li><strong>sensitivity</strong> One of the SensitivityMode values (default SENSITIVITY_BALANCED). Written to firmware register 0x01 and applied each firmware loop() iteration. See SensitivityMode for descriptions of each mode.</li>
+  <li><strong>sensitivity</strong> One of the SensitivityMode values (default SENSITIVITY_BALANCED). Written to REG_CONFIG (0x0B) and applied each firmware loop() iteration. See SensitivityMode for descriptions of each mode.</li>
 </ul>
 
-<p><strong>Return</strong>: true if the device acknowledges on I2C, false otherwise.</p>
+<p><strong>Return</strong>: true if the device acknowledges and reports correct firmware; false otherwise.</p>
 
-<p><strong>Warning</strong>: Address selection is not yet implemented in firmware; this parameter is accepted but ignored. The device always uses its fixed firmware address. The default (0x50) also clashes with Haar’s default address. Both issues will be resolved in a future firmware update.</p>
+<p>Checks that the device acknowledges on I2C, verifies that the firmware reports the “Apis” device name at registers 0x01–0x04 (indicating firmware v0.2.0+ with the current register map), and writes the initial sensitivity mode to REG_CONFIG (0x0B). Returns false if: (a) no I2C ACK, or (b) name mismatch (old firmware). The minimum firmware version policy beyond that name check is TBD.</p>
 
 <h3 id="function-setnrangereadings">function setNRangeReadings</h3>
 
@@ -450,14 +458,31 @@
   <li><strong>mode</strong> One of the SensitivityMode values.</li>
 </ul>
 
-<p>Writes the new mode to firmware register 0x01; the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
+<p>Writes the new mode to REG_CONFIG (0x0B); the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
+
+<h3 id="function-seti2caddress">function setI2CAddress</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setI2CAddress</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">newAddress</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Write a new I2C address to the device.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>newAddress</strong> The 7-bit I2C address to persist.</li>
+</ul>
+
+<p>The firmware saves it to EEPROM byte 6 and uses it on the next boot; the current session continues on the old address. Falls back to 0x50 if EEPROM byte 6 is 0xFF (erased).</p>
 
 <h3 id="function-updaterange">function updateRange</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateRange</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Returns false if the sensor returns an error value.</p>
+<p>Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Also updates the cached signal strength (see <a href="">getSignalStrength()</a>). Returns false if the sensor returns an error value.</p>
 
 <h3 id="function-updateorientation">function updateOrientation</h3>
 
@@ -493,6 +518,15 @@
 </code></pre></div></div>
 
 <p>Return pitch mean [deg].</p>
+
+<h3 id="function-getsignalstrength">function getSignalStrength</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">getSignalStrength</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the most recently cached LiDAR Lite signal strength.</p>
+
+<p>Updated by every call to <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a> or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>. Returns 0 before the first measurement.</p>
 
 <h3 id="function-getrangemean">function getRangeMean</h3>
 
@@ -610,7 +644,7 @@
 
 <hr />
 
-<p>Updated on 2026-05-12 at 19:46:52 +0000</p>
+<p>Updated on 2026-05-13 at 21:24:13 +0000</p>
 
         
       </section>

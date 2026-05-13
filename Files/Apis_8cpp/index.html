@@ -246,10 +246,30 @@
     <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">sensitivity</span><span class="p">;</span>
     <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+
+    <span class="c1">// Check ACK.</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x01</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="c1">// Verify device identity by reading the 4-byte ASCII name from REG_NAME_0–3</span>
+    <span class="c1">// (0x01–0x04). New firmware initialises these statically, so they are valid</span>
+    <span class="c1">// before _waitUntilReady(). Old firmware leaves them 0x00; returning false</span>
+    <span class="c1">// here prevents misinterpreting the old register map.</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="n">expected</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'A'</span><span class="p">,</span> <span class="sc">'p'</span><span class="p">,</span> <span class="sc">'i'</span><span class="p">,</span> <span class="sc">'s'</span><span class="p">};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_NAME_0</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_CONFIG</span><span class="p">);</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNRangeReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span>  <span class="p">{</span> <span class="n">_nRangeReadings</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="p">}</span>
@@ -260,8 +280,15 @@
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setRangefinderSensitivity</span><span class="p">(</span><span class="n">SensitivityMode</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">mode</span><span class="p">;</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x01</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_CONFIG</span><span class="p">);</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setI2CAddress</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">newAddress</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_I2C_ADDR</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">newAddress</span><span class="p">);</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
 <span class="p">}</span>
 
@@ -274,18 +301,24 @@
     <span class="kt">uint8_t</span> <span class="n">data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x02</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_RANGE_L</span><span class="p">);</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
     <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
 
     <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x03</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_RANGE_H</span><span class="p">);</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
     <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
 
     <span class="n">_range</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
+
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_SIGNAL_STR</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">_signalStrength</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">_range</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
@@ -302,20 +335,38 @@
     <span class="kt">uint8_t</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">int16_t</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x10–0x15)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">);</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
         <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
 
         <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
         <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
 
         <span class="n">dataSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Accel offsets X/Y/Z at REG_OFFSET_BASE (0x18–0x1D)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+        <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kt">float</span> <span class="n">gx</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gz</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
@@ -340,22 +391,22 @@
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_waitUntilReady</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Poll Reg[0] until the firmware signals ready (1) or 150 ms elapse.</span>
+    <span class="c1">// Poll REG_STATUS bit 0 until the firmware signals ready or 150 ms elapse.</span>
     <span class="c1">// The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +</span>
     <span class="c1">// 680 uF cap charge (~15 ms at MIC2544 current limit) + delay(100) +</span>
     <span class="c1">// ENABLE high + InitAccel + InitLiDAR ~= 115 ms, with margin.</span>
     <span class="c1">// The TLV61220 boost converter is always on (EN tied to VIN+) and produces</span>
     <span class="c1">// stable 5V before the ATTiny starts, so no converter startup is added here.</span>
-    <span class="c1">// Old firmware leaves Reg[0]=0 always and times out; new firmware</span>
+    <span class="c1">// Old firmware leaves REG_STATUS=0 always and times out; new firmware</span>
     <span class="c1">// (github.com/NorthernWidget/Project-Apis/issues/15)</span>
-    <span class="c1">// sets Reg[0]=1 after InitLiDAR(), allowing an early exit.</span>
+    <span class="c1">// sets bit 0 after InitLiDAR(), allowing an early exit.</span>
     <span class="kt">uint32_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">150</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="mh">0x00</span><span class="p">);</span>
+        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_STATUS</span><span class="p">);</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
         <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mh">0x01</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="n">delay</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -419,20 +470,10 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">_range</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kt">int16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRange</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Distance in cm (rounded mean when nRangeReadings &gt; 1)</span>
-    <span class="k">return</span> <span class="n">_range</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRoll</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Roll in degrees</span>
-    <span class="k">return</span> <span class="n">_roll</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getPitch</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Pitch in degrees</span>
-    <span class="k">return</span> <span class="n">_pitch</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="kt">int16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRange</span><span class="p">()</span>          <span class="p">{</span> <span class="k">return</span> <span class="n">_range</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span>   <span class="n">Apis</span><span class="o">::</span><span class="n">getRoll</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_roll</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span>   <span class="n">Apis</span><span class="o">::</span><span class="n">getPitch</span><span class="p">()</span>          <span class="p">{</span> <span class="k">return</span> <span class="n">_pitch</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getSignalStrength</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_signalStrength</span><span class="p">;</span> <span class="p">}</span>
 
 <span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeMean</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_rangeMean</span><span class="p">;</span> <span class="p">}</span>
 <span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeStd</span><span class="p">()</span>   <span class="p">{</span> <span class="k">return</span> <span class="n">_rangeStd</span><span class="p">;</span> <span class="p">}</span>
@@ -504,7 +545,7 @@
 
 <hr />
 
-<p>Updated on 2026-05-12 at 19:46:52 +0000</p>
+<p>Updated on 2026-05-13 at 21:24:13 +0000</p>
 
         
       </section>
