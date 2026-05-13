@@ -24,11 +24,30 @@ License: GNU GPL v3. You should find a copy in the repository.
   #define M_PI 3.14159265358979323846
 #endif
 
-#define ADR_DEFAULT 0x50 // Define default address.
+#define ADR_DEFAULT 0x50
+
+// Register map (firmware v0.2.0+, 32-byte layout).
+// Registers not listed here are reserved.
+#define REG_STATUS      0x00  // Status flags; bit 0 = ready (poll in _waitUntilReady)
+#define REG_NAME_0      0x01  // 'A' — checked by begin() to detect old firmware
+#define REG_NAME_1      0x02  // 'p'
+#define REG_NAME_2      0x03  // 'i'
+#define REG_NAME_3      0x04  // 's'
+#define REG_HW_MAJOR    0x05  // Hardware version major
+#define REG_HW_MINOR    0x06  // Hardware version minor
+#define REG_FW_PATCH    0x07  // Firmware patch version
+#define REG_RANGE_L     0x08  // Range low byte  (little-endian int16, cm)
+#define REG_RANGE_H     0x09  // Range high byte
+#define REG_SIGNAL_STR  0x0A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
+#define REG_CONFIG      0x0B  // Sensitivity mode bits [1:0], writable
+#define REG_I2C_ADDR    0x0C  // I2C address, writable; firmware saves to EEPROM byte 6,
+                              //   takes effect on next boot; falls back to 0x50 if 0xFF
+#define REG_ACCEL_BASE  0x10  // Accel raw X low byte; X/Y/Z span 0x10–0x15, little-endian int16
+#define REG_OFFSET_BASE 0x18  // Accel offset X low byte; X/Y/Z span 0x18–0x1D, little-endian int16
 
 /**
  * @brief Sensitivity mode for the LiDAR Lite acquisition pipeline.
- * @details Written to firmware register 0x01 by begin(); applied on every
+ * @details Written to REG_CONFIG (0x0B) by begin(); applied on every
  * loop() iteration when the firmware reinitialises the LiDAR Lite via
  * InitLiDAR(). Two LiDAR Lite registers drive the behaviour:
  *   - SIG_COUNT_VAL (0x02): maximum acquisition count per measurement.
@@ -37,8 +56,6 @@ License: GNU GPL v3. You should find a copy in the repository.
  *   - THRESHOLD_BYPASS (0x1C): signal detection threshold. Lower values
  *     detect weaker returns (higher sensitivity, more false positives);
  *     higher values suppress weak returns (fewer false positives, less range).
- * TODO: consider automatic mode selection based on signal quality feedback
- * from the LiDAR Lite.
  */
 enum SensitivityMode : uint8_t {
     SENSITIVITY_BALANCED  = 0, ///< Default. SIG_COUNT_VAL=0x80, THRESHOLD_BYPASS=0x00.
@@ -117,19 +134,21 @@ class Apis
              uint16_t nOrientReadings = 1, bool orientStats = false);
 
         /**
-         * @brief Begin communications with the Apis using a prescribed
-         * address.
+         * @brief Begin communications with the Apis using a prescribed address.
+         * @details Checks that the device acknowledges on I2C, verifies that
+         * the firmware reports the "Apis" device name at registers 0x01–0x04
+         * (indicating firmware v0.2.0+ with the current register map), and
+         * writes the initial sensitivity mode to REG_CONFIG (0x0B).
+         * Returns false if: (a) no I2C ACK, or (b) name mismatch (old
+         * firmware). The minimum firmware version policy beyond that name
+         * check is TBD.
          * @param address I2C address (default ADR_DEFAULT = 0x50).
-         * @warning Address selection is not yet implemented in firmware;
-         *          this parameter is accepted but ignored. The device always
-         *          uses its fixed firmware address. The default (0x50) also
-         *          clashes with Haar's default address. Both issues will be
-         *          resolved in a future firmware update.
          * @param sensitivity One of the SensitivityMode values
-         * (default SENSITIVITY_BALANCED). Written to firmware register 0x01
+         * (default SENSITIVITY_BALANCED). Written to REG_CONFIG (0x0B)
          * and applied each firmware loop() iteration. See SensitivityMode
          * for descriptions of each mode.
-         * @return true if the device acknowledges on I2C, false otherwise.
+         * @return true if the device acknowledges and reports correct firmware;
+         *         false otherwise.
          */
         bool begin(uint8_t address = ADR_DEFAULT,
                    SensitivityMode sensitivity = SENSITIVITY_BALANCED);
@@ -145,7 +164,7 @@ class Apis
         void setOrientStats(bool enable);
         /**
          * @brief Change the rangefinder sensitivity mode after begin().
-         * @details Writes the new mode to firmware register 0x01; the firmware
+         * @details Writes the new mode to REG_CONFIG (0x0B); the firmware
          * applies it on the next loop() iteration via InitLiDAR(). Must be
          * called after begin(); if called before, Wire is uninitialised and
          * the transmission fails silently.
@@ -154,8 +173,18 @@ class Apis
         void setRangefinderSensitivity(SensitivityMode mode);
 
         /**
+         * @brief Write a new I2C address to the device.
+         * @details The firmware saves it to EEPROM byte 6 and uses it on the
+         * next boot; the current session continues on the old address. Falls
+         * back to 0x50 if EEPROM byte 6 is 0xFF (erased).
+         * @param newAddress The 7-bit I2C address to persist.
+         */
+        void setI2CAddress(uint8_t newAddress);
+
+        /**
          * @brief Measure range [cm] only, without reading the accelerometer.
          * Intended for rapid repeated range readings (e.g. for averaging).
+         * Also updates the cached signal strength (see getSignalStrength()).
          * Returns false if the sensor returns an error value.
          */
         bool updateRange();
@@ -184,6 +213,12 @@ class Apis
         float getRoll();
         /** @brief Return pitch mean [deg]. */
         float getPitch();
+        /**
+         * @brief Return the most recently cached LiDAR Lite signal strength.
+         * @details Updated by every call to updateRange() or updateMeasurements().
+         * Returns 0 before the first measurement.
+         */
+        uint8_t getSignalStrength();
 
         // --- Statistics getters ---
         /** @brief Return range mean [cm] as float. */
@@ -248,7 +283,7 @@ class Apis
 
     private:
         /**
-         * @brief Poll Reg[0] until firmware signals ready, or 150 ms elapses.
+         * @brief Poll REG_STATUS until bit 0 is set, or 150 ms elapses.
          * @details Power-on startup sequence (from board power arriving):
          *   1. TLV61220 boost converter starts immediately (EN tied to VIN+);
          *      outputs stable 5V within ~2 ms. No firmware action needed.
@@ -260,10 +295,10 @@ class Apis
          *      I2C-addressable before it has finished initialising the LiDAR.
          *      A library call arriving during this window would find the sensor
          *      not yet ready.
-         * New firmware (Issue #15) sets Reg[0]=1 after InitLiDAR() completes,
+         * Firmware sets REG_STATUS bit 0 after InitLiDAR() completes,
          * allowing the library to exit the poll immediately rather than waiting
-         * a fixed time. Old firmware leaves Reg[0]=0 always; the 150 ms timeout
-         * then covers the full firmware startup with margin.
+         * a fixed time. Old firmware leaves REG_STATUS=0 always; the 150 ms
+         * timeout then covers the full firmware startup with margin.
          * See: https://github.com/NorthernWidget/Project-Apis/issues/15
          */
         void _waitUntilReady();
@@ -293,6 +328,9 @@ class Apis
         float _pitchSterr = APIS_NOT_MEASURED;
         float _rollStd    = APIS_NOT_MEASURED;
         float _rollSterr  = APIS_NOT_MEASURED;
+
+        // LiDAR Lite signal strength; updated by updateRange()
+        uint8_t _signalStrength = 0;
 
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;

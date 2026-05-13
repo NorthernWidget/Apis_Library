@@ -13,10 +13,30 @@ bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
     _sensitivity = sensitivity;
     _needsStartupDelay = true;
     Wire.begin();
+
+    // Check ACK.
     Wire.beginTransmission(_adr);
-    Wire.write(0x01);
+    if (Wire.endTransmission() != 0) return false;
+
+    // Verify device identity by reading the 4-byte ASCII name from REG_NAME_0–3
+    // (0x01–0x04). New firmware initialises these statically, so they are valid
+    // before _waitUntilReady(). Old firmware leaves them 0x00; returning false
+    // here prevents misinterpreting the old register map.
+    const char expected[4] = {'A', 'p', 'i', 's'};
+    for (uint8_t i = 0; i < 4; i++) {
+        Wire.beginTransmission(_adr);
+        Wire.write(REG_NAME_0 + i);
+        Wire.endTransmission();
+        Wire.requestFrom(_adr, 1);
+        if (Wire.read() != expected[i]) return false;
+    }
+
+    Wire.beginTransmission(_adr);
+    Wire.write(REG_CONFIG);
     Wire.write((uint8_t)_sensitivity);
-    return Wire.endTransmission() == 0;
+    Wire.endTransmission();
+
+    return true;
 }
 
 void Apis::setNRangeReadings(uint16_t n)  { _nRangeReadings = n; }
@@ -27,8 +47,15 @@ void Apis::setOrientStats(bool enable)     { _orientStats = enable; }
 void Apis::setRangefinderSensitivity(SensitivityMode mode) {
     _sensitivity = mode;
     Wire.beginTransmission(_adr);
-    Wire.write(0x01);
+    Wire.write(REG_CONFIG);
     Wire.write((uint8_t)_sensitivity);
+    Wire.endTransmission();
+}
+
+void Apis::setI2CAddress(uint8_t newAddress) {
+    Wire.beginTransmission(_adr);
+    Wire.write(REG_I2C_ADDR);
+    Wire.write(newAddress);
     Wire.endTransmission();
 }
 
@@ -41,18 +68,24 @@ bool Apis::updateRange() {
     uint8_t data2 = 0;
 
     Wire.beginTransmission(_adr);
-    Wire.write(0x02);
+    Wire.write(REG_RANGE_L);
     Wire.endTransmission();
     Wire.requestFrom(_adr, 1);
     data1 = Wire.read();
 
     Wire.beginTransmission(_adr);
-    Wire.write(0x03);
+    Wire.write(REG_RANGE_H);
     Wire.endTransmission();
     Wire.requestFrom(_adr, 1);
     data2 = Wire.read();
 
     _range = (int16_t)((data2 << 8) | data1);
+
+    Wire.beginTransmission(_adr);
+    Wire.write(REG_SIGNAL_STR);
+    Wire.endTransmission();
+    Wire.requestFrom(_adr, 1);
+    _signalStrength = Wire.read();
 
     if (_range < 0) {
         _range = APIS_ERROR;
@@ -69,20 +102,38 @@ bool Apis::updateOrientation() {
     uint8_t data1 = 0, data2 = 0;
     int16_t dataSet[6];
 
-    for (int i = 0; i < 6; i++) {
+    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x10–0x15)
+    for (int i = 0; i < 3; i++) {
         Wire.beginTransmission(_adr);
-        Wire.write(2*i + 4);
+        Wire.write(REG_ACCEL_BASE + 2*i);
         Wire.endTransmission();
         Wire.requestFrom(_adr, 1);
         data1 = Wire.read();
 
         Wire.beginTransmission(_adr);
-        Wire.write(2*i + 5);
+        Wire.write(REG_ACCEL_BASE + 2*i + 1);
         Wire.endTransmission();
         Wire.requestFrom(_adr, 1);
         data2 = Wire.read();
 
         dataSet[i] = ((data2 << 8) | data1);
+    }
+
+    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x18–0x1D)
+    for (int i = 0; i < 3; i++) {
+        Wire.beginTransmission(_adr);
+        Wire.write(REG_OFFSET_BASE + 2*i);
+        Wire.endTransmission();
+        Wire.requestFrom(_adr, 1);
+        data1 = Wire.read();
+
+        Wire.beginTransmission(_adr);
+        Wire.write(REG_OFFSET_BASE + 2*i + 1);
+        Wire.endTransmission();
+        Wire.requestFrom(_adr, 1);
+        data2 = Wire.read();
+
+        dataSet[3+i] = ((data2 << 8) | data1);
     }
 
     float gx = dataSet[0], gy = dataSet[1], gz = dataSet[2];
@@ -107,22 +158,22 @@ bool Apis::updateOrientation() {
 }
 
 void Apis::_waitUntilReady() {
-    // Poll Reg[0] until the firmware signals ready (1) or 150 ms elapse.
+    // Poll REG_STATUS bit 0 until the firmware signals ready or 150 ms elapse.
     // The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +
     // 680 uF cap charge (~15 ms at MIC2544 current limit) + delay(100) +
     // ENABLE high + InitAccel + InitLiDAR ~= 115 ms, with margin.
     // The TLV61220 boost converter is always on (EN tied to VIN+) and produces
     // stable 5V before the ATTiny starts, so no converter startup is added here.
-    // Old firmware leaves Reg[0]=0 always and times out; new firmware
+    // Old firmware leaves REG_STATUS=0 always and times out; new firmware
     // (github.com/NorthernWidget/Project-Apis/issues/15)
-    // sets Reg[0]=1 after InitLiDAR(), allowing an early exit.
+    // sets bit 0 after InitLiDAR(), allowing an early exit.
     uint32_t start = millis();
     while (millis() - start < 150) {
         Wire.beginTransmission(_adr);
-        Wire.write(0x00);
+        Wire.write(REG_STATUS);
         Wire.endTransmission();
         Wire.requestFrom(_adr, 1);
-        if (Wire.read() == 1) return;
+        if (Wire.read() & 0x01) return;
         delay(5);
     }
 }
@@ -186,20 +237,10 @@ bool Apis::updateMeasurements() {
     return (_range != APIS_ERROR) && (_pitch != APIS_ERROR) && (_roll != APIS_ERROR);
 }
 
-int16_t Apis::getRange() {
-    // Distance in cm (rounded mean when nRangeReadings > 1)
-    return _range;
-}
-
-float Apis::getRoll() {
-    // Roll in degrees
-    return _roll;
-}
-
-float Apis::getPitch() {
-    // Pitch in degrees
-    return _pitch;
-}
+int16_t Apis::getRange()          { return _range; }
+float   Apis::getRoll()           { return _roll; }
+float   Apis::getPitch()          { return _pitch; }
+uint8_t Apis::getSignalStrength() { return _signalStrength; }
 
 float Apis::getRangeMean()  { return _rangeMean; }
 float Apis::getRangeStd()   { return _rangeStd; }
