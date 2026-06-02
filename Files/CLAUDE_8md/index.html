@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 
 
-<!-- begin _includes/seo.html --><title>src - Apis Library</title>
+<!-- begin _includes/seo.html --><title>CLAUDE.md - Apis Library</title>
 <meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
 
 
@@ -26,8 +26,8 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Apis Library">
-<meta property="og:title" content="src">
-<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Files/dir_68267d1309a1af8e8297ef4c3efbcdba/">
+<meta property="og:title" content="CLAUDE.md">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Files/CLAUDE_8md/">
 
 
   <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
@@ -45,7 +45,7 @@
 
 
 
-<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Files/dir_68267d1309a1af8e8297ef4c3efbcdba/">
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Files/CLAUDE_8md/">
 
 
 
@@ -201,7 +201,7 @@
 
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="src">
+    <meta itemprop="headline" content="CLAUDE.md">
     
     
     
@@ -210,7 +210,7 @@
       
         <header>
           <h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="https://docs.northernwidget.com/Apis_Library/Files/dir_68267d1309a1af8e8297ef4c3efbcdba/" itemprop="url">src
+            <a href="https://docs.northernwidget.com/Apis_Library/Files/CLAUDE_8md/" itemprop="url">CLAUDE.md
 </a>
           </h1>
           
@@ -225,27 +225,28 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#files">Files</a></li></ul>
+              <ul class="toc__menu"><li><a href="#source-code">Source code</a></li></ul>
             </nav>
           </aside>
         
-        <h2 id="files">Files</h2>
+        <h2 id="source-code">Source code</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#file-apis.cpp">src/Apis.cpp</a></strong></td>
-    </tr>
-    <tr>
-      <td><strong><a href="/Apis_Library/Files/Apis_8h/#file-apis.h">src/Apis.h</a></strong></td>
-    </tr>
-  </tbody>
-</table>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Apis_Library</span>
+
+Arduino library for the Apis board, which manages a LiDAR Lite rangefinder (range, roll, pitch, firmware recovery).
+
+<span class="gu">## Standards</span>
+
+Follow the NW library standards for all work here. Two sources:
+<span class="p">-</span> <span class="gs">**Within the NorthernWidget workspace:**</span> the root <span class="sb">`CLAUDE.md`</span> (one level above <span class="sb">`github/`</span>) has the full checklist and code conventions.
+<span class="p">-</span> <span class="gs">**Fresh clone / other location:**</span> fetch <span class="p">[</span><span class="nv">NorthernWidget/.github/RELEASING.md</span><span class="p">](</span><span class="sx">https://github.com/NorthernWidget/.github/blob/main/RELEASING.md</span><span class="p">)</span> for the release checklist and <span class="p">[</span><span class="nv">NorthernWidget/.github/CONTRIBUTING.md</span><span class="p">](</span><span class="sx">https://github.com/NorthernWidget/.github/blob/main/CONTRIBUTING.md</span><span class="p">)</span> for naming and versioning conventions.
+
+This is a <span class="gs">**sensor library**</span>. Schema 1 migration is required once the spec is stable and a Schema 0 snapshot tag exists. Refer to the Apis device appendix in <span class="p">[</span><span class="nv">NW-Device-Specification</span><span class="p">](</span><span class="sx">https://github.com/NorthernWidget/NW-Device-Specification</span><span class="p">)</span> for the exact Page 1 register layout.
+
+<span class="gu">## Hard rule</span>
+
+<span class="gs">**Never**</span> create a git tag, GitHub release, push to a shared remote, or submit to any external registry (Zenodo, Arduino Library Manager, etc.) unless explicitly asked in the current message. If in doubt, ask.
+</code></pre></div></div>
 
 <hr />
 

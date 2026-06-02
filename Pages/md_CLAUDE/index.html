@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 
 
-<!-- begin _includes/seo.html --><title>src - Apis Library</title>
+<!-- begin _includes/seo.html --><title>Apis_Library - Apis Library</title>
 <meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
 
 
@@ -26,8 +26,8 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Apis Library">
-<meta property="og:title" content="src">
-<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Files/dir_68267d1309a1af8e8297ef4c3efbcdba/">
+<meta property="og:title" content="Apis_Library">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Pages/md_CLAUDE/">
 
 
   <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
@@ -45,7 +45,7 @@
 
 
 
-<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Files/dir_68267d1309a1af8e8297ef4c3efbcdba/">
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Pages/md_CLAUDE/">
 
 
 
@@ -201,7 +201,7 @@
 
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="src">
+    <meta itemprop="headline" content="Apis_Library">
     
     
     
@@ -210,7 +210,7 @@
       
         <header>
           <h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="https://docs.northernwidget.com/Apis_Library/Files/dir_68267d1309a1af8e8297ef4c3efbcdba/" itemprop="url">src
+            <a href="https://docs.northernwidget.com/Apis_Library/Pages/md_CLAUDE/" itemprop="url">Apis_Library
 </a>
           </h1>
           
@@ -225,27 +225,25 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#files">Files</a></li></ul>
+              <ul class="toc__menu"><li><a href="#standards">Standards</a></li><li><a href="#hard-rule">Hard rule</a></li></ul>
             </nav>
           </aside>
         
-        <h2 id="files">Files</h2>
+        <p>Arduino library for the <a href="/Apis_Library/Classes/classApis/">Apis</a> board, which manages a LiDAR Lite rangefinder (range, roll, pitch, firmware recovery).</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#file-apis.cpp">src/Apis.cpp</a></strong></td>
-    </tr>
-    <tr>
-      <td><strong><a href="/Apis_Library/Files/Apis_8h/#file-apis.h">src/Apis.h</a></strong></td>
-    </tr>
-  </tbody>
-</table>
+<h1 id="standards">Standards</h1>
+
+<p>Follow the NW library standards for all work here. Two sources:</p>
+
+<ul>
+  <li><strong>Within the NorthernWidget workspace:</strong> the root <code class="language-plaintext highlighter-rouge">CLAUDE.md</code> (one level above <code class="language-plaintext highlighter-rouge">github/</code>) has the full checklist and code conventions.</li>
+  <li><strong>Fresh clone / other location:</strong> fetch <a href="https://github.com/NorthernWidget/.github/blob/main/RELEASING.md">NorthernWidget/.github/RELEASING.md</a> for the release checklist and <a href="https://github.com/NorthernWidget/.github/blob/main/CONTRIBUTING.md">NorthernWidget/.github/CONTRIBUTING.md</a> for naming and versioning conventions.
+This is a <strong>sensor library</strong>. Schema 1 migration is required once the spec is stable and a Schema 0 snapshot tag exists. Refer to the <a href="/Apis_Library/Classes/classApis/">Apis</a> device appendix in <a href="https://github.com/NorthernWidget/NW-Device-Specification">NW-Device-Specification</a> for the exact Page 1 register layout.</li>
+</ul>
+
+<h1 id="hard-rule">Hard rule</h1>
+
+<p><strong>Never</strong> create a git tag, GitHub release, push to a shared remote, or submit to any external registry (Zenodo, Arduino Library Manager, etc.) unless explicitly asked in the current message. If in doubt, ask.</p>
 
 <hr />
 
