@@ -4,7 +4,7 @@ message: "If you use this library, please cite it using the metadata from this f
 type: software
 authors:
   - family-names: Wickert
-    given-names: Andrew
+    given-names: Andrew D.
     orcid: "https://orcid.org/0000-0002-9545-3365"
   - family-names: Schulz
     given-names: Bobby

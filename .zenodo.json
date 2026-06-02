@@ -1,0 +1,25 @@
+{
+  "title": "Apis_Library",
+  "description": "Arduino library for the Apis board, which manages a LiDAR Lite rangefinder (range, roll, pitch, firmware recovery).",
+  "upload_type": "software",
+  "license": {"id": "GPL-3.0-only"},
+  "creators": [
+    {
+      "name": "Wickert, Andrew D.",
+      "orcid": "0000-0002-9545-3365",
+      "affiliation": "University of Minnesota, Department of Earth & Environmental Sciences"
+    },
+    {
+      "name": "Schulz, Bobby",
+      "orcid": "0000-0002-9272-4756",
+      "affiliation": "Northern Widget LLC"
+    }
+  ],
+  "keywords": [
+    "Arduino",
+    "LiDAR",
+    "rangefinder",
+    "environmental monitoring",
+    "open-source"
+  ]
+}
