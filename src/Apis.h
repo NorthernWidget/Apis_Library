@@ -117,7 +117,7 @@ class Apis
          * @brief Measurement group: which on-board chip a reading covers.
          * @details One group per chip, in the order the NW-Device-Specification
          * Apis appendix numbers them: 0 = LiDAR Lite (range, signal strength),
-         * 1 = LIS2DH12 accelerometer (pitch, roll). ALL selects every chip.
+         * 1 = LIS3DH accelerometer (pitch, roll). ALL selects every chip.
          * Written as Apis::RANGE etc. at the call site.
          */
         enum Component : uint8_t {
