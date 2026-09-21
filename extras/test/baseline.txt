@@ -23,14 +23,14 @@ logReading RANGE: 1234,
 [N=5 range stats, N=3 orient stats, varying]
 header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],
 string: 306,4.74,2.12,-6.11,2.85,0.40,0.23,0.00,0.00,
-raw ALL (15 bytes): 309,-6.50,2.84,
-raw RANGE (4 bytes): 312,
-getters: range=312 roll=2.8440 pitch=-6.5036 signal=90 mean=306.0000 std=4.7434 sterr=2.1213
+raw ALL (15 bytes): 312,-6.11,2.85,
+raw RANGE (4 bytes): 303,
+getters: range=303 roll=2.8462 pitch=-6.1074 signal=90 mean=306.0000 std=4.7434 sterr=2.1213
 printHeader ALL: Range [cm],Pitch [deg],Roll [deg],
-printReading ALL (stored): 312,-6.50,2.84,
-logReading ALL (15 bytes): 300,-6.11,2.85,
+printReading ALL (stored): 303,-6.11,2.85,
+logReading ALL (15 bytes): 306,-6.11,2.85,
 printHeader RANGE: Range [cm],
-logReading RANGE: 303,
+logReading RANGE: 312,
 [errors: range<0, accel 0xFFFF]
 header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],
 string: -9999,-9999.00,-9999.00,-9999.00,-9999.00,
@@ -46,6 +46,8 @@ logReading RANGE: -9999,
 string: -9998,-9998.00,-9998.00,
 [per-chip] RANGE ok=1 string(false): 300,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00, counts=4/2
 [per-chip] ORIENT ok=1 string(false): 300,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,
+[handshake] ready=1 newReading(before any)=1 counter after 1 reading=2 newReading=0 ctrl after request=0x02 fault after ack=0x00
+[handshake] no firmware response: updateRange=0 range=-9999
 [wrong name] begin=0
 [schema 0x00] begin=0 fw=1
 [schema 0xFF unprovisioned] begin=0

@@ -65,7 +65,25 @@ static void report(const char* name, Apis& a) {
 }
 #pragma GCC diagnostic pop
 
+// Emulate the Schema 1 firmware's response to a control write: a trigger
+// completes a reading at once — counter +1, ready set, trigger and sleep
+// bits cleared, fault byte cleared. A per-test hook can vary the data.
+static std::function<void(TwoWire&)> onReading;
+static void installFirmwareEmulation() {
+    Wire.onWrite = [](TwoWire& w, uint8_t reg, uint8_t val) {
+        if (reg != 0x21) return;
+        w.image[0x27] = 0;                                  // any control write acknowledges the fault
+        if (!(val & 0x01)) return;
+        w.image[0x21] = val & 0x7E;                         // trigger and sleep consumed
+        if (onReading) onReading(w);
+        uint16_t c = w.image[0x22] | (w.image[0x23] << 8); c++;
+        w.image[0x22] = c & 0xFF; w.image[0x23] = c >> 8;
+        w.image[0x20] |= 0x01;
+    };
+}
+
 int main() {
+    installFirmwareEmulation();
     // 1. Single reading, no statistics, level board.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; if (!a.begin()) { puts("begin failed"); return 1; } report("N=1, no stats, level", a); }
@@ -77,19 +95,15 @@ int main() {
     // 3. N=5 with statistics; the image changes between reads so the
     //    statistics paths are exercised with differing readings.
     { Apis a(5, true, 3, true); a.begin();
-      // A new reading begins whenever the register pointer moves backwards
-      // (the previous reading finished at a higher address). Only then does the
-      // image change, so the values within one reading are always consistent
-      // and the count of readings, not of bus transactions, drives the sequence.
-      int k = 0; int lastPtr = 0xFF;
-      Wire.beforeRead = [&](TwoWire& w, uint8_t ptr) {
-          if (ptr <= lastPtr) { k++;
-              int16_t r = 300 + 3 * (k % 5);   w.image[0x28] = r & 0xFF;  w.image[0x29] = (r >> 8) & 0xFF;
-              int16_t ax = 100 + 7 * (k % 3);  w.image[0x30] = ax & 0xFF; w.image[0x31] = (ax >> 8) & 0xFF; }
-          lastPtr = ptr; };
+      // Each trigger yields a fresh reading: range steps through five values,
+      // the X axis through three, so both statistics paths see spread.
+      int k = 0;
+      onReading = [&](TwoWire& w) { k++;
+          int16_t r = 300 + 3 * (k % 5);   w.image[0x28] = r & 0xFF;  w.image[0x29] = (r >> 8) & 0xFF;
+          int16_t ax = 100 + 7 * (k % 3);  w.image[0x30] = ax & 0xFF; w.image[0x31] = (ax >> 8) & 0xFF; };
       loadImage(300, 90, 100, 50, 1000, 0, 0, 0);
       report("N=5 range stats, N=3 orient stats, varying", a);
-      Wire.beforeRead = nullptr; }
+      onReading = nullptr; }
 
     // 4. Error image: negative range, accelerometer bus-failure signature.
     loadImage(-1, 0, -1, -1, -1, 0, 0, 0);
@@ -109,6 +123,21 @@ int main() {
              a.getRangeCount(), a.getOrientCount());
       ok = a.updateMeasurements(Apis::ORIENT);
       printf("[per-chip] ORIENT ok=%d string(false): %s\n", ok, a.getString(false).c_str()); }
+
+    // 5c. Handshake: ready/newReading/requestReading against the emulated firmware.
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
+    { Apis a; a.begin();
+      printf("[handshake] ready=%d newReading(before any)=%d", a.ready(), a.newReading());
+      a.updateRange();
+      printf(" counter after 1 reading=%u newReading=%d", Wire.image[0x22] | (Wire.image[0x23] << 8), a.newReading());
+      Wire.image[0x27] = 0x02;                       // firmware latched a LiDAR timeout
+      a.requestReading(Apis::RANGE);
+      printf(" ctrl after request=0x%02X fault after ack=0x%02X\n", Wire.image[0x21], Wire.image[0x27]);
+      // timeout path: firmware that never answers (no emulation)
+      auto saved = Wire.onWrite; Wire.onWrite = nullptr;
+      bool ok = a.updateRange();
+      printf("[handshake] no firmware response: updateRange=%d range=%d\n", ok, a.getRange());
+      Wire.onWrite = saved; }
 
     // 6. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';

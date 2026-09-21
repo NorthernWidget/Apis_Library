@@ -212,20 +212,43 @@ class Apis
          */
         void setI2CAddress(uint8_t newAddress);
 
+        // --- Handshake (NW-Device-Specification Page 1 Block 0) ---
+        /** @brief True when the status byte's ready bit is set: the data registers hold a complete reading. */
+        bool ready();
+
         /**
-         * @brief Measure range [cm] only, without reading the accelerometer.
-         * Intended for rapid repeated range readings (e.g. for averaging).
-         * Also updates the cached signal strength (see getSignalStrength()).
-         * Returns false if the sensor returns an error value.
+         * @brief True when the device's reading counter has advanced since
+         * this library last stored a reading, i.e. a reading is available that
+         * has not been read yet. Does not acquire.
+         */
+        bool newReading();
+
+        /**
+         * @brief Ask the device for a reading now, of the selected chips.
+         * Writes the control register: trigger bit plus the chip-select bits
+         * for the component. The device clears ready, measures, and sets ready
+         * again with the counter incremented. A write to control also clears
+         * the latched fault byte (acknowledgement).
+         * @return true if the device acknowledged the write.
+         */
+        bool requestReading(uint8_t component = ALL);
+
+        /**
+         * @brief Take one range reading [cm]: request it, wait for the device's
+         * reading counter to advance (up to the timeout), then read range and
+         * signal strength. Each call is a distinct acquisition, so repeated
+         * calls give independent readings for statistics.
+         * Returns false on timeout, bus error, or a negative (error) range.
          */
         bool updateRange();
 
         /**
-         * @brief Measure pitch [deg] and roll [deg] only, without ranging.
-         * Intended for rapid repeated orientation readings (e.g. for averaging).
-         * FIX: Independent readings require firmware support; current firmware
-         * caches accelerometer values each loop (~200 ms).
-         * Returns false if the sensor returns an error value.
+         * @brief Take one orientation reading: request it, wait for the
+         * counter to advance, then read the accelerometer and offsets and
+         * compute pitch [deg] and roll [deg]. Each call is a distinct
+         * acquisition.
+         * Returns false on timeout, bus error, or the accelerometer failure
+         * signature.
          */
         bool updateOrientation();
 
@@ -361,25 +384,14 @@ class Apis
 
     private:
         /**
-         * @brief Poll REG_STATUS until bit 0 is set, or 150 ms elapses.
-         * @details Power-on startup sequence (from board power arriving):
-         *   1. TLV61220 boost converter starts immediately (EN tied to VIN+);
-         *      outputs stable 5V within ~2 ms. No firmware action needed.
-         *   2. MIC5365 LDO derives 3.3V from the 5V rail; ATTiny1634 starts.
-         *   3. Firmware setup(): delay(10) -> POWER_SW high (MIC2544 enables,
-         *      680 uF cap charges at ~227 mA over ~15 ms) -> delay(100) ->
-         *      ENABLE high -> InitAccel() -> InitLiDAR(). Total: ~115 ms.
-         *   4. Wire.begin() is called early in setup(), so the ATTiny is
-         *      I2C-addressable before it has finished initialising the LiDAR.
-         *      A library call arriving during this window would find the sensor
-         *      not yet ready.
-         * Firmware sets REG_STATUS bit 0 after InitLiDAR() completes,
-         * allowing the library to exit the poll immediately rather than waiting
-         * a fixed time. Old firmware leaves REG_STATUS=0 always; the 150 ms
-         * timeout then covers the full firmware startup with margin.
-         * See: https://github.com/NorthernWidget/Project-Apis/issues/15
+         * @brief Request a reading of the given chips and wait until the
+         * device's reading counter advances or timeoutGlobal elapses.
+         * @return true if a new reading arrived.
          */
-        void _waitUntilReady();
+        bool _takeReading(uint8_t component);
+
+        /** @brief Read the 16-bit reading counter (0x22–0x23). */
+        uint16_t _readCounter();
 
         /**
          * @brief Read n consecutive registers starting at reg into buf, in one
@@ -430,8 +442,11 @@ class Apis
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
 
-        // True after begin(); cleared after _waitUntilReady() fires once.
-        bool _needsStartupDelay = true;
+        // Reading counter as of the last reading this library stored, and the
+        // longest wait for a requested reading (ms). The firmware's cycle is
+        // ~100 ms plus LiDAR start-up; 500 ms covers it as in Haar.
+        uint16_t _lastCounter = 0xFFFF;
+        unsigned long timeoutGlobal = 500;
 
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;

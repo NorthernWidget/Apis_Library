@@ -11,7 +11,6 @@ bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
 {
     _adr = address;
     _sensitivity = sensitivity;
-    _needsStartupDelay = true;
     Wire.begin();
 
     // Check ACK.
@@ -75,10 +74,44 @@ void Apis::setI2CAddress(uint8_t newAddress) {
     _writeByte(REG_I2C_ADDR, newAddress);
 }
 
+bool Apis::ready() {
+    uint8_t status = 0;
+    return _readBytes(REG_STATUS, &status, 1) && (status & APIS_BIT_READY);
+}
+
+uint16_t Apis::_readCounter() {
+    uint8_t d[2] = {0xFF, 0xFF};
+    _readBytes(REG_COUNTER, d, 2);
+    return (uint16_t)((d[1] << 8) | d[0]);
+}
+
+bool Apis::newReading() {
+    return _readCounter() != _lastCounter;
+}
+
+bool Apis::requestReading(uint8_t component) {
+    uint8_t ctrl = APIS_CTRL_TRIGGER;
+    if (component == ALL || component == RANGE)  ctrl |= APIS_CTRL_LIDAR;
+    if (component == ALL || component == ORIENT) ctrl |= APIS_CTRL_ACCEL;
+    return _writeByte(REG_CTRL, ctrl);
+}
+
+bool Apis::_takeReading(uint8_t component) {
+    uint16_t before = _readCounter();
+    if (!requestReading(component)) return false;
+    unsigned long start = millis();
+    while (millis() - start < timeoutGlobal) {
+        uint16_t now = _readCounter();
+        if (now != before) { _lastCounter = now; return true; }
+        delay(1);
+    }
+    return false;
+}
+
 bool Apis::updateRange() {
-    if (_needsStartupDelay) {
-        _waitUntilReady();
-        _needsStartupDelay = false;
+    if (!_takeReading(RANGE)) {
+        _range = APIS_ERROR;
+        return false;
     }
     // Range low/high and signal strength are consecutive (0x28–0x2A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
@@ -94,9 +127,9 @@ bool Apis::updateRange() {
 }
 
 bool Apis::updateOrientation() {
-    if (_needsStartupDelay) {
-        _waitUntilReady();
-        _needsStartupDelay = false;
+    if (!_takeReading(ORIENT)) {
+        _pitch = _roll = APIS_ERROR;
+        return false;
     }
     int16_t dataSet[6];
     uint8_t d[6];
@@ -130,24 +163,6 @@ bool Apis::updateOrientation() {
                 - atan(offsetY / sqrt(pow(offsetX, 2) + pow(offsetZ, 2)))) * 180. / M_PI;
     }
     return true;
-}
-
-void Apis::_waitUntilReady() {
-    // Poll REG_STATUS bit 0 until the firmware signals ready or 150 ms elapse.
-    // The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +
-    // 680 uF cap charge (~15 ms at MIC2544 current limit) + delay(100) +
-    // ENABLE high + InitAccel + InitLiDAR ~= 115 ms, with margin.
-    // The TLV61220 boost converter is always on (EN tied to VIN+) and produces
-    // stable 5V before the ATTiny starts, so no converter startup is added here.
-    // Old firmware leaves REG_STATUS=0 always and times out; new firmware
-    // (github.com/NorthernWidget/Project-Apis/issues/15)
-    // sets bit 0 after InitLiDAR(), allowing an early exit.
-    uint32_t start = millis();
-    while (millis() - start < 150) {
-        uint8_t status = 0;
-        if (_readBytes(REG_STATUS, &status, 1) && (status & APIS_BIT_READY)) return;
-        delay(5);
-    }
 }
 
 bool Apis::updateMeasurements(uint8_t component) {
