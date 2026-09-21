@@ -24,26 +24,40 @@ License: GNU GPL v3. You should find a copy in the repository.
   #define M_PI 3.14159265358979323846
 #endif
 
-#define ADR_DEFAULT 0x50
+#define ADR_DEFAULT 0x41   // NW-Device-Specification Schema 1: 'A'. Firmware v0.1.x used 0x50.
 
-// Register map (firmware v0.2.0+, 32-byte layout).
-// Registers not listed here are reserved.
-#define REG_STATUS      0x00  // Status flags; bit 0 = ready (poll in _waitUntilReady)
-#define REG_NAME_0      0x01  // 'A' — checked by begin() to detect old firmware
-#define REG_NAME_1      0x02  // 'p'
-#define REG_NAME_2      0x03  // 'i'
-#define REG_NAME_3      0x04  // 's'
-#define REG_HW_MAJOR    0x05  // Hardware version major
-#define REG_HW_MINOR    0x06  // Hardware version minor
-#define REG_FW_PATCH    0x07  // Firmware patch version
-#define REG_RANGE_L     0x08  // Range low byte  (little-endian int16, cm)
-#define REG_RANGE_H     0x09  // Range high byte
-#define REG_SIGNAL_STR  0x0A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
-#define REG_CONFIG      0x0B  // Sensitivity mode bits [1:0], writable
-#define REG_I2C_ADDR    0x0C  // I2C address, writable; firmware saves to EEPROM byte 6,
-                              //   takes effect on next boot; falls back to 0x50 if 0xFF
-#define REG_ACCEL_BASE  0x10  // Accel raw X low byte; X/Y/Z span 0x10–0x15, little-endian int16
-#define REG_OFFSET_BASE 0x18  // Accel offset X low byte; X/Y/Z span 0x18–0x1D, little-endian int16
+// Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is
+// the first firmware serving the Schema 1 register map.
+#define APIS_FW_MIN_PATCH 1
+
+// Register map: NW-Device-Specification Schema 1, Apis appendix. Three 32-byte
+// pages; a controller writes a start address and reads up to 32 bytes with
+// auto-increment. Registers not listed are reserved.
+// Page 0 (0x00–0x1F) — identity, EEPROM-backed
+#define REG_SCHEMA      0x00  // 0x01 = Schema 1; anything else is refused by begin()
+#define REG_NAME        0x01  // 'A','p','i','s', null-padded to 7 bytes (0x01–0x07)
+#define REG_HW_MAJOR    0x08  // Hardware version major
+#define REG_HW_MINOR    0x09  // Hardware version minor
+#define REG_FW_PATCH    0x0A  // Firmware patch version (written by the firmware)
+#define REG_I2C_ADDR    0x1F  // I2C address, writable; persisted; takes effect on next boot
+// Page 1 (0x20–0x3F) — status and sensor data, SRAM
+#define REG_STATUS      0x20  // bit 0 ready; bit 1 LiDAR fault; bit 2 accel fault; bit 7 pan-fault
+#define REG_CTRL        0x21  // writable: bit 0 trigger; bit 1 measure LiDAR; bit 2 measure accel
+#define REG_COUNTER     0x22  // reading counter, uint16 little-endian (0x22–0x23)
+#define REG_CONFIG      0x26  // writable: sensitivity mode bits [1:0]
+#define REG_FAULT       0x27  // latched fault code: bits 7–5 chip, bits 4–0 kind; cleared by a Control write
+#define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
+#define REG_RANGE_H     0x29  // Range high byte
+#define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
+#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16
+// Page 2 (0x40–0x5F) — calibration, EEPROM-backed
+#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16
+
+#define APIS_BIT_READY     0x01
+#define APIS_BIT_PANFAULT  0x80
+#define APIS_CTRL_TRIGGER  0x01
+#define APIS_CTRL_LIDAR    0x02
+#define APIS_CTRL_ACCEL    0x04
 
 /**
  * @brief Sensitivity mode for the LiDAR Lite acquisition pipeline.
@@ -148,23 +162,27 @@ class Apis
 
         /**
          * @brief Begin communications with the Apis using a prescribed address.
-         * @details Checks that the device acknowledges on I2C, verifies that
-         * the firmware reports the "Apis" device name at registers 0x01–0x04
-         * (indicating firmware v0.2.0+ with the current register map), and
-         * writes the initial sensitivity mode to REG_CONFIG (0x0B).
-         * Returns false if: (a) no I2C ACK, or (b) name mismatch (old
-         * firmware). The minimum firmware version policy beyond that name
-         * check is TBD.
-         * @param address I2C address (default ADR_DEFAULT = 0x50).
+         * @details Checks that the device acknowledges on I2C, then reads
+         * Page 0 Blocks 0–1 and requires: schema byte 0x01 (Schema 1); the
+         * name "Apis"; a firmware patch of at least APIS_FW_MIN_PATCH. Stores
+         * the hardware and firmware versions for the getters below, and writes
+         * the initial sensitivity mode to REG_CONFIG (0x26).
+         * @param address I2C address (default ADR_DEFAULT = 0x41).
          * @param sensitivity One of the SensitivityMode values
-         * (default SENSITIVITY_BALANCED). Written to REG_CONFIG (0x0B)
-         * and applied each firmware loop() iteration. See SensitivityMode
-         * for descriptions of each mode.
-         * @return true if the device acknowledges and reports correct firmware;
-         *         false otherwise.
+         * (default SENSITIVITY_BALANCED). See SensitivityMode.
+         * @return true if the device acknowledges and passes all three checks;
+         *         false otherwise. Call getFirmwareVersion() after a refusal
+         *         to see what the device reported (0 if unreadable).
          */
         bool begin(uint8_t address = ADR_DEFAULT,
                    SensitivityMode sensitivity = SENSITIVITY_BALANCED);
+
+        /** @brief Hardware version major, from Page 0 (valid after begin()). */
+        uint8_t getHardwareMajor();
+        /** @brief Hardware version minor, from Page 0 (valid after begin()). */
+        uint8_t getHardwareMinor();
+        /** @brief Firmware patch version, from Page 0 (valid after begin(), even when it refused). */
+        uint8_t getFirmwareVersion();
 
         // --- Configuration setters ---
         /** @brief Set number of range readings to average. */
@@ -177,7 +195,7 @@ class Apis
         void setOrientStats(bool enable);
         /**
          * @brief Change the rangefinder sensitivity mode after begin().
-         * @details Writes the new mode to REG_CONFIG (0x0B); the firmware
+         * @details Writes the new mode to REG_CONFIG (0x26); the firmware
          * applies it on the next loop() iteration via InitLiDAR(). Must be
          * called after begin(); if called before, Wire is uninitialised and
          * the transmission fails silently.
@@ -187,9 +205,9 @@ class Apis
 
         /**
          * @brief Write a new I2C address to the device.
-         * @details The firmware saves it to EEPROM byte 6 and uses it on the
-         * next boot; the current session continues on the old address. Falls
-         * back to 0x50 if EEPROM byte 6 is 0xFF (erased).
+         * @details The firmware persists it in Page 0 byte 0x1F and uses it on
+         * the next boot; the current session continues on the old address.
+         * Falls back to 0x41 if that byte is 0xFF (unprogrammed).
          * @param newAddress The 7-bit I2C address to persist.
          */
         void setI2CAddress(uint8_t newAddress);
@@ -375,6 +393,9 @@ class Apis
 
         // I2C address
         uint8_t _adr = ADR_DEFAULT;
+
+        // Identity read by begin()
+        uint8_t _hwMajor = 0, _hwMinor = 0, _fwPatch = 0;
 
         // Configuration
         uint16_t _nRangeReadings;

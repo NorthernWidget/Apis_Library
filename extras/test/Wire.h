@@ -12,15 +12,15 @@
 
 class TwoWire {
   public:
-    uint8_t image[64] = {0};
-    uint8_t deviceAddress = 0x50;
+    uint8_t image[128] = {0};
+    uint8_t deviceAddress = 0x41;
     std::function<void(TwoWire&, uint8_t)> beforeRead;   // hook(wire, pointer): mutate the image before a read
     unsigned transactions = 0;                  // count of requestFrom calls (bus-load metric)
 
     void begin() {}
     void beginTransmission(uint8_t adr) { _adr = adr; _nwrites = 0; }
     size_t write(uint8_t v) {
-        if (_nwrites == 0) _ptr = v; else if (_adr == deviceAddress) image[_ptr++ & 0x3F] = v;
+        if (_nwrites == 0) _ptr = v; else if (_adr == deviceAddress) image[_ptr++ & 0x7F] = v;
         _nwrites++; return 1;
     }
     uint8_t endTransmission(bool = true) { return _adr == deviceAddress ? 0 : 2; }
@@ -28,7 +28,7 @@ class TwoWire {
         transactions++;
         if (adr != deviceAddress) return 0;
         if (beforeRead) beforeRead(*this, _ptr);
-        for (uint8_t i = 0; i < n; i++) _q.push_back(image[_ptr++ & 0x3F]);
+        for (uint8_t i = 0; i < n; i++) _q.push_back(image[_ptr++ & 0x7F]);
         return n;
     }
     int read() { if (_q.empty()) return -1; int v = _q.front(); _q.pop_front(); return v; }

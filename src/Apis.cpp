@@ -18,36 +18,39 @@ bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
     Wire.beginTransmission(_adr);
     if (Wire.endTransmission() != 0) return false;
 
-    // Verify device identity by reading the 4-byte ASCII name from REG_NAME_0–3
-    // (0x01–0x04). New firmware initialises these statically, so they are valid
-    // before _waitUntilReady(). Old firmware leaves them 0x00; returning false
-    // here prevents misinterpreting the old register map.
-    const char expected[4] = {'A', 'p', 'i', 's'};
-    uint8_t name[4];
-    if (!_readBytes(REG_NAME_0, name, 4)) return false;
-    for (uint8_t i = 0; i < 4; i++) {
-        if (name[i] != expected[i]) return false;
+    // Page 0 Blocks 0–1 (0x00–0x0F): schema, name, versions. Read in one
+    // transaction; the firmware serves Page 0 from EEPROM so it is valid before
+    // the first reading.
+    uint8_t p0[16];
+    _hwMajor = _hwMinor = _fwPatch = 0;
+    if (!_readBytes(REG_SCHEMA, p0, 16)) return false;
+    _hwMajor = p0[REG_HW_MAJOR];
+    _hwMinor = p0[REG_HW_MINOR];
+    _fwPatch = p0[REG_FW_PATCH];
+    if (p0[REG_SCHEMA] != 0x01) return false;               // not Schema 1 (0x00 legacy, 0xFF unprovisioned, other)
+    const char expected[7] = {'A', 'p', 'i', 's', 0, 0, 0};   // 7-byte name field, null-padded
+    for (uint8_t i = 0; i < 7; i++) {
+        if (p0[REG_NAME + i] != expected[i]) return false;
     }
+    if (_fwPatch < APIS_FW_MIN_PATCH) return false;          // register map older than this library
 
     _writeByte(REG_CONFIG, (uint8_t)_sensitivity);
 
     return true;
 }
 
+uint8_t Apis::getHardwareMajor()   { return _hwMajor; }
+uint8_t Apis::getHardwareMinor()   { return _hwMinor; }
+uint8_t Apis::getFirmwareVersion() { return _fwPatch; }
+
 bool Apis::_readBytes(uint8_t reg, uint8_t* buf, uint8_t n) {
-    // One transaction per byte. The deployed firmware's requestEvent() loads a
-    // single byte per request (two after a repeated start), so a multi-byte
-    // requestFrom() would receive one register and then whatever WireS sends
-    // when its buffer is empty. When the firmware serves auto-incremented
-    // pages (NW-Device-Specification Schema 1), this collapses to one
-    // transaction of n bytes: pointer write, then requestFrom(_adr, n).
-    for (uint8_t i = 0; i < n; i++) {
-        Wire.beginTransmission(_adr);
-        Wire.write(reg + i);
-        if (Wire.endTransmission() != 0) return false;
-        if (Wire.requestFrom(_adr, (uint8_t)1) != 1) return false;
-        buf[i] = Wire.read();
-    }
+    // One transaction: pointer write, then requestFrom(n). Schema 1 firmware
+    // (patch 1+) serves up to 32 bytes with auto-increment.
+    Wire.beginTransmission(_adr);
+    Wire.write(reg);
+    if (Wire.endTransmission() != 0) return false;
+    if (Wire.requestFrom(_adr, n) != n) return false;
+    for (uint8_t i = 0; i < n; i++) buf[i] = Wire.read();
     return true;
 }
 
@@ -77,7 +80,7 @@ bool Apis::updateRange() {
         _waitUntilReady();
         _needsStartupDelay = false;
     }
-    // Range low/high and signal strength are consecutive (0x08–0x0A): one read.
+    // Range low/high and signal strength are consecutive (0x28–0x2A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
     _readBytes(REG_RANGE_L, d, 3);
     _range = (int16_t)((d[1] << 8) | d[0]);
@@ -98,12 +101,12 @@ bool Apis::updateOrientation() {
     int16_t dataSet[6];
     uint8_t d[6];
 
-    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x10–0x15): one read of six bytes
+    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35): one read of six bytes
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
     _readBytes(REG_ACCEL_BASE, d, 6);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
 
-    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x18–0x1D): one read of six bytes
+    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2): one read of six bytes
     memset(d, 0xFF, sizeof d);
     _readBytes(REG_OFFSET_BASE, d, 6);
     for (int i = 0; i < 3; i++) dataSet[3+i] = ((d[2*i + 1] << 8) | d[2*i]);
@@ -142,7 +145,7 @@ void Apis::_waitUntilReady() {
     uint32_t start = millis();
     while (millis() - start < 150) {
         uint8_t status = 0;
-        if (_readBytes(REG_STATUS, &status, 1) && (status & 0x01)) return;
+        if (_readBytes(REG_STATUS, &status, 1) && (status & APIS_BIT_READY)) return;
         delay(5);
     }
 }

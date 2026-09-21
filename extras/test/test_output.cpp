@@ -6,15 +6,28 @@
 TwoWire Wire;
 #include "../../src/Apis.cpp"
 
+static uint8_t crc8(const uint8_t* d, uint8_t n) {           // CRC-8/SMBUS, as NW-Provision writes it
+    uint8_t c = 0; for (uint8_t i = 0; i < n; i++) { c ^= d[i]; for (int b = 0; b < 8; b++) c = (c & 0x80) ? (c << 1) ^ 0x07 : (c << 1); }
+    return c;
+}
+
+// Build a Schema 1 register image: Page 0 as NW-Provision writes it (with the
+// firmware's patch at 0x0A), Page 1 with a complete reading, Page 2 offsets.
 static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int16_t az,
-                      int16_t ox, int16_t oy, int16_t oz) {
+                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 1, uint8_t schema = 0x01) {
     uint8_t* r = Wire.image; memset(r, 0, sizeof(Wire.image));
-    r[0x00] = 0x01; r[0x01] = 'A'; r[0x02] = 'p'; r[0x03] = 'i'; r[0x04] = 's';
-    r[0x05] = 1; r[0x06] = 0; r[0x07] = 2;
-    r[0x08] = range & 0xFF; r[0x09] = (range >> 8) & 0xFF; r[0x0A] = signal; r[0x0C] = 0x50;
+    r[0x00] = schema; r[0x01] = 'A'; r[0x02] = 'p'; r[0x03] = 'i'; r[0x04] = 's';
+    r[0x08] = 0; r[0x09] = 1; r[0x0A] = fwPatch;                       // HW 0.1, FW patch
+    r[0x10] = 0x41; r[0x11] = 0x01; r[0x12] = 0; r[0x13] = 7; r[0x14] = 0; r[0x15] = 42;
+    r[0x1D] = 0x4E; r[0x1E] = crc8(r, 0x1E); r[0x1F] = 0x41;
+    r[0x20] = 0x01;                                                   // ready
+    r[0x21] = 0x06;                                                   // both chips selected
+    r[0x22] = 1; r[0x23] = 0;                                         // reading counter = 1
+    r[0x26] = 0x00; r[0x27] = 0x00;
+    r[0x28] = range & 0xFF; r[0x29] = (range >> 8) & 0xFF; r[0x2A] = signal;
     int16_t a[3] = {ax, ay, az}, o[3] = {ox, oy, oz};
-    for (int i = 0; i < 3; i++) { r[0x10 + 2*i] = a[i] & 0xFF; r[0x11 + 2*i] = (a[i] >> 8) & 0xFF;
-                                  r[0x18 + 2*i] = o[i] & 0xFF; r[0x19 + 2*i] = (o[i] >> 8) & 0xFF; }
+    for (int i = 0; i < 3; i++) { r[0x30 + 2*i] = a[i] & 0xFF; r[0x31 + 2*i] = (a[i] >> 8) & 0xFF;
+                                  r[0x40 + 2*i] = o[i] & 0xFF; r[0x41 + 2*i] = (o[i] >> 8) & 0xFF; }
 }
 
 // Print into a fixed buffer: the in-memory Print destination from the design.
@@ -71,8 +84,8 @@ int main() {
       int k = 0; int lastPtr = 0xFF;
       Wire.beforeRead = [&](TwoWire& w, uint8_t ptr) {
           if (ptr <= lastPtr) { k++;
-              int16_t r = 300 + 3 * (k % 5);   w.image[0x08] = r & 0xFF;  w.image[0x09] = (r >> 8) & 0xFF;
-              int16_t ax = 100 + 7 * (k % 3);  w.image[0x10] = ax & 0xFF; w.image[0x11] = (ax >> 8) & 0xFF; }
+              int16_t r = 300 + 3 * (k % 5);   w.image[0x28] = r & 0xFF;  w.image[0x29] = (r >> 8) & 0xFF;
+              int16_t ax = 100 + 7 * (k % 3);  w.image[0x30] = ax & 0xFF; w.image[0x31] = (ax >> 8) & 0xFF; }
           lastPtr = ptr; };
       loadImage(300, 90, 100, 50, 1000, 0, 0, 0);
       report("N=5 range stats, N=3 orient stats, varying", a);
@@ -89,17 +102,25 @@ int main() {
     // 5b. Per-chip reading: RANGE alone must not touch pitch/roll; counts reported.
     loadImage(400, 50, 100, 50, 1000, 0, 0, 0);
     { Apis a(4, true, 2, true); a.begin(); a.updateMeasurements();
-      Wire.image[0x08] = 0x2C; Wire.image[0x09] = 0x01;   // range -> 300
-      Wire.image[0x10] = 0x00; Wire.image[0x11] = 0x00;   // ax -> 0 (would change pitch if read)
+      Wire.image[0x28] = 0x2C; Wire.image[0x29] = 0x01;   // range -> 300
+      Wire.image[0x30] = 0x00; Wire.image[0x31] = 0x00;   // ax -> 0 (would change pitch if read)
       bool ok = a.updateMeasurements(Apis::RANGE);
       printf("[per-chip] RANGE ok=%d string(false): %s counts=%u/%u\n", ok, a.getString(false).c_str(),
              a.getRangeCount(), a.getOrientCount());
       ok = a.updateMeasurements(Apis::ORIENT);
       printf("[per-chip] ORIENT ok=%d string(false): %s\n", ok, a.getString(false).c_str()); }
 
-    // 6. Wrong name: begin() must fail.
+    // 6. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
     { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0x00);
+    { Apis a; bool ok = a.begin(); printf("[schema 0x00] begin=%d fw=%u\n", ok, a.getFirmwareVersion()); }
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0xFF);
+    { Apis a; printf("[schema 0xFF unprovisioned] begin=%d\n", a.begin()); }
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 0);
+    { Apis a; bool ok = a.begin(); printf("[fw patch 0 < min %d] begin=%d fw=%u\n", APIS_FW_MIN_PATCH, ok, a.getFirmwareVersion()); }
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
+    { Apis a; bool ok = a.begin(); printf("[versions] begin=%d hw=%u.%u fw=%u\n", ok, a.getHardwareMajor(), a.getHardwareMinor(), a.getFirmwareVersion()); }
 
     fprintf(stderr, "bus transactions total: %u\n", Wire.transactions);   // metric, not output
     return 0;

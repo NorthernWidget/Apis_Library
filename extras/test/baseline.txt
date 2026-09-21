@@ -47,3 +47,7 @@ string: -9998,-9998.00,-9998.00,
 [per-chip] RANGE ok=1 string(false): 300,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00, counts=4/2
 [per-chip] ORIENT ok=1 string(false): 300,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,
 [wrong name] begin=0
+[schema 0x00] begin=0 fw=1
+[schema 0xFF unprovisioned] begin=0
+[fw patch 0 < min 1] begin=0 fw=0
+[versions] begin=1 hw=0.1 fw=1
