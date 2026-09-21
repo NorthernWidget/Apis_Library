@@ -30,28 +30,8 @@ License: GNU GPL v3. You should find a copy in the repository.
 // the first firmware serving the Schema 1 register map.
 #define APIS_FW_MIN_PATCH 1
 
-// Register map: NW-Device-Specification Schema 1, Apis appendix. Three 32-byte
-// pages; a controller writes a start address and reads up to 32 bytes with
-// auto-increment. Registers not listed are reserved.
-// Page 0 (0x00–0x1F) — identity, EEPROM-backed
-#define REG_SCHEMA      0x00  // 0x01 = Schema 1; anything else is refused by begin()
-#define REG_NAME        0x01  // 'A','p','i','s', null-padded to 7 bytes (0x01–0x07)
-#define REG_HW_MAJOR    0x08  // Hardware version major
-#define REG_HW_MINOR    0x09  // Hardware version minor
-#define REG_FW_PATCH    0x0A  // Firmware patch version (written by the firmware)
-#define REG_I2C_ADDR    0x1F  // I2C address, writable; persisted; takes effect on next boot
-// Page 1 (0x20–0x3F) — status and sensor data, SRAM
-#define REG_STATUS      0x20  // bit 0 ready; bit 1 LiDAR fault; bit 2 accel fault; bit 7 pan-fault
-#define REG_CTRL        0x21  // writable: bit 0 trigger; bit 1 measure LiDAR; bit 2 measure accel
-#define REG_COUNTER     0x22  // reading counter, uint16 little-endian (0x22–0x23)
-#define REG_CONFIG      0x26  // writable: sensitivity mode bits [1:0]
-#define REG_FAULT       0x27  // latched fault code: bits 7–5 chip, bits 4–0 kind; cleared by a Control write
-#define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
-#define REG_RANGE_H     0x29  // Range high byte
-#define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
-#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16
-// Page 2 (0x40–0x5F) — calibration, EEPROM-backed
-#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16
+// Register addresses and bit masks are implementation details and live in
+// Apis.cpp (NW convention: no public names for them). Sketches use the API.
 
 // Reading arrays: each measurement keeps its readings from the last
 // updateMeasurements() in a statically sized array so that median and
