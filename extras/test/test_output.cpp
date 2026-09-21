@@ -17,6 +17,17 @@ static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int
                                   r[0x18 + 2*i] = o[i] & 0xFF; r[0x19 + 2*i] = (o[i] >> 8) & 0xFF; }
 }
 
+// Print into a fixed buffer: the in-memory Print destination from the design.
+class BufferPrint : public Print {
+    char* _buf; size_t _cap, _len = 0;
+  public:
+    BufferPrint(char* buf, size_t cap) : _buf(buf), _cap(cap) { _buf[0] = 0; }
+    size_t write(uint8_t c) override { if (_len + 1 >= _cap) return 0; _buf[_len++] = c; _buf[_len] = 0; return 1; }
+    size_t length() const { return _len; }
+};
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"   // the deprecated names are under test on purpose
 static void report(const char* name, Apis& a) {
     printf("[%s]\n", name);
     printf("header: %s\n", a.getHeader().c_str());
@@ -30,7 +41,16 @@ static void report(const char* name, Apis& a) {
     printf("getters: range=%d roll=%.4f pitch=%.4f signal=%u mean=%.4f std=%.4f sterr=%.4f\n",
            a.getRange(), a.getRoll(), a.getPitch(), a.getSignalStrength(),
            a.getRangeMean(), a.getRangeStd(), a.getRangeSterr());
+    // Print-based interface: header, stored reading, and one logged reading.
+    char pb[64]; BufferPrint bp(pb, sizeof pb);
+    a.beginReadings(Apis::ALL); a.printHeader(bp); printf("printHeader ALL: %s\n", pb);
+    BufferPrint bp2(pb, sizeof pb); a.printReading(bp2); printf("printReading ALL (stored): %s\n", pb);
+    BufferPrint bp3(pb, sizeof pb); size_t nb = a.logReading(bp3); a.endReadings();
+    printf("logReading ALL (%zu bytes): %s\n", nb, pb);
+    a.beginReadings(Apis::RANGE); BufferPrint bp4(pb, sizeof pb); a.printHeader(bp4); printf("printHeader RANGE: %s\n", pb);
+    BufferPrint bp5(pb, sizeof pb); a.logReading(bp5); a.endReadings(); printf("logReading RANGE: %s\n", pb);
 }
+#pragma GCC diagnostic pop
 
 int main() {
     // 1. Single reading, no statistics, level board.

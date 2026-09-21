@@ -284,25 +284,61 @@ class Apis
          */
         String getString(bool takeNewReadings = true);
 
-        // --- Raw reading interface (NW standard) ---
+        // --- Reading interface (NW standard) ---
         /**
-         * @brief Prepare for raw reading collection.
+         * @brief Print the header matching printReading(): column names with
+         * units, each followed by a comma, for the chips selected by
+         * beginReadings(). No statistics columns: one reading has none.
+         * @param out Any Print destination (SdFat File, Serial, ...).
+         * @return Bytes written.
+         */
+        size_t printHeader(Print& out);
+
+        /**
+         * @brief Print the stored reading of the selected chips, each value
+         * followed by a comma. Does not acquire: call updateRange(),
+         * updateOrientation(), or updateMeasurements() first, or use
+         * logReading(). Writes: range [cm] for RANGE; pitch [deg], roll [deg]
+         * for ORIENT; range, pitch, roll for ALL.
+         * @return Bytes written.
+         */
+        size_t printReading(Print& out);
+
+        /**
+         * @brief Take ONE reading of the selected chips and print it: the
+         * one-reading primitive for collecting many readings to a file. Uses
+         * updateRange()/updateOrientation(), not updateMeasurements(), so each
+         * call is a single acquisition regardless of nRangeReadings.
+         * @return Bytes written.
+         */
+        size_t logReading(Print& out);
+
+        /**
+         * @brief Begin a run of readings, selecting which chips they cover.
          * @param component Apis::ALL, Apis::RANGE, or Apis::ORIENT.
          */
+        void beginReadings(uint8_t component = ALL);
+
+        /** @brief End a run of readings. */
+        void endReadings();
+
+        // --- Deprecated raw-reading interface (v0.1.x names) ---
+        /** @deprecated Use beginReadings(). */
+        [[deprecated("Use beginReadings()")]]
         void beginRawReadings(uint8_t component = ALL);
 
         /**
-         * @brief Take one raw reading and write CSV data into buf at offset.
-         * Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT;
-         * range, pitch, roll for ALL. Each value followed by a comma.
-         * Max bytes written per call: 7 (RANGE), 18 (ORIENT), 25 (ALL).
-         * @param buf Caller-managed destination buffer.
-         * @param offset Starting write position in buf.
+         * @deprecated Use logReading(Print&) with an SdFat File, Serial, or a
+         * buffer-backed Print. Kept for v0.1.x sketches: takes one raw reading
+         * and writes CSV into buf at offset (range for RANGE; pitch, roll for
+         * ORIENT; all three for ALL). Max bytes: 7 (RANGE), 18 (ORIENT), 25 (ALL).
          * @return New offset after writing.
          */
+        [[deprecated("Use logReading(Print&)")]]
         uint16_t takeRawReading(char* buf, uint16_t offset);
 
-        /** @brief End raw reading collection. */
+        /** @deprecated Use endReadings(). */
+        [[deprecated("Use endReadings()")]]
         void endRawReadings();
 
     private:
@@ -376,7 +412,7 @@ class Apis
         // True after begin(); cleared after _waitUntilReady() fires once.
         bool _needsStartupDelay = true;
 
-        // Raw reading state
+        // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;
 };
 

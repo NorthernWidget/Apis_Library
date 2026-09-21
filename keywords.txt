@@ -37,6 +37,11 @@ getRollStd	KEYWORD2
 getRollSterr	KEYWORD2
 getHeader	KEYWORD2
 getString	KEYWORD2
+printHeader	KEYWORD2
+printReading	KEYWORD2
+logReading	KEYWORD2
+beginReadings	KEYWORD2
+endReadings	KEYWORD2
 beginRawReadings	KEYWORD2
 takeRawReading	KEYWORD2
 endRawReadings	KEYWORD2

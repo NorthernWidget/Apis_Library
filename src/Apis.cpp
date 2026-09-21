@@ -254,6 +254,46 @@ String Apis::getHeader() {
     return h;
 }
 
+void Apis::beginReadings(uint8_t component) {
+    _rawComponent = component;
+}
+
+void Apis::endReadings() {
+    // No cleanup required currently
+}
+
+size_t Apis::printHeader(Print& out) {
+    size_t n = 0;
+    if (_rawComponent == ALL || _rawComponent == RANGE) {
+        n += out.print("Range [cm],");
+    }
+    if (_rawComponent == ALL || _rawComponent == ORIENT) {
+        n += out.print("Pitch [deg],Roll [deg],");
+    }
+    return n;
+}
+
+size_t Apis::printReading(Print& out) {
+    size_t n = 0;
+    if (_rawComponent == ALL || _rawComponent == RANGE) {
+        n += out.print(_range);  n += out.print(',');
+    }
+    if (_rawComponent == ALL || _rawComponent == ORIENT) {
+        n += out.print(_pitch);  n += out.print(',');
+        n += out.print(_roll);   n += out.print(',');
+    }
+    return n;
+}
+
+size_t Apis::logReading(Print& out) {
+    if (_rawComponent == ALL || _rawComponent == RANGE)  updateRange();
+    if (_rawComponent == ALL || _rawComponent == ORIENT) updateOrientation();
+    return printReading(out);
+}
+
+// --- Deprecated raw-reading interface: bodies kept verbatim from v0.1.x so
+// --- their output stays byte-identical for existing sketches.
+
 void Apis::beginRawReadings(uint8_t component) {
     _rawComponent = component;
 }

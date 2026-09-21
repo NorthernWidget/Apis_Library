@@ -4,24 +4,44 @@ string: 250,0.00,0.00,
 raw ALL (15 bytes): 250,-0.00,0.00,
 raw RANGE (4 bytes): 250,
 getters: range=250 roll=0.0000 pitch=-0.0000 signal=120 mean=250.0000 std=0.0000 sterr=0.0000
+printHeader ALL: Range [cm],Pitch [deg],Roll [deg],
+printReading ALL (stored): 250,0.00,0.00,
+logReading ALL (14 bytes): 250,0.00,0.00,
+printHeader RANGE: Range [cm],
+logReading RANGE: 250,
 [N=1, tilted with offsets]
 header: Range [cm],Pitch [deg],Roll [deg],
 string: 1234,-10.96,-8.24,
 raw ALL (18 bytes): 1234,-10.96,-8.24,
 raw RANGE (5 bytes): 1234,
 getters: range=1234 roll=-8.2426 pitch=-10.9617 signal=77 mean=1234.0000 std=0.0000 sterr=0.0000
+printHeader ALL: Range [cm],Pitch [deg],Roll [deg],
+printReading ALL (stored): 1234,-10.96,-8.24,
+logReading ALL (18 bytes): 1234,-10.96,-8.24,
+printHeader RANGE: Range [cm],
+logReading RANGE: 1234,
 [N=5 range stats, N=3 orient stats, varying]
 header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],
 string: 306,4.74,2.12,-6.11,2.85,0.40,0.23,0.00,0.00,
 raw ALL (15 bytes): 309,-6.50,2.84,
 raw RANGE (4 bytes): 312,
 getters: range=312 roll=2.8440 pitch=-6.5036 signal=90 mean=306.0000 std=4.7434 sterr=2.1213
+printHeader ALL: Range [cm],Pitch [deg],Roll [deg],
+printReading ALL (stored): 312,-6.50,2.84,
+logReading ALL (15 bytes): 300,-6.11,2.85,
+printHeader RANGE: Range [cm],
+logReading RANGE: 303,
 [errors: range<0, accel 0xFFFF]
 header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],
 string: -9999,-9999.00,-9999.00,-9999.00,-9999.00,
 raw ALL (18 bytes): -9999,-9999,-9999,
 raw RANGE (6 bytes): -9999,
 getters: range=-9999 roll=-9999.0000 pitch=-9999.0000 signal=0 mean=-9999.0000 std=-9999.0000 sterr=-9999.0000
+printHeader ALL: Range [cm],Pitch [deg],Roll [deg],
+printReading ALL (stored): -9999,-9999.00,-9999.00,
+logReading ALL (24 bytes): -9999,-9999.00,-9999.00,
+printHeader RANGE: Range [cm],
+logReading RANGE: -9999,
 [not measured]
 string: -9998,-9998.00,-9998.00,
 [per-chip] RANGE ok=1 string(false): 300,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00, counts=4/2
