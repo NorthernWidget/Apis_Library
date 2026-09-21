@@ -2,14 +2,14 @@
 
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
   Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
   Copyright 2024-2026 iBug - ibugone.com | @iBug
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
 
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" dir="ltr">
   <head>
     
 <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
   </head>
 
-  <body class="layout--single" dir="ltr">
+  <body class="layout--single">
     
 <nav class="skip-links" aria-label="Skip links">
   <ul>
@@ -225,100 +225,354 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#source-code">Source code</a></li></ul>
+              <ul class="toc__menu"><li><a href="#defines">Defines</a></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-reg_schema">define REG_SCHEMA</a></li><li><a href="#define-reg_name">define REG_NAME</a></li><li><a href="#define-reg_hw_major">define REG_HW_MAJOR</a></li><li><a href="#define-reg_hw_minor">define REG_HW_MINOR</a></li><li><a href="#define-reg_fw_patch">define REG_FW_PATCH</a></li><li><a href="#define-reg_i2c_addr">define REG_I2C_ADDR</a></li><li><a href="#define-reg_status">define REG_STATUS</a></li><li><a href="#define-reg_ctrl">define REG_CTRL</a></li><li><a href="#define-reg_counter">define REG_COUNTER</a></li><li><a href="#define-reg_config">define REG_CONFIG</a></li><li><a href="#define-reg_fault">define REG_FAULT</a></li><li><a href="#define-reg_range_l">define REG_RANGE_L</a></li><li><a href="#define-reg_range_h">define REG_RANGE_H</a></li><li><a href="#define-reg_signal_str">define REG_SIGNAL_STR</a></li><li><a href="#define-reg_accel_base">define REG_ACCEL_BASE</a></li><li><a href="#define-reg_offset_base">define REG_OFFSET_BASE</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
             </nav>
           </aside>
         
-        <h2 id="source-code">Source code</h2>
+        <h2 id="defines">Defines</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-schema">REG_SCHEMA</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-name">REG_NAME</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-hw-major">REG_HW_MAJOR</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-hw-minor">REG_HW_MINOR</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-fw-patch">REG_FW_PATCH</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-i2c-addr">REG_I2C_ADDR</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-status">REG_STATUS</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-ctrl">REG_CTRL</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-counter">REG_COUNTER</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-config">REG_CONFIG</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-fault">REG_FAULT</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-range-l">REG_RANGE_L</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-range-h">REG_RANGE_H</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-signal-str">REG_SIGNAL_STR</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-accel-base">REG_ACCEL_BASE</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-offset-base">REG_OFFSET_BASE</a></strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="macros-documentation">Macros Documentation</h2>
+
+<h3 id="define-reg_schema">define REG_SCHEMA</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_SCHEMA 0x00
+</span></code></pre></div></div>
+
+<h3 id="define-reg_name">define REG_NAME</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_NAME 0x01
+</span></code></pre></div></div>
+
+<h3 id="define-reg_hw_major">define REG_HW_MAJOR</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_HW_MAJOR 0x08
+</span></code></pre></div></div>
+
+<h3 id="define-reg_hw_minor">define REG_HW_MINOR</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_HW_MINOR 0x09
+</span></code></pre></div></div>
+
+<h3 id="define-reg_fw_patch">define REG_FW_PATCH</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_FW_PATCH 0x0A
+</span></code></pre></div></div>
+
+<h3 id="define-reg_i2c_addr">define REG_I2C_ADDR</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_I2C_ADDR 0x1F
+</span></code></pre></div></div>
+
+<h3 id="define-reg_status">define REG_STATUS</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_STATUS 0x20
+</span></code></pre></div></div>
+
+<h3 id="define-reg_ctrl">define REG_CTRL</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_CTRL 0x21
+</span></code></pre></div></div>
+
+<h3 id="define-reg_counter">define REG_COUNTER</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_COUNTER 0x22
+</span></code></pre></div></div>
+
+<h3 id="define-reg_config">define REG_CONFIG</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_CONFIG 0x26
+</span></code></pre></div></div>
+
+<h3 id="define-reg_fault">define REG_FAULT</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_FAULT 0x27
+</span></code></pre></div></div>
+
+<h3 id="define-reg_range_l">define REG_RANGE_L</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_RANGE_L 0x28
+</span></code></pre></div></div>
+
+<h3 id="define-reg_range_h">define REG_RANGE_H</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_RANGE_H 0x29
+</span></code></pre></div></div>
+
+<h3 id="define-reg_signal_str">define REG_SIGNAL_STR</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_SIGNAL_STR 0x2A
+</span></code></pre></div></div>
+
+<h3 id="define-reg_accel_base">define REG_ACCEL_BASE</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_ACCEL_BASE 0x30
+</span></code></pre></div></div>
+
+<h3 id="define-reg_offset_base">define REG_OFFSET_BASE</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_OFFSET_BASE 0x40
+</span></code></pre></div></div>
+
+<h2 id="source-code">Source code</h2>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"Apis.h"</span><span class="cp">
 </span>
+<span class="c1">// Register map: NW-Device-Specification Schema 1, Apis appendix. Three 32-byte</span>
+<span class="c1">// pages; a controller writes a start address and reads up to 32 bytes with</span>
+<span class="c1">// auto-increment. Registers not listed are reserved.</span>
+<span class="c1">// Page 0 (0x00–0x1F) — identity, EEPROM-backed</span>
+<span class="cp">#define REG_SCHEMA      0x00  // 0x01 = Schema 1; anything else is refused by begin()
+#define REG_NAME        0x01  // 'A','p','i','s', null-padded to 7 bytes (0x01–0x07)
+#define REG_HW_MAJOR    0x08  // Hardware version major
+#define REG_HW_MINOR    0x09  // Hardware version minor
+#define REG_FW_PATCH    0x0A  // Firmware patch version (written by the firmware)
+#define REG_I2C_ADDR    0x1F  // I2C address, writable; persisted; takes effect on next boot
+</span><span class="c1">// Page 1 (0x20–0x3F) — status and sensor data, SRAM</span>
+<span class="cp">#define REG_STATUS      0x20  // bit 0 ready; bit 1 LiDAR fault; bit 2 accel fault; bit 7 pan-fault
+#define REG_CTRL        0x21  // writable: bit 0 trigger; bit 1 measure LiDAR; bit 2 measure accel
+#define REG_COUNTER     0x22  // reading counter, uint16 little-endian (0x22–0x23)
+#define REG_CONFIG      0x26  // writable: sensitivity mode bits [1:0]
+#define REG_FAULT       0x27  // latched fault code: bits 7–5 chip, bits 4–0 kind; cleared by a Control write
+#define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
+#define REG_RANGE_H     0x29  // Range high byte
+#define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
+#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16
+</span><span class="c1">// Page 2 (0x40–0x5F) — calibration, EEPROM-backed</span>
+<span class="cp">#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16
+</span>
+
 <span class="n">Apis</span><span class="o">::</span><span class="n">Apis</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nRangeReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">rangeStats</span><span class="p">,</span>
            <span class="kt">uint16_t</span> <span class="n">nOrientReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">orientStats</span><span class="p">)</span>
-    <span class="o">:</span> <span class="n">_nRangeReadings</span><span class="p">(</span><span class="n">nRangeReadings</span><span class="p">),</span> <span class="n">_rangeStats</span><span class="p">(</span><span class="n">rangeStats</span><span class="p">),</span>
-      <span class="n">_nOrientReadings</span><span class="p">(</span><span class="n">nOrientReadings</span><span class="p">),</span> <span class="n">_orientStats</span><span class="p">(</span><span class="n">orientStats</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">_rangeStats</span><span class="p">(</span><span class="n">rangeStats</span><span class="p">),</span> <span class="n">_orientStats</span><span class="p">(</span><span class="n">orientStats</span><span class="p">)</span>
 <span class="p">{</span>
+    <span class="n">setRangeReadings</span><span class="p">(</span><span class="n">nRangeReadings</span><span class="p">);</span>
+    <span class="n">setOrientReadings</span><span class="p">(</span><span class="n">nOrientReadings</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">address</span><span class="p">,</span> <span class="n">SensitivityMode</span> <span class="n">sensitivity</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">_adr</span> <span class="o">=</span> <span class="n">address</span><span class="p">;</span>
     <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">sensitivity</span><span class="p">;</span>
-    <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
 
     <span class="c1">// Check ACK.</span>
     <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 
-    <span class="c1">// Verify device identity by reading the 4-byte ASCII name from REG_NAME_0–3</span>
-    <span class="c1">// (0x01–0x04). New firmware initialises these statically, so they are valid</span>
-    <span class="c1">// before _waitUntilReady(). Old firmware leaves them 0x00; returning false</span>
-    <span class="c1">// here prevents misinterpreting the old register map.</span>
-    <span class="k">const</span> <span class="kt">char</span> <span class="n">expected</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'A'</span><span class="p">,</span> <span class="sc">'p'</span><span class="p">,</span> <span class="sc">'i'</span><span class="p">,</span> <span class="sc">'s'</span><span class="p">};</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_NAME_0</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="c1">// Page 0 Blocks 0–1 (0x00–0x0F): schema, name, versions. Read in one</span>
+    <span class="c1">// transaction; the firmware serves Page 0 from EEPROM so it is valid before</span>
+    <span class="c1">// the first reading.</span>
+    <span class="kt">uint8_t</span> <span class="n">p0</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+    <span class="n">_hwMajor</span> <span class="o">=</span> <span class="n">_hwMinor</span> <span class="o">=</span> <span class="n">_fwPatch</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_SCHEMA</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">_hwMajor</span> <span class="o">=</span> <span class="n">p0</span><span class="p">[</span><span class="n">REG_HW_MAJOR</span><span class="p">];</span>
+    <span class="n">_hwMinor</span> <span class="o">=</span> <span class="n">p0</span><span class="p">[</span><span class="n">REG_HW_MINOR</span><span class="p">];</span>
+    <span class="n">_fwPatch</span> <span class="o">=</span> <span class="n">p0</span><span class="p">[</span><span class="n">REG_FW_PATCH</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p0</span><span class="p">[</span><span class="n">REG_SCHEMA</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x01</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>               <span class="c1">// not Schema 1 (0x00 legacy, 0xFF unprovisioned, other)</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="n">expected</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'A'</span><span class="p">,</span> <span class="sc">'p'</span><span class="p">,</span> <span class="sc">'i'</span><span class="p">,</span> <span class="sc">'s'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>   <span class="c1">// 7-byte name field, null-padded</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p0</span><span class="p">[</span><span class="n">REG_NAME</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_fwPatch</span> <span class="o">&lt;</span> <span class="n">APIS_FW_MIN_PATCH</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>          <span class="c1">// register map older than this library</span>
 
-    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_CONFIG</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+    <span class="n">_writeByte</span><span class="p">(</span><span class="n">REG_CONFIG</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
 
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNRangeReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span>  <span class="p">{</span> <span class="n">_nRangeReadings</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getHardwareMajor</span><span class="p">()</span>   <span class="p">{</span> <span class="k">return</span> <span class="n">_hwMajor</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getHardwareMinor</span><span class="p">()</span>   <span class="p">{</span> <span class="k">return</span> <span class="n">_hwMinor</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getFirmwareVersion</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_fwPatch</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_readBytes</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// One transaction: pointer write, then requestFrom(n). Schema 1 firmware</span>
+    <span class="c1">// (patch 1+) serves up to 32 bytes with auto-increment.</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">reg</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_writeByte</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">reg</span><span class="p">);</span>
+    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setRangeReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_nRangeReadings</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="n">APIS_RANGE_CAPACITY</span><span class="p">)</span> <span class="o">?</span> <span class="n">APIS_RANGE_CAPACITY</span> <span class="o">:</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">_nRangeReadings</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setOrientReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_nOrientReadings</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="n">APIS_ORIENT_CAPACITY</span><span class="p">)</span> <span class="o">?</span> <span class="n">APIS_ORIENT_CAPACITY</span> <span class="o">:</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">_nOrientReadings</span><span class="p">;</span>
+<span class="p">}</span>
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setRangeStats</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">)</span>      <span class="p">{</span> <span class="n">_rangeStats</span> <span class="o">=</span> <span class="n">enable</span><span class="p">;</span> <span class="p">}</span>
-<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNOrientReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="n">_nOrientReadings</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="p">}</span>
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setOrientStats</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">)</span>     <span class="p">{</span> <span class="n">_orientStats</span> <span class="o">=</span> <span class="n">enable</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNRangeReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span>   <span class="p">{</span> <span class="n">setRangeReadings</span><span class="p">(</span><span class="n">n</span><span class="p">);</span> <span class="p">}</span>
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setNOrientReadings</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span>  <span class="p">{</span> <span class="n">setOrientReadings</span><span class="p">(</span><span class="n">n</span><span class="p">);</span> <span class="p">}</span>
 
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setRangefinderSensitivity</span><span class="p">(</span><span class="n">SensitivityMode</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">mode</span><span class="p">;</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_CONFIG</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+    <span class="n">_writeByte</span><span class="p">(</span><span class="n">REG_CONFIG</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">setI2CAddress</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">newAddress</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_I2C_ADDR</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">newAddress</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
+    <span class="n">_writeByte</span><span class="p">(</span><span class="n">REG_I2C_ADDR</span><span class="p">,</span> <span class="n">newAddress</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">ready</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">uint8_t</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_STATUS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">status</span> <span class="o">&amp;</span> <span class="n">APIS_BIT_READY</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_readCounter</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">};</span>
+    <span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_COUNTER</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">uint16_t</span><span class="p">)((</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">newReading</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_readCounter</span><span class="p">()</span> <span class="o">!=</span> <span class="n">_lastCounter</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">requestReading</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint8_t</span> <span class="n">ctrl</span> <span class="o">=</span> <span class="n">APIS_CTRL_TRIGGER</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">component</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">component</span> <span class="o">==</span> <span class="n">RANGE</span><span class="p">)</span>  <span class="n">ctrl</span> <span class="o">|=</span> <span class="n">APIS_CTRL_LIDAR</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">component</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">component</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="n">ctrl</span> <span class="o">|=</span> <span class="n">APIS_CTRL_ACCEL</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">_writeByte</span><span class="p">(</span><span class="n">REG_CTRL</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_takeReading</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint16_t</span> <span class="n">before</span> <span class="o">=</span> <span class="n">_readCounter</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">requestReading</span><span class="p">(</span><span class="n">component</span><span class="p">))</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">timeoutGlobal</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint16_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">_readCounter</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">!=</span> <span class="n">before</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_lastCounter</span> <span class="o">=</span> <span class="n">now</span><span class="p">;</span>
+            <span class="c1">// Block 0 of the new reading: status (0x20) and latched fault (0x27)</span>
+            <span class="kt">uint8_t</span> <span class="n">b0</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+            <span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_STATUS</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+            <span class="n">_status</span> <span class="o">=</span> <span class="n">b0</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">_fault</span>  <span class="o">=</span> <span class="n">b0</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">delay</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">faulted</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">chip</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_status</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">chip</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span> <span class="p">}</span>
+<span class="kt">bool</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">anyFault</span><span class="p">()</span>            <span class="p">{</span> <span class="k">return</span> <span class="n">_status</span> <span class="o">&amp;</span> <span class="n">APIS_BIT_PANFAULT</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">faultChip</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_fault</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">faultKind</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_fault</span> <span class="o">&amp;</span> <span class="mh">0x1F</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printFault</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"accelerometer"</span><span class="p">};</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">kinds</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"none"</span><span class="p">,</span> <span class="s">"no acknowledge"</span><span class="p">,</span> <span class="s">"timeout"</span><span class="p">,</span> <span class="s">"checksum"</span><span class="p">,</span> <span class="s">"out of range"</span><span class="p">,</span>
+                                        <span class="s">"not initialised"</span><span class="p">,</span> <span class="s">"reset since configured"</span><span class="p">,</span> <span class="s">"config rejected"</span><span class="p">,</span>
+                                        <span class="s">"supply fault"</span><span class="p">};</span>
+    <span class="kt">uint8_t</span> <span class="n">chip</span> <span class="o">=</span> <span class="n">faultChip</span><span class="p">(),</span> <span class="n">kind</span> <span class="o">=</span> <span class="n">faultKind</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">kind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"none"</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">chip</span> <span class="o">==</span> <span class="mi">7</span><span class="p">)</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"unit"</span><span class="p">);</span>
+    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">chip</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">chips</span><span class="p">[</span><span class="n">chip</span><span class="p">]);</span>
+    <span class="k">else</span> <span class="p">{</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"chip "</span><span class="p">);</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">chip</span><span class="p">);</span> <span class="p">}</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">": "</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">kind</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">)</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">kinds</span><span class="p">[</span><span class="n">kind</span><span class="p">]);</span>
+    <span class="k">else</span> <span class="p">{</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"kind "</span><span class="p">);</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">kind</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateRange</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">_needsStartupDelay</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_waitUntilReady</span><span class="p">();</span>
-        <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_takeReading</span><span class="p">(</span><span class="n">RANGE</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="kt">uint8_t</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">uint8_t</span> <span class="n">data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_RANGE_L</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_RANGE_H</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-    <span class="n">_range</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
-
-    <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_SIGNAL_STR</span><span class="p">);</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-    <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">_signalStrength</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+    <span class="c1">// Range low/high and signal strength are consecutive (0x28–0x2A): one read.</span>
+    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">};</span>   <span class="c1">// 0xFF mirrors what Wire.read() yields on a failed request</span>
+    <span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_RANGE_L</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)((</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">_signalStrength</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">_range</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
@@ -328,46 +582,22 @@
 <span class="p">}</span>
 
 <span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateOrientation</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">_needsStartupDelay</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_waitUntilReady</span><span class="p">();</span>
-        <span class="n">_needsStartupDelay</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_takeReading</span><span class="p">(</span><span class="n">ORIENT</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="kt">uint8_t</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">int16_t</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
 
-    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x10–0x15)</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35): one read of six bytes</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">d</span><span class="p">);</span>           <span class="c1">// 0xFF mirrors what Wire.read() yields on a failed request</span>
+    <span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">dataSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span>
 
-        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-        <span class="n">dataSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="c1">// Accel offsets X/Y/Z at REG_OFFSET_BASE (0x18–0x1D)</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">data1</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">data2</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-        <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">data2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">data1</span><span class="p">);</span>
-    <span class="p">}</span>
+    <span class="c1">// Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2): one read of six bytes</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">d</span><span class="p">);</span>
+    <span class="n">_readBytes</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span>
 
     <span class="kt">float</span> <span class="n">gx</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gz</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
     <span class="kt">float</span> <span class="n">offsetX</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">offsetY</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">offsetZ</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
@@ -390,85 +620,97 @@
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_waitUntilReady</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Poll REG_STATUS bit 0 until the firmware signals ready or 150 ms elapse.</span>
-    <span class="c1">// The 150 ms covers the full firmware startup: delay(10) + POWER_SW high +</span>
-    <span class="c1">// 680 uF cap charge (~15 ms at MIC2544 current limit) + delay(100) +</span>
-    <span class="c1">// ENABLE high + InitAccel + InitLiDAR ~= 115 ms, with margin.</span>
-    <span class="c1">// The TLV61220 boost converter is always on (EN tied to VIN+) and produces</span>
-    <span class="c1">// stable 5V before the ATTiny starts, so no converter startup is added here.</span>
-    <span class="c1">// Old firmware leaves REG_STATUS=0 always and times out; new firmware</span>
-    <span class="c1">// (github.com/NorthernWidget/Project-Apis/issues/15)</span>
-    <span class="c1">// sets bit 0 after InitLiDAR(), allowing an early exit.</span>
-    <span class="kt">uint32_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">150</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">beginTransmission</span><span class="p">(</span><span class="n">_adr</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">REG_STATUS</span><span class="p">);</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">endTransmission</span><span class="p">();</span>
-        <span class="n">Wire</span><span class="p">.</span><span class="n">requestFrom</span><span class="p">(</span><span class="n">_adr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mh">0x01</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-        <span class="n">delay</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateMeasurements</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">rangeOK</span>  <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">orientOK</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 
-<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateMeasurements</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Welford's online algorithm for range mean, std, sterr</span>
-    <span class="kt">float</span> <span class="n">rangeM2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rangeMean</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">component</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">component</span> <span class="o">==</span> <span class="n">RANGE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Take N range readings into the array, then two-pass mean, std, sterr.</span>
+    <span class="c1">// Two-pass in float is exact enough for N up to the array capacity; see</span>
+    <span class="c1">// the precision note in Apis.h.</span>
     <span class="kt">uint16_t</span> <span class="n">rangeN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
     <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_nRangeReadings</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">updateRange</span><span class="p">())</span> <span class="p">{</span>
-            <span class="n">rangeN</span><span class="o">++</span><span class="p">;</span>
-            <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">_range</span><span class="p">;</span>
-            <span class="kt">float</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">rangeMean</span><span class="p">;</span>
-            <span class="n">rangeMean</span> <span class="o">+=</span> <span class="n">delta</span> <span class="o">/</span> <span class="n">rangeN</span><span class="p">;</span>
-            <span class="n">rangeM2</span>   <span class="o">+=</span> <span class="n">delta</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">rangeMean</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">updateRange</span><span class="p">())</span> <span class="n">_rangeReadings</span><span class="p">[</span><span class="n">rangeN</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
         <span class="n">_rangeMean</span> <span class="o">=</span> <span class="n">_rangeStd</span> <span class="o">=</span> <span class="n">_rangeSterr</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">_rangeMean</span> <span class="o">=</span> <span class="n">rangeMean</span><span class="p">;</span>
-        <span class="n">_range</span>     <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">rangeMean</span><span class="p">;</span>
-        <span class="n">_rangeStd</span>   <span class="o">=</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">rangeM2</span> <span class="o">/</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rangeN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">sum</span> <span class="o">+=</span> <span class="n">_rangeReadings</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="kt">float</span> <span class="n">mean</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="n">rangeN</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">m2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rangeN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="kt">float</span> <span class="n">d</span> <span class="o">=</span> <span class="n">_rangeReadings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mean</span><span class="p">;</span> <span class="n">m2</span> <span class="o">+=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">d</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">_rangeMean</span>  <span class="o">=</span> <span class="n">mean</span><span class="p">;</span>
+        <span class="n">_range</span>      <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">mean</span><span class="p">;</span>
+        <span class="n">_rangeStd</span>   <span class="o">=</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">m2</span> <span class="o">/</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
         <span class="n">_rangeSterr</span> <span class="o">=</span> <span class="p">(</span><span class="n">rangeN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">_rangeStd</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">rangeN</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">}</span>
+    <span class="n">_rangeCount</span> <span class="o">=</span> <span class="n">rangeN</span><span class="p">;</span>
+    <span class="c1">// Float comparisons with APIS_ERROR are safe: the value is assigned directly,</span>
+    <span class="c1">// never computed, so the float representation is exact and consistent.</span>
+    <span class="n">rangeOK</span> <span class="o">=</span> <span class="p">(</span><span class="n">_range</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    <span class="c1">// Welford's online algorithm for orientation mean, std, sterr</span>
-    <span class="kt">float</span> <span class="n">pitchM2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rollM2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pitchMean</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rollMean</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">component</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">component</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Take N orientation readings into the arrays, then two-pass statistics.</span>
     <span class="kt">uint16_t</span> <span class="n">orientN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
     <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_nOrientReadings</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">updateOrientation</span><span class="p">())</span> <span class="p">{</span>
-            <span class="n">orientN</span><span class="o">++</span><span class="p">;</span>
-            <span class="kt">float</span> <span class="n">dp</span> <span class="o">=</span> <span class="n">_pitch</span> <span class="o">-</span> <span class="n">pitchMean</span><span class="p">;</span>
-            <span class="n">pitchMean</span> <span class="o">+=</span> <span class="n">dp</span> <span class="o">/</span> <span class="n">orientN</span><span class="p">;</span>
-            <span class="n">pitchM2</span>   <span class="o">+=</span> <span class="n">dp</span> <span class="o">*</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">-</span> <span class="n">pitchMean</span><span class="p">);</span>
-
-            <span class="kt">float</span> <span class="n">dr</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">-</span> <span class="n">rollMean</span><span class="p">;</span>
-            <span class="n">rollMean</span> <span class="o">+=</span> <span class="n">dr</span> <span class="o">/</span> <span class="n">orientN</span><span class="p">;</span>
-            <span class="n">rollM2</span>   <span class="o">+=</span> <span class="n">dr</span> <span class="o">*</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">-</span> <span class="n">rollMean</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">updateOrientation</span><span class="p">())</span> <span class="p">{</span> <span class="n">_pitchReadings</span><span class="p">[</span><span class="n">orientN</span><span class="p">]</span> <span class="o">=</span> <span class="n">_pitch</span><span class="p">;</span> <span class="n">_rollReadings</span><span class="p">[</span><span class="n">orientN</span><span class="p">]</span> <span class="o">=</span> <span class="n">_roll</span><span class="p">;</span> <span class="n">orientN</span><span class="o">++</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
         <span class="n">_pitchStd</span> <span class="o">=</span> <span class="n">_pitchSterr</span> <span class="o">=</span> <span class="n">_rollStd</span> <span class="o">=</span> <span class="n">_rollSterr</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">pitchMean</span><span class="p">;</span>
-        <span class="n">_roll</span>  <span class="o">=</span> <span class="n">rollMean</span><span class="p">;</span>
-        <span class="n">_pitchStd</span>   <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pitchM2</span> <span class="o">/</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">ps</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">orientN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="n">ps</span> <span class="o">+=</span> <span class="n">_pitchReadings</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">rs</span> <span class="o">+=</span> <span class="n">_rollReadings</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+        <span class="kt">float</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">ps</span> <span class="o">/</span> <span class="n">orientN</span><span class="p">,</span> <span class="n">rm</span> <span class="o">=</span> <span class="n">rs</span> <span class="o">/</span> <span class="n">orientN</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">pm2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rm2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">orientN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">float</span> <span class="n">dp</span> <span class="o">=</span> <span class="n">_pitchReadings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">pm</span><span class="p">;</span> <span class="n">pm2</span> <span class="o">+=</span> <span class="n">dp</span> <span class="o">*</span> <span class="n">dp</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">dr</span> <span class="o">=</span> <span class="n">_rollReadings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">-</span> <span class="n">rm</span><span class="p">;</span> <span class="n">rm2</span> <span class="o">+=</span> <span class="n">dr</span> <span class="o">*</span> <span class="n">dr</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">pm</span><span class="p">;</span>
+        <span class="n">_roll</span>  <span class="o">=</span> <span class="n">rm</span><span class="p">;</span>
+        <span class="n">_pitchStd</span>   <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pm2</span> <span class="o">/</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
         <span class="n">_pitchSterr</span> <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">_pitchStd</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">orientN</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">_rollStd</span>    <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">rollM2</span>  <span class="o">/</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">_rollStd</span>    <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">rm2</span> <span class="o">/</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
         <span class="n">_rollSterr</span>  <span class="o">=</span> <span class="p">(</span><span class="n">orientN</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">_rollStd</span>  <span class="o">/</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">orientN</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">}</span>
+    <span class="n">_orientCount</span> <span class="o">=</span> <span class="n">orientN</span><span class="p">;</span>
+    <span class="n">orientOK</span> <span class="o">=</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    <span class="c1">// Float comparisons with APIS_ERROR are safe: the value is assigned directly,</span>
-    <span class="c1">// never computed, so the float representation is exact and consistent.</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">_range</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rangeOK</span> <span class="o">&amp;&amp;</span> <span class="n">orientOK</span><span class="p">;</span>
 <span class="p">}</span>
+
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">_median</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+    <span class="c1">// Copy into a stack buffer no larger than the biggest capacity and sort</span>
+    <span class="c1">// (insertion sort: n is small and the copy is already on the stack).</span>
+    <span class="kt">float</span> <span class="n">tmp</span><span class="p">[(</span><span class="n">APIS_RANGE_CAPACITY</span> <span class="o">&gt;</span> <span class="n">APIS_ORIENT_CAPACITY</span><span class="p">)</span> <span class="o">?</span> <span class="n">APIS_RANGE_CAPACITY</span> <span class="o">:</span> <span class="n">APIS_ORIENT_CAPACITY</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="kt">int16_t</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">tmp</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">j</span><span class="p">];</span> <span class="n">j</span><span class="o">--</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="n">tmp</span><span class="p">[</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">:</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">[</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeMedian</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rangeCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">tmp</span><span class="p">[</span><span class="n">APIS_RANGE_CAPACITY</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_rangeCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rangeReadings</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">_median</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">_rangeCount</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getPitchMedian</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">_orientCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">APIS_ERROR</span> <span class="o">:</span> <span class="n">_median</span><span class="p">(</span><span class="n">_pitchReadings</span><span class="p">,</span> <span class="n">_orientCount</span><span class="p">);</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRollMedian</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">_orientCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">APIS_ERROR</span> <span class="o">:</span> <span class="n">_median</span><span class="p">(</span><span class="n">_rollReadings</span><span class="p">,</span>  <span class="n">_orientCount</span><span class="p">);</span> <span class="p">}</span>
+
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRangeCount</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_rangeCount</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getOrientCount</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_orientCount</span><span class="p">;</span> <span class="p">}</span>
 
 <span class="kt">int16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getRange</span><span class="p">()</span>          <span class="p">{</span> <span class="k">return</span> <span class="n">_range</span><span class="p">;</span> <span class="p">}</span>
 <span class="kt">float</span>   <span class="n">Apis</span><span class="o">::</span><span class="n">getRoll</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_roll</span><span class="p">;</span> <span class="p">}</span>
@@ -512,16 +754,56 @@
     <span class="k">return</span> <span class="n">h</span><span class="p">;</span>
 <span class="p">}</span>
 
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">beginReadings</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">_rawComponent</span> <span class="o">=</span> <span class="n">component</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">endReadings</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// No cleanup required currently</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printHeader</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">RANGE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Range [cm],"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Pitch [deg],Roll [deg],"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printReading</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">RANGE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">_range</span><span class="p">);</span>  <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">_pitch</span><span class="p">);</span>  <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">_roll</span><span class="p">);</span>   <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">logReading</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">RANGE</span><span class="p">)</span>  <span class="n">updateRange</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="n">updateOrientation</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">printReading</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// --- Deprecated raw-reading interface: bodies kept verbatim from v0.1.x so</span>
+<span class="c1">// --- their output stays byte-identical for existing sketches.</span>
+
 <span class="kt">void</span> <span class="n">Apis</span><span class="o">::</span><span class="n">beginRawReadings</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">_rawComponent</span> <span class="o">=</span> <span class="n">component</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">takeRawReading</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">offset</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_RANGE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">RANGE</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">updateRange</span><span class="p">();</span>
         <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s">"%d,"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_range</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">NW_READING_ORIENT</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">_rawComponent</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
         <span class="kt">char</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">updateOrientation</span><span class="p">())</span> <span class="p">{</span>
             <span class="n">dtostrf</span><span class="p">(</span><span class="n">_pitch</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
@@ -545,7 +827,7 @@
 
 <hr />
 
-<p>Updated on 2026-06-02 at 18:28:55 +0000</p>
+<p>Updated on 2026-09-21 at 22:16:20 +0000</p>
 
         
       </section>

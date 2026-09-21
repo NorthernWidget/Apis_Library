@@ -1,0 +1,480 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js" dir="ltr">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>String - Apis Library</title>
+<meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
+
+
+  <meta name="author" content="Northern Widget">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Apis Library">
+<meta property="og:title" content="String">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Classes/classString/">
+
+
+  <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Classes/classString/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/Apis_Library/feed.xml" type="application/atom+xml" rel="alternate" title="Apis Library Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/Apis_Library/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/Apis_Library/">
+          Apis Library
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/"
+                
+                
+              >Quick-Start Guide</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+    
+      
+<nav class="nav__list">
+  
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle Menu</label>
+  <ul class="nav__items">
+    
+      
+      
+        <li>
+          
+            <a href="/Apis_Library/"><span class="nav__sub-title">Overview</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Classes/classApis/"><span class="nav__sub-title">Apis Class</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Classes/index_classes/"><span class="nav__sub-title">Classes</span></a>
+          
+
+          
+        </li>
+      
+        <li>
+          
+            <a href="/Apis_Library/Files/index_files/"><span class="nav__sub-title">Files</span></a>
+          
+
+          
+        </li>
+      
+    
+  </ul>
+</nav>
+
+    
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="String">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://docs.northernwidget.com/Apis_Library/Classes/classString/" itemprop="url">String
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-string">function String</a></li><li><a href="#function-string-1">function String</a></li><li><a href="#function-string-2">function String</a></li><li><a href="#function-string-3">function String</a></li><li><a href="#function-string-4">function String</a></li><li><a href="#function-string-5">function String</a></li><li><a href="#function-string-6">function String</a></li><li><a href="#function-string-7">function String</a></li><li><a href="#function-string-8">function String</a></li><li><a href="#function-operator">function operator+</a></li><li><a href="#function-operator-1">function operator+</a></li><li><a href="#function-operator-2">function operator+=</a></li><li><a href="#function-operator-3">function operator+=</a></li><li><a href="#function-c_str">function c_str</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="public-functions">Public Functions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>()</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(const char * c)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(const std::string &amp; c)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(int v)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(long v)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(unsigned int v)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(unsigned long v)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(float v, unsigned char d =2)</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-string">String</a></strong>(double v, unsigned char d =2)</td>
+    </tr>
+    <tr>
+      <td><a href="/Apis_Library/Classes/classString/">String</a></td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-operator+">operator+</a></strong>(const <a href="/Apis_Library/Classes/classString/">String</a> &amp; o) const</td>
+    </tr>
+    <tr>
+      <td><a href="/Apis_Library/Classes/classString/">String</a></td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-operator+">operator+</a></strong>(const char * o) const</td>
+    </tr>
+    <tr>
+      <td><a href="/Apis_Library/Classes/classString/">String</a> &amp;</td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-operator+=">operator+=</a></strong>(const <a href="/Apis_Library/Classes/classString/">String</a> &amp; o)</td>
+    </tr>
+    <tr>
+      <td><a href="/Apis_Library/Classes/classString/">String</a> &amp;</td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-operator+=">operator+=</a></strong>(const char * o)</td>
+    </tr>
+    <tr>
+      <td>const char *</td>
+      <td><strong><a href="/Apis_Library/Classes/classString/#function-c-str">c_str</a></strong>() const</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="public-functions-documentation">Public Functions Documentation</h2>
+
+<h3 id="function-string">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="function-string-1">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">c</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-2">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">c</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-3">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">v</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-4">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="kt">long</span> <span class="n">v</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-5">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">v</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-6">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">v</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-7">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="kt">float</span> <span class="n">v</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">d</span> <span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-string-8">function String</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span><span class="p">(</span>
+    <span class="kt">double</span> <span class="n">v</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">d</span> <span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-operator">function operator+</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span> <span class="n">o</span>
+<span class="p">)</span> <span class="k">const</span>
+</code></pre></div></div>
+
+<h3 id="function-operator-1">function operator+</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">o</span>
+<span class="p">)</span> <span class="k">const</span>
+</code></pre></div></div>
+
+<h3 id="function-operator-2">function operator+=</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span> <span class="n">o</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-operator-3">function operator+=</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="n">String</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">o</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="function-c_str">function c_str</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">inline</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">c_str</span><span class="p">()</span> <span class="k">const</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>Updated on 2026-09-21 at 22:16:20 +0000</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+
+
+        
+
+
+
+      </footer>
+
+      
+
+      
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/Apis_Library/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://docs.northernwidget.com">Apis Library</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/Apis_Library/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -2,14 +2,14 @@
 
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
   Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
   Copyright 2024-2026 iBug - ibugone.com | @iBug
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
 
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" dir="ltr">
   <head>
     
 <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
   </head>
 
-  <body class="layout--single" dir="ltr">
+  <body class="layout--single">
     
 <nav class="skip-links" aria-label="Skip links">
   <ul>
@@ -225,13 +225,30 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#public-functions">Public Functions</a></li><li><a href="#detailed-description">Detailed Description</a></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-apis">function Apis</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-setnrangereadings">function setNRangeReadings</a></li><li><a href="#function-setrangestats">function setRangeStats</a></li><li><a href="#function-setnorientreadings">function setNOrientReadings</a></li><li><a href="#function-setorientstats">function setOrientStats</a></li><li><a href="#function-setrangefindersensitivity">function setRangefinderSensitivity</a></li><li><a href="#function-seti2caddress">function setI2CAddress</a></li><li><a href="#function-updaterange">function updateRange</a></li><li><a href="#function-updateorientation">function updateOrientation</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getrange">function getRange</a></li><li><a href="#function-getroll">function getRoll</a></li><li><a href="#function-getpitch">function getPitch</a></li><li><a href="#function-getsignalstrength">function getSignalStrength</a></li><li><a href="#function-getrangemean">function getRangeMean</a></li><li><a href="#function-getrangestd">function getRangeStd</a></li><li><a href="#function-getrangesterr">function getRangeSterr</a></li><li><a href="#function-getpitchstd">function getPitchStd</a></li><li><a href="#function-getpitchsterr">function getPitchSterr</a></li><li><a href="#function-getrollstd">function getRollStd</a></li><li><a href="#function-getrollsterr">function getRollSterr</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-beginrawreadings">function beginRawReadings</a></li><li><a href="#function-takerawreading">function takeRawReading</a></li><li><a href="#function-endrawreadings">function endRawReadings</a></li></ul></li></ul>
+              <ul class="toc__menu"><li><a href="#public-types">Public Types</a></li><li><a href="#public-functions">Public Functions</a></li><li><a href="#detailed-description">Detailed Description</a></li><li><a href="#public-types-documentation">Public Types Documentation</a><ul><li><a href="#enum-component">enum Component</a></li></ul></li><li><a href="#public-functions-documentation">Public Functions Documentation</a><ul><li><a href="#function-apis">function Apis</a></li><li><a href="#function-begin">function begin</a></li><li><a href="#function-gethardwaremajor">function getHardwareMajor</a></li><li><a href="#function-gethardwareminor">function getHardwareMinor</a></li><li><a href="#function-getfirmwareversion">function getFirmwareVersion</a></li><li><a href="#function-setrangereadings">function setRangeReadings</a></li><li><a href="#function-setrangestats">function setRangeStats</a></li><li><a href="#function-setorientreadings">function setOrientReadings</a></li><li><a href="#function-setorientstats">function setOrientStats</a></li><li><a href="#function-setnrangereadings">function setNRangeReadings</a></li><li><a href="#function-setnorientreadings">function setNOrientReadings</a></li><li><a href="#function-setrangefindersensitivity">function setRangefinderSensitivity</a></li><li><a href="#function-seti2caddress">function setI2CAddress</a></li><li><a href="#function-ready">function ready</a></li><li><a href="#function-newreading">function newReading</a></li><li><a href="#function-requestreading">function requestReading</a></li><li><a href="#function-faulted">function faulted</a></li><li><a href="#function-anyfault">function anyFault</a></li><li><a href="#function-faultchip">function faultChip</a></li><li><a href="#function-faultkind">function faultKind</a></li><li><a href="#function-printfault">function printFault</a></li><li><a href="#function-updaterange">function updateRange</a></li><li><a href="#function-updateorientation">function updateOrientation</a></li><li><a href="#function-updatemeasurements">function updateMeasurements</a></li><li><a href="#function-getrangecount">function getRangeCount</a></li><li><a href="#function-getorientcount">function getOrientCount</a></li><li><a href="#function-getrange">function getRange</a></li><li><a href="#function-getroll">function getRoll</a></li><li><a href="#function-getpitch">function getPitch</a></li><li><a href="#function-getsignalstrength">function getSignalStrength</a></li><li><a href="#function-getrangemean">function getRangeMean</a></li><li><a href="#function-getrangemedian">function getRangeMedian</a></li><li><a href="#function-getpitchmedian">function getPitchMedian</a></li><li><a href="#function-getrollmedian">function getRollMedian</a></li><li><a href="#function-getrangestd">function getRangeStd</a></li><li><a href="#function-getrangesterr">function getRangeSterr</a></li><li><a href="#function-getpitchstd">function getPitchStd</a></li><li><a href="#function-getpitchsterr">function getPitchSterr</a></li><li><a href="#function-getrollstd">function getRollStd</a></li><li><a href="#function-getrollsterr">function getRollSterr</a></li><li><a href="#function-getheader">function getHeader</a></li><li><a href="#function-getstring">function getString</a></li><li><a href="#function-printheader">function printHeader</a></li><li><a href="#function-printreading">function printReading</a></li><li><a href="#function-logreading">function logReading</a></li><li><a href="#function-beginreadings">function beginReadings</a></li><li><a href="#function-endreadings">function endReadings</a></li><li><a href="#function-beginrawreadings">function beginRawReadings</a></li><li><a href="#function-takerawreading">function takeRawReading</a></li><li><a href="#function-endrawreadings">function endRawReadings</a></li></ul></li></ul>
             </nav>
           </aside>
         
         <p>Arduino library for the <a href="">Apis</a> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).  <a href="#detailed-description">More…</a></p>
 
 <p><code class="language-plaintext highlighter-rouge">#include &lt;Apis.h&gt;</code></p>
+
+<h2 id="public-types">Public Types</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>enum uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#enum-component">Component</a></strong> { ALL = 0, RANGE = 1, ORIENT = 2}<br />Measurement group: which on-board chip a reading covers.</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="public-functions">Public Functions</h2>
 
@@ -252,20 +269,40 @@
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-begin">begin</a></strong>(uint8_t address =ADR_DEFAULT, SensitivityMode sensitivity =SENSITIVITY_BALANCED)<br />Begin communications with the <a href="/Apis_Library/Classes/classApis/">Apis</a> using a prescribed address.</td>
     </tr>
     <tr>
-      <td>void</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setnrangereadings">setNRangeReadings</a></strong>(uint16_t n)<br />Set number of range readings to average.</td>
+      <td>uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-gethardwaremajor">getHardwareMajor</a></strong>()<br />Hardware version major, from Page 0 (valid after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>).</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-gethardwareminor">getHardwareMinor</a></strong>()<br />Hardware version minor, from Page 0 (valid after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>).</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getfirmwareversion">getFirmwareVersion</a></strong>()<br />Firmware patch version, from Page 0 (valid after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>, even when it refused).</td>
+    </tr>
+    <tr>
+      <td>uint16_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setrangereadings">setRangeReadings</a></strong>(uint16_t n)<br />Set the number of range readings taken per <a href="">updateMeasurements()</a> (statistics are computed over them). Clamped to APIS_RANGE_CAPACITY.</td>
     </tr>
     <tr>
       <td>void</td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-setrangestats">setRangeStats</a></strong>(bool enable)<br />Enable or disable range std and sterr in <a href="">getString()</a>.</td>
     </tr>
     <tr>
-      <td>void</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setnorientreadings">setNOrientReadings</a></strong>(uint16_t n)<br />Set number of orientation readings to average.</td>
+      <td>uint16_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setorientreadings">setOrientReadings</a></strong>(uint16_t n)<br />Set the number of orientation readings per <a href="">updateMeasurements()</a>. Clamped to APIS_ORIENT_CAPACITY.</td>
     </tr>
     <tr>
       <td>void</td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-setorientstats">setOrientStats</a></strong>(bool enable)<br />Enable or disable orientation std and sterr in <a href="">getString()</a>.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setnrangereadings">setNRangeReadings</a></strong>(uint16_t n)</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-setnorientreadings">setNOrientReadings</a></strong>(uint16_t n)</td>
     </tr>
     <tr>
       <td>void</td>
@@ -277,15 +314,55 @@
     </tr>
     <tr>
       <td>bool</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange</a></strong>()<br />Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Also updates the cached signal strength (see <a href="">getSignalStrength()</a>). Returns false if the sensor returns an error value.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-ready">ready</a></strong>()<br />True when the status byte’s ready bit is set: the data registers hold a complete reading.</td>
     </tr>
     <tr>
       <td>bool</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation</a></strong>()<br />Measure pitch [deg] and roll [deg] only, without ranging. Intended for rapid repeated orientation readings (e.g. for averaging). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms). Returns false if the sensor returns an error value.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-newreading">newReading</a></strong>()<br />True when the device’s reading counter has advanced since this library last stored a reading, i.e. a reading is available that has not been read yet. Does not acquire.</td>
     </tr>
     <tr>
       <td>bool</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements</a></strong>()<br />Measure range [cm], roll [deg] and pitch [deg]. Uses Welford’s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively. Returns false if any sensor returns an error value.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-requestreading">requestReading</a></strong>(uint8_t component =<a href="/Apis_Library/Classes/classApis/#enumvalue-all">ALL</a>)<br />Ask the device for a reading now, of the selected chips. Writes the control register: trigger bit plus the chip-select bits for the component. The device clears ready, measures, and sets ready again with the counter incremented. A write to control also clears the latched fault byte (acknowledgement).</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-faulted">faulted</a></strong>(uint8_t chip)<br />True if the given chip (0 = LiDAR, 1 = accelerometer) was faulted in the status byte of the last reading taken.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-anyfault">anyFault</a></strong>()<br />True if any chip was faulted in the last reading (status pan-fault bit).</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-faultchip">faultChip</a></strong>()<br />Chip index of the most recent latched fault (0 LiDAR, 1 accelerometer, 7 the unit itself), from the fault byte read with the last reading; meaningful only when <a href="">faultKind()</a> != 0.</td>
+    </tr>
+    <tr>
+      <td>uint8_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-faultkind">faultKind</a></strong>()<br />Kind of the most recent latched fault, per the spec’s table: 0 none, 1 no-acknowledge, 2 timeout, 3 checksum, 4 out of range, 5 not initialised, 6 reset since the controller last wrote control, 7 configuration rejected, 8 supply fault, 16–31 device-specific. The device clears it on the next control write (<a href="/Apis_Library/Classes/classApis/#function-requestreading">requestReading()</a>).</td>
+    </tr>
+    <tr>
+      <td>size_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printfault">printFault</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br /><a href="/Apis_Library/Classes/classPrint/">Print</a> the latched fault as text, e.g. “LiDAR: timeout” or “unit: reset since configured”; prints “none” when there is no fault.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange</a></strong>()<br />Take one range reading [cm]: request it, wait for the device’s reading counter to advance (up to the timeout), then read range and signal strength. Each call is a distinct acquisition, so repeated calls give independent readings for statistics. Returns false on timeout, bus error, or a negative (error) range.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation</a></strong>()<br />Take one orientation reading: request it, wait for the counter to advance, then read the accelerometer and offsets and compute pitch [deg] and roll [deg]. Each call is a distinct acquisition. Returns false on timeout, bus error, or the accelerometer failure signature.</td>
+    </tr>
+    <tr>
+      <td>bool</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements</a></strong>(uint8_t component =<a href="/Apis_Library/Classes/classApis/#enumvalue-all">ALL</a>)<br />Take a reading: measure range [cm], roll [deg] and pitch [deg], or one chip’s measurements alone. Uses Welford’s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively.</td>
+    </tr>
+    <tr>
+      <td>uint16_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrangecount">getRangeCount</a></strong>()<br />Number of valid range readings in the last <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> call (0 to nRangeReadings). The statistics are computed over these.</td>
+    </tr>
+    <tr>
+      <td>uint16_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getorientcount">getOrientCount</a></strong>()<br />Number of valid orientation readings in the last <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>.</td>
     </tr>
     <tr>
       <td>int16_t</td>
@@ -306,6 +383,18 @@
     <tr>
       <td>float</td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrangemean">getRangeMean</a></strong>()<br />Return range mean [cm] as float.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrangemedian">getRangeMedian</a></strong>()<br />Return the median range [cm] of the stored readings (nearest cm for odd N; mean of the middle pair otherwise).</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getpitchmedian">getPitchMedian</a></strong>()<br />Return the median pitch [deg] of the stored readings.</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrollmedian">getRollMedian</a></strong>()<br />Return the median roll [deg] of the stored readings.</td>
     </tr>
     <tr>
       <td>float</td>
@@ -332,24 +421,44 @@
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrollsterr">getRollSterr</a></strong>()<br />Return roll standard error [deg].</td>
     </tr>
     <tr>
-      <td>String</td>
+      <td><a href="/Apis_Library/Classes/classString/">String</a></td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getheader">getHeader</a></strong>()<br />Return a comma-separated header matching <a href="">getString()</a> output. Includes statistics columns when rangeStats or orientStats are enabled and nReadings &gt; 1.</td>
     </tr>
     <tr>
-      <td>String</td>
+      <td><a href="/Apis_Library/Classes/classString/">String</a></td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getstring">getString</a></strong>(bool takeNewReadings =true)<br />Return comma-separated data values.</td>
     </tr>
     <tr>
+      <td>size_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printheader">printHeader</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br /><a href="/Apis_Library/Classes/classPrint/">Print</a> the header matching <a href="">printReading()</a>: column names with units, each followed by a comma, for the chips selected by <a href="">beginReadings()</a>. No statistics columns: one reading has none.</td>
+    </tr>
+    <tr>
+      <td>size_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printreading">printReading</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br /><a href="/Apis_Library/Classes/classPrint/">Print</a> the stored reading of the selected chips, each value followed by a comma. Does not acquire: call <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>, <a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation()</a>, or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL.</td>
+    </tr>
+    <tr>
+      <td>size_t</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-logreading">logReading</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br />Take ONE reading of the selected chips and print it: the one-reading primitive for collecting many readings to a file. Uses <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>/updateOrientation(), not <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>, so each call is a single acquisition regardless of nRangeReadings.</td>
+    </tr>
+    <tr>
       <td>void</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-beginrawreadings">beginRawReadings</a></strong>(uint8_t component =NW_READING_ALL)<br />Prepare for raw reading collection.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-beginreadings">beginReadings</a></strong>(uint8_t component =<a href="/Apis_Library/Classes/classApis/#enumvalue-all">ALL</a>)<br />Begin a run of readings, selecting which chips they cover.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-endreadings">endReadings</a></strong>()<br />End a run of readings.</td>
+    </tr>
+    <tr>
+      <td>void</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-beginrawreadings">beginRawReadings</a></strong>(uint8_t component =<a href="/Apis_Library/Classes/classApis/#enumvalue-all">ALL</a>)</td>
     </tr>
     <tr>
       <td>uint16_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-takerawreading">takeRawReading</a></strong>(char * buf, uint16_t offset)<br />Take one raw reading and write CSV data into buf at offset. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL. Each value followed by a comma. Max bytes written per call: 7 (RANGE), 18 (ORIENT), 25 (ALL).</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-takerawreading">takeRawReading</a></strong>(char * buf, uint16_t offset)</td>
     </tr>
     <tr>
       <td>void</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-endrawreadings">endRawReadings</a></strong>()<br />End raw reading collection.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-endrawreadings">endRawReadings</a></strong>()</td>
     </tr>
   </tbody>
 </table>
@@ -362,6 +471,41 @@
 <p>Arduino library for the <a href="">Apis</a> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).</p>
 
 <p>Library to communicate with the <a href="/Apis_Library/Classes/classApis/">Apis</a> module, which connects to a LiDAR Lite rangefinder. The <a href="/Apis_Library/Classes/classApis/">Apis</a> is equipped with capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is placed on a cliff or a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the <a href="/Apis_Library/Classes/classApis/">Apis</a> is essential, and the <a href="/Apis_Library/Classes/classApis/">Apis</a> therefore acts as a buffer to protect the data logger from raw sensor failures.</p>
+
+<h2 id="public-types-documentation">Public Types Documentation</h2>
+
+<h3 id="enum-component">enum Component</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Enumerator</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ALL</td>
+      <td>0</td>
+      <td>Every chip: range, then pitch and roll.</td>
+    </tr>
+    <tr>
+      <td>RANGE</td>
+      <td>1</td>
+      <td>LiDAR Lite only.</td>
+    </tr>
+    <tr>
+      <td>ORIENT</td>
+      <td>2</td>
+      <td>Accelerometer only.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Measurement group: which on-board chip a reading covers.</p>
+
+<p>One group per chip, in the order the NW-Device-Specification <a href="/Apis_Library/Classes/classApis/">Apis</a> appendix numbers them: 0 = LiDAR Lite (range, signal strength), 1 = LIS3DH accelerometer (pitch, roll). ALL selects every chip. Written as <a href="/Apis_Library/Classes/classApis/#enumvalue-range">Apis::RANGE</a> etc. at the call site.</p>
 
 <h2 id="public-functions-documentation">Public Functions Documentation</h2>
 
@@ -399,22 +543,45 @@
 <p><strong>Parameters</strong>:</p>
 
 <ul>
-  <li><strong>address</strong> I2C address (default ADR_DEFAULT = 0x50).</li>
-  <li><strong>sensitivity</strong> One of the SensitivityMode values (default SENSITIVITY_BALANCED). Written to REG_CONFIG (0x0B) and applied each firmware loop() iteration. See SensitivityMode for descriptions of each mode.</li>
+  <li><strong>address</strong> I2C address (default ADR_DEFAULT = 0x41).</li>
+  <li><strong>sensitivity</strong> One of the SensitivityMode values (default SENSITIVITY_BALANCED). See SensitivityMode.</li>
 </ul>
 
-<p><strong>Return</strong>: true if the device acknowledges and reports correct firmware; false otherwise.</p>
+<p><strong>Return</strong>: true if the device acknowledges and passes all three checks; false otherwise. Call <a href="/Apis_Library/Classes/classApis/#function-getfirmwareversion">getFirmwareVersion()</a> after a refusal to see what the device reported (0 if unreadable).</p>
 
-<p>Checks that the device acknowledges on I2C, verifies that the firmware reports the “Apis” device name at registers 0x01–0x04 (indicating firmware v0.2.0+ with the current register map), and writes the initial sensitivity mode to REG_CONFIG (0x0B). Returns false if: (a) no I2C ACK, or (b) name mismatch (old firmware). The minimum firmware version policy beyond that name check is TBD.</p>
+<p>Checks that the device acknowledges on I2C, then reads Page 0 Blocks 0–1 and requires: schema byte 0x01 (Schema 1); the name “Apis”; a firmware patch of at least APIS_FW_MIN_PATCH. Stores the hardware and firmware versions for the getters below, and writes the initial sensitivity mode to REG_CONFIG (0x26).</p>
 
-<h3 id="function-setnrangereadings">function setNRangeReadings</h3>
+<h3 id="function-gethardwaremajor">function getHardwareMajor</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setNRangeReadings</span><span class="p">(</span>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">getHardwareMajor</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Hardware version major, from Page 0 (valid after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>).</p>
+
+<h3 id="function-gethardwareminor">function getHardwareMinor</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">getHardwareMinor</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Hardware version minor, from Page 0 (valid after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>).</p>
+
+<h3 id="function-getfirmwareversion">function getFirmwareVersion</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">getFirmwareVersion</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Firmware patch version, from Page 0 (valid after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>, even when it refused).</p>
+
+<h3 id="function-setrangereadings">function setRangeReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">setRangeReadings</span><span class="p">(</span>
     <span class="kt">uint16_t</span> <span class="n">n</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Set number of range readings to average.</p>
+<p>Set the number of range readings taken per <a href="">updateMeasurements()</a> (statistics are computed over them). Clamped to APIS_RANGE_CAPACITY.</p>
+
+<p><strong>Return</strong>: The number actually set.</p>
 
 <h3 id="function-setrangestats">function setRangeStats</h3>
 
@@ -425,14 +592,14 @@
 
 <p>Enable or disable range std and sterr in <a href="">getString()</a>.</p>
 
-<h3 id="function-setnorientreadings">function setNOrientReadings</h3>
+<h3 id="function-setorientreadings">function setOrientReadings</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setNOrientReadings</span><span class="p">(</span>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">setOrientReadings</span><span class="p">(</span>
     <span class="kt">uint16_t</span> <span class="n">n</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Set number of orientation readings to average.</p>
+<p>Set the number of orientation readings per <a href="">updateMeasurements()</a>. Clamped to APIS_ORIENT_CAPACITY.</p>
 
 <h3 id="function-setorientstats">function setOrientStats</h3>
 
@@ -442,6 +609,28 @@
 </code></pre></div></div>
 
 <p>Enable or disable orientation std and sterr in <a href="">getString()</a>.</p>
+
+<h3 id="function-setnrangereadings">function setNRangeReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setNRangeReadings</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Deprecated</strong>:</p>
+
+<p>Use <a href="/Apis_Library/Classes/classApis/#function-setrangereadings">setRangeReadings()</a>.</p>
+
+<h3 id="function-setnorientreadings">function setNOrientReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">setNOrientReadings</span><span class="p">(</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Deprecated</strong>:</p>
+
+<p>Use <a href="/Apis_Library/Classes/classApis/#function-setorientreadings">setOrientReadings()</a>.</p>
 
 <h3 id="function-setrangefindersensitivity">function setRangefinderSensitivity</h3>
 
@@ -458,7 +647,7 @@
   <li><strong>mode</strong> One of the SensitivityMode values.</li>
 </ul>
 
-<p>Writes the new mode to REG_CONFIG (0x0B); the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
+<p>Writes the new mode to REG_CONFIG (0x26); the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
 
 <h3 id="function-seti2caddress">function setI2CAddress</h3>
 
@@ -475,28 +664,118 @@
   <li><strong>newAddress</strong> The 7-bit I2C address to persist.</li>
 </ul>
 
-<p>The firmware saves it to EEPROM byte 6 and uses it on the next boot; the current session continues on the old address. Falls back to 0x50 if EEPROM byte 6 is 0xFF (erased).</p>
+<p>The firmware persists it in Page 0 byte 0x1F and uses it on the next boot; the current session continues on the old address. Falls back to 0x41 if that byte is 0xFF (unprogrammed).</p>
+
+<h3 id="function-ready">function ready</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">ready</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>True when the status byte’s ready bit is set: the data registers hold a complete reading.</p>
+
+<h3 id="function-newreading">function newReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">newReading</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>True when the device’s reading counter has advanced since this library last stored a reading, i.e. a reading is available that has not been read yet. Does not acquire.</p>
+
+<h3 id="function-requestreading">function requestReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">requestReading</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">ALL</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Ask the device for a reading now, of the selected chips. Writes the control register: trigger bit plus the chip-select bits for the component. The device clears ready, measures, and sets ready again with the counter incremented. A write to control also clears the latched fault byte (acknowledgement).</p>
+
+<p><strong>Return</strong>: true if the device acknowledged the write.</p>
+
+<h3 id="function-faulted">function faulted</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">faulted</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">chip</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>True if the given chip (0 = LiDAR, 1 = accelerometer) was faulted in the status byte of the last reading taken.</p>
+
+<h3 id="function-anyfault">function anyFault</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">anyFault</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>True if any chip was faulted in the last reading (status pan-fault bit).</p>
+
+<h3 id="function-faultchip">function faultChip</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">faultChip</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Chip index of the most recent latched fault (0 LiDAR, 1 accelerometer, 7 the unit itself), from the fault byte read with the last reading; meaningful only when <a href="">faultKind()</a> != 0.</p>
+
+<h3 id="function-faultkind">function faultKind</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span> <span class="n">faultKind</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Kind of the most recent latched fault, per the spec’s table: 0 none, 1 no-acknowledge, 2 timeout, 3 checksum, 4 out of range, 5 not initialised, 6 reset since the controller last wrote control, 7 configuration rejected, 8 supply fault, 16–31 device-specific. The device clears it on the next control write (<a href="/Apis_Library/Classes/classApis/#function-requestreading">requestReading()</a>).</p>
+
+<h3 id="function-printfault">function printFault</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printFault</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><a href="/Apis_Library/Classes/classPrint/">Print</a> the latched fault as text, e.g. “LiDAR: timeout” or “unit: reset since configured”; prints “none” when there is no fault.</p>
+
+<p><strong>Return</strong>: Bytes written.</p>
 
 <h3 id="function-updaterange">function updateRange</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateRange</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Measure range [cm] only, without reading the accelerometer. Intended for rapid repeated range readings (e.g. for averaging). Also updates the cached signal strength (see <a href="">getSignalStrength()</a>). Returns false if the sensor returns an error value.</p>
+<p>Take one range reading [cm]: request it, wait for the device’s reading counter to advance (up to the timeout), then read range and signal strength. Each call is a distinct acquisition, so repeated calls give independent readings for statistics. Returns false on timeout, bus error, or a negative (error) range.</p>
 
 <h3 id="function-updateorientation">function updateOrientation</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateOrientation</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>Measure pitch [deg] and roll [deg] only, without ranging. Intended for rapid repeated orientation readings (e.g. for averaging). FIX: Independent readings require firmware support; current firmware caches accelerometer values each loop (~200 ms). Returns false if the sensor returns an error value.</p>
+<p>Take one orientation reading: request it, wait for the counter to advance, then read the accelerometer and offsets and compute pitch [deg] and roll [deg]. Each call is a distinct acquisition. Returns false on timeout, bus error, or the accelerometer failure signature.</p>
 
 <h3 id="function-updatemeasurements">function updateMeasurements</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateMeasurements</span><span class="p">()</span>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">updateMeasurements</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">ALL</span>
+<span class="p">)</span>
 </code></pre></div></div>
 
-<p>Measure range [cm], roll [deg] and pitch [deg]. Uses Welford’s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively. Returns false if any sensor returns an error value.</p>
+<p>Take a reading: measure range [cm], roll [deg] and pitch [deg], or one chip’s measurements alone. Uses Welford’s online algorithm to compute mean, std, and sterr over nRangeReadings and nOrientReadings respectively.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>component</strong> <a href="/Apis_Library/Classes/classApis/#enumvalue-all">Apis::ALL</a> (default), <a href="/Apis_Library/Classes/classApis/#enumvalue-range">Apis::RANGE</a>, or <a href="/Apis_Library/Classes/classApis/#enumvalue-orient">Apis::ORIENT</a>: which chip(s) to read. Fields of a chip not selected are left as they were.</li>
+</ul>
+
+<p><strong>Return</strong>: false if any selected chip returned only error values.</p>
+
+<h3 id="function-getrangecount">function getRangeCount</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">getRangeCount</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Number of valid range readings in the last <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> call (0 to nRangeReadings). The statistics are computed over these.</p>
+
+<h3 id="function-getorientcount">function getOrientCount</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint16_t</span> <span class="n">getOrientCount</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Number of valid orientation readings in the last <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>.</p>
 
 <h3 id="function-getrange">function getRange</h3>
 
@@ -534,6 +813,27 @@
 </code></pre></div></div>
 
 <p>Return range mean [cm] as float.</p>
+
+<h3 id="function-getrangemedian">function getRangeMedian</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRangeMedian</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the median range [cm] of the stored readings (nearest cm for odd N; mean of the middle pair otherwise).</p>
+
+<h3 id="function-getpitchmedian">function getPitchMedian</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getPitchMedian</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the median pitch [deg] of the stored readings.</p>
+
+<h3 id="function-getrollmedian">function getRollMedian</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">getRollMedian</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Return the median roll [deg] of the stored readings.</p>
 
 <h3 id="function-getrangestd">function getRangeStd</h3>
 
@@ -601,20 +901,77 @@
 
 <p>This is the most likely function (alongside getHeader) for an end user to use. Always includes: Range [cm], Pitch [deg], Roll [deg]. Appends range std and sterr when rangeStats is true and nRangeReadings &gt; 1. Appends orientation std and sterr when orientStats is true and nOrientReadings &gt; 1. Error values are APIS_ERROR (-9999) for sensor errors and APIS_NOT_MEASURED (-9998) when no measurement has yet been taken.</p>
 
-<h3 id="function-beginrawreadings">function beginRawReadings</h3>
+<h3 id="function-printheader">function printHeader</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">beginRawReadings</span><span class="p">(</span>
-    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">NW_READING_ALL</span>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printHeader</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Prepare for raw reading collection.</p>
+<p><a href="/Apis_Library/Classes/classPrint/">Print</a> the header matching <a href="">printReading()</a>: column names with units, each followed by a comma, for the chips selected by <a href="">beginReadings()</a>. No statistics columns: one reading has none.</p>
 
 <p><strong>Parameters</strong>:</p>
 
 <ul>
-  <li><strong>component</strong> NW_READING_ALL, NW_READING_RANGE (primary), or NW_READING_ORIENT (secondary).</li>
+  <li><strong>out</strong> Any <a href="/Apis_Library/Classes/classPrint/">Print</a> destination (SdFat File, Serial, …).</li>
 </ul>
+
+<p><strong>Return</strong>: Bytes written.</p>
+
+<h3 id="function-printreading">function printReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">printReading</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><a href="/Apis_Library/Classes/classPrint/">Print</a> the stored reading of the selected chips, each value followed by a comma. Does not acquire: call <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>, <a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation()</a>, or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL.</p>
+
+<p><strong>Return</strong>: Bytes written.</p>
+
+<h3 id="function-logreading">function logReading</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">size_t</span> <span class="n">logReading</span><span class="p">(</span>
+    <span class="n">Print</span> <span class="o">&amp;</span> <span class="n">out</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Take ONE reading of the selected chips and print it: the one-reading primitive for collecting many readings to a file. Uses <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>/updateOrientation(), not <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>, so each call is a single acquisition regardless of nRangeReadings.</p>
+
+<p><strong>Return</strong>: Bytes written.</p>
+
+<h3 id="function-beginreadings">function beginReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">beginReadings</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">ALL</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Begin a run of readings, selecting which chips they cover.</p>
+
+<p><strong>Parameters</strong>:</p>
+
+<ul>
+  <li><strong>component</strong> <a href="/Apis_Library/Classes/classApis/#enumvalue-all">Apis::ALL</a>, <a href="/Apis_Library/Classes/classApis/#enumvalue-range">Apis::RANGE</a>, or <a href="/Apis_Library/Classes/classApis/#enumvalue-orient">Apis::ORIENT</a>.</li>
+</ul>
+
+<h3 id="function-endreadings">function endReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">endReadings</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>End a run of readings.</p>
+
+<h3 id="function-beginrawreadings">function beginRawReadings</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">beginRawReadings</span><span class="p">(</span>
+    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">ALL</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Deprecated</strong>:</p>
+
+<p>Use <a href="/Apis_Library/Classes/classApis/#function-beginreadings">beginReadings()</a>.</p>
 
 <h3 id="function-takerawreading">function takeRawReading</h3>
 
@@ -624,14 +981,9 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Take one raw reading and write CSV data into buf at offset. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL. Each value followed by a comma. Max bytes written per call: 7 (RANGE), 18 (ORIENT), 25 (ALL).</p>
+<p><strong>Deprecated</strong>:</p>
 
-<p><strong>Parameters</strong>:</p>
-
-<ul>
-  <li><strong>buf</strong> Caller-managed destination buffer.</li>
-  <li><strong>offset</strong> Starting write position in buf.</li>
-</ul>
+<p>Use <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading(Print&amp;)</a> with an SdFat File, Serial, or a buffer-backed <a href="/Apis_Library/Classes/classPrint/">Print</a>. Kept for v0.1.x sketches: takes one raw reading and writes CSV into buf at offset (range for RANGE; pitch, roll for ORIENT; all three for ALL). Max bytes: 7 (RANGE), 18 (ORIENT), 25 (ALL).</p>
 
 <p><strong>Return</strong>: New offset after writing.</p>
 
@@ -640,11 +992,13 @@
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">endRawReadings</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>End raw reading collection.</p>
+<p><strong>Deprecated</strong>:</p>
+
+<p>Use <a href="/Apis_Library/Classes/classApis/#function-endreadings">endReadings()</a>.</p>
 
 <hr />
 
-<p>Updated on 2026-06-02 at 18:28:55 +0000</p>
+<p>Updated on 2026-09-21 at 22:16:20 +0000</p>
 
         
       </section>

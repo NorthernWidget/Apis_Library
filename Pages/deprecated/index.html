@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 
 
-<!-- begin _includes/seo.html --><title>Modules - Apis Library</title>
+<!-- begin _includes/seo.html --><title>Deprecated List - Apis Library</title>
 <meta name="description" content="Arduino library for the Apis LiDAR rangefinder board">
 
 
@@ -26,8 +26,8 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Apis Library">
-<meta property="og:title" content="Modules">
-<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Modules/index_groups/">
+<meta property="og:title" content="Deprecated List">
+<meta property="og:url" content="https://docs.northernwidget.com/Apis_Library/Pages/deprecated/">
 
 
   <meta property="og:description" content="Arduino library for the Apis LiDAR rangefinder board">
@@ -45,7 +45,7 @@
 
 
 
-<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Modules/index_groups/">
+<link rel="canonical" href="https://docs.northernwidget.com/Apis_Library/Pages/deprecated/">
 
 
 
@@ -201,7 +201,7 @@
 
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Modules">
+    <meta itemprop="headline" content="Deprecated List">
     
     
     
@@ -210,7 +210,7 @@
       
         <header>
           <h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="https://docs.northernwidget.com/Apis_Library/Modules/index_groups/" itemprop="url">Modules
+            <a href="https://docs.northernwidget.com/Apis_Library/Pages/deprecated/" itemprop="url">Deprecated List
 </a>
           </h1>
           
@@ -229,7 +229,37 @@
             </nav>
           </aside>
         
-        <hr />
+        <p>Member <a href="/Apis_Library/Classes/classApis/#function-beginrawreadings">Apis::beginRawReadings</a>  (uint8_t component=ALL)</p>
+
+<ul>
+  <li>Use <a href="/Apis_Library/Classes/classApis/#function-beginreadings">beginReadings()</a>.</li>
+</ul>
+
+<p>Member <a href="/Apis_Library/Classes/classApis/#function-endrawreadings">Apis::endRawReadings</a>  ()</p>
+
+<ul>
+  <li>Use <a href="/Apis_Library/Classes/classApis/#function-endreadings">endReadings()</a>.</li>
+</ul>
+
+<p>Member <a href="/Apis_Library/Classes/classApis/#function-setnorientreadings">Apis::setNOrientReadings</a>  (uint16_t n)</p>
+
+<ul>
+  <li>Use <a href="/Apis_Library/Classes/classApis/#function-setorientreadings">setOrientReadings()</a>.</li>
+</ul>
+
+<p>Member <a href="/Apis_Library/Classes/classApis/#function-setnrangereadings">Apis::setNRangeReadings</a>  (uint16_t n)</p>
+
+<ul>
+  <li>Use <a href="/Apis_Library/Classes/classApis/#function-setrangereadings">setRangeReadings()</a>.</li>
+</ul>
+
+<p>Member <a href="/Apis_Library/Classes/classApis/#function-takerawreading">Apis::takeRawReading</a>  (char *buf, uint16_t offset)</p>
+
+<ul>
+  <li>Use <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading(Print&amp;)</a> with an SdFat File, Serial, or a buffer-backed <a href="/Apis_Library/Classes/classPrint/">Print</a>. Kept for v0.1.x sketches: takes one raw reading and writes CSV into buf at offset (range for RANGE; pitch, roll for ORIENT; all three for ALL). Max bytes: 7 (RANGE), 18 (ORIENT), 25 (ALL).</li>
+</ul>
+
+<hr />
 
 <p>Updated on 2026-09-21 at 22:16:20 +0000</p>
 

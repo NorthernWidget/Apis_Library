@@ -2,14 +2,14 @@
 
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
   Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
   Copyright 2024-2026 iBug - ibugone.com | @iBug
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
 
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" dir="ltr">
   <head>
     
 <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
   </head>
 
-  <body class="layout--single" dir="ltr">
+  <body class="layout--single">
     
 <nav class="skip-links" aria-label="Skip links">
   <ul>
@@ -225,13 +225,15 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              
+              <ul class="toc__menu"><li><a href="#readings">Readings</a></li><li><a href="#testing">Testing</a></li></ul>
             </nav>
           </aside>
         
         <p><a href="https://doi.org/10.5281/zenodo.4572371"><img src="/Apis_Library/images/https://zenodo.org/badge/DOI/10.5281/zenodo.4572371.svg" alt="https://zenodo.org/badge/DOI/10.5281/zenodo.4572371.svg" /></a></p>
 
 <p>Arduino library for the <a href="https://github.com/NorthernWidget/Project-Apis">Apis</a> LiDAR rangefinder board. <a href="/Apis_Library/Classes/classApis/">Apis</a> manages power supply, firmware watchdog, and I2C communication for a LiDAR Lite unit, and reads a MEMS accelerometer to report pitch and roll — useful when the sensor is not mounted level.</p>
+
+<p><strong>Requires firmware patch 1 or later</strong> (the <a href="https://github.com/NorthernWidget/NW-Device-Specification">NW-Device-Specification</a> Schema 1 register map, on Project-Apis <code class="language-plaintext highlighter-rouge">master</code>) on a board provisioned with <a href="https://github.com/NorthernWidget/NW-Provision">NW-Provision</a>. The default I2C address is <code class="language-plaintext highlighter-rouge">0x41</code>. Boards running the v0.1.x firmware (address <code class="language-plaintext highlighter-rouge">0x50</code>) are refused by <code class="language-plaintext highlighter-rouge">begin()</code>; reflash and provision them, or use Apis_Library v0.1.0.</p>
 
 <p><strong>Installation:</strong> included in <a href="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</a>. Also available via the Arduino Library Manager.</p>
 
@@ -242,7 +244,11 @@
 
 <span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
-    <span class="n">rangefinder</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">rangefinder</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span> <span class="p">{</span>          <span class="c1">// false: no ACK, not Schema 1, wrong name, or firmware too old</span>
+        <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Apis refused; firmware patch "</span><span class="p">);</span>
+        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">rangefinder</span><span class="p">.</span><span class="n">getFirmwareVersion</span><span class="p">());</span>
+        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">rangefinder</span><span class="p">.</span><span class="n">getHeader</span><span class="p">());</span>
 <span class="p">}</span>
 
@@ -252,13 +258,39 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>See <a href="examples/">examples/</a> for a complete demo and Margay logger integration.</p>
+<p>See <a href="examples/">examples/</a> for a complete demo, a many-readings logger, and Margay logger integration.</p>
+
+<h1 id="readings">Readings</h1>
+
+<p><code class="language-plaintext highlighter-rouge">getString()</code> takes a reading (or several, with statistics, when configured) and returns one CSV row. For writing many individual readings to a file or the serial monitor without building <code class="language-plaintext highlighter-rouge">[String](/Apis_Library/Classes/classString/)</code>s, use the reading interface, which prints to any Arduino <code class="language-plaintext highlighter-rouge">[Print](/Apis_Library/Classes/classPrint/)</code> (an SdFat <code class="language-plaintext highlighter-rouge">File</code>, <code class="language-plaintext highlighter-rouge">Serial</code>, …):</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">rangefinder</span><span class="p">.</span><span class="n">beginReadings</span><span class="p">(</span><span class="n">Apis</span><span class="o">::</span><span class="n">RANGE</span><span class="p">);</span>   <span class="c1">// Apis::ALL, Apis::RANGE, or Apis::ORIENT</span>
+<span class="n">rangefinder</span><span class="p">.</span><span class="n">printHeader</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>            <span class="c1">// "Range [cm],"</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">rangefinder</span><span class="p">.</span><span class="n">logReading</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>         <span class="c1">// takes ONE reading and prints it: "312,"</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="n">rangefinder</span><span class="p">.</span><span class="n">endReadings</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">printReading(out)</code> prints the stored reading without acquiring; <code class="language-plaintext highlighter-rouge">updateMeasurements(component)</code> reads one chip alone (<code class="language-plaintext highlighter-rouge">[Apis::RANGE](/Apis_Library/Classes/classApis/#enumvalue-range)</code> or <code class="language-plaintext highlighter-rouge">[Apis::ORIENT](/Apis_Library/Classes/classApis/#enumvalue-orient)</code>) or both; <code class="language-plaintext highlighter-rouge">getRangeCount()</code> and <code class="language-plaintext highlighter-rouge">getOrientCount()</code> report how many valid readings are behind the current statistics.</p>
+
+<p>Every reading is requested from the device and waited for through its reading counter, so repeated readings are independent measurements. <code class="language-plaintext highlighter-rouge">setRangeReadings(n)</code> and <code class="language-plaintext highlighter-rouge">setOrientReadings(n)</code> set how many are taken per <code class="language-plaintext highlighter-rouge">updateMeasurements()</code> (clamped to <code class="language-plaintext highlighter-rouge">APIS_RANGE_CAPACITY</code>, default 64, and <code class="language-plaintext highlighter-rouge">APIS_ORIENT_CAPACITY</code>, default 8; override either before the include). Statistics over them: <code class="language-plaintext highlighter-rouge">getRangeMean()</code>, <code class="language-plaintext highlighter-rouge">getRangeStd()</code>, <code class="language-plaintext highlighter-rouge">getRangeSterr()</code>, <code class="language-plaintext highlighter-rouge">getRangeMedian()</code>, and the same for pitch and roll, plus <code class="language-plaintext highlighter-rouge">getRangeCount()</code>. With <code class="language-plaintext highlighter-rouge">setRangeStats(true)</code> the std and sterr columns join <code class="language-plaintext highlighter-rouge">getString()</code>.</p>
+
+<p>Handshake and faults, for sketches that want them: <code class="language-plaintext highlighter-rouge">requestReading()</code>, <code class="language-plaintext highlighter-rouge">ready()</code>, <code class="language-plaintext highlighter-rouge">newReading()</code>; <code class="language-plaintext highlighter-rouge">faulted(chip)</code>, <code class="language-plaintext highlighter-rouge">anyFault()</code>, <code class="language-plaintext highlighter-rouge">faultChip()</code>, <code class="language-plaintext highlighter-rouge">faultKind()</code>, <code class="language-plaintext highlighter-rouge">printFault(Serial)</code>; <code class="language-plaintext highlighter-rouge">getHardwareMajor()</code>, <code class="language-plaintext highlighter-rouge">getHardwareMinor()</code>, <code class="language-plaintext highlighter-rouge">getFirmwareVersion()</code>.</p>
+
+<p>The v0.1.x names <code class="language-plaintext highlighter-rouge">beginRawReadings()</code>, <code class="language-plaintext highlighter-rouge">takeRawReading(buf, offset)</code>, <code class="language-plaintext highlighter-rouge">endRawReadings()</code> and the <code class="language-plaintext highlighter-rouge">NW_READING_*</code> selectors still work and are deprecated.</p>
+
+<h1 id="testing">Testing</h1>
+
+<p><code class="language-plaintext highlighter-rouge">extras/test/run.sh</code> compiles the library on a desktop against stub <code class="language-plaintext highlighter-rouge">[Arduino.h]</code> and <code class="language-plaintext highlighter-rouge">[Wire.h]</code> and checks that <code class="language-plaintext highlighter-rouge">getHeader()</code>, <code class="language-plaintext highlighter-rouge">getString()</code> and the reading interface produce byte-identical output to <code class="language-plaintext highlighter-rouge">extras/test/baseline.txt</code> for fixed register images. Run it after any change; <code class="language-plaintext highlighter-rouge">--record</code> rewrites the baseline when an output change is intended.</p>
 
 <p><strong>Full API reference:</strong><a href="https://docs.northernwidget.com/Apis_Library/">https://docs.northernwidget.com/Apis_Library/</a></p>
 
 <hr />
 
-<p>Updated on 2026-06-02 at 18:28:55 +0000</p>
+<p>Updated on 2026-09-21 at 22:16:20 +0000</p>
 
         
       </section>
