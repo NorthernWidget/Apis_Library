@@ -24,6 +24,17 @@ updateRange	KEYWORD2
 updateOrientation	KEYWORD2
 updateMeasurements	KEYWORD2
 getRangeCount	KEYWORD2
+ready	KEYWORD2
+newReading	KEYWORD2
+requestReading	KEYWORD2
+faulted	KEYWORD2
+anyFault	KEYWORD2
+faultChip	KEYWORD2
+faultKind	KEYWORD2
+printFault	KEYWORD2
+getHardwareMajor	KEYWORD2
+getHardwareMinor	KEYWORD2
+getFirmwareVersion	KEYWORD2
 getOrientCount	KEYWORD2
 getRange	KEYWORD2
 getRoll	KEYWORD2

@@ -48,6 +48,8 @@ string: -9998,-9998.00,-9998.00,
 [per-chip] ORIENT ok=1 string(false): 300,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,
 [handshake] ready=1 newReading(before any)=1 counter after 1 reading=2 newReading=0 ctrl after request=0x02 fault after ack=0x00
 [handshake] no firmware response: updateRange=0 range=-9999
+[faults] faulted(0)=1 faulted(1)=0 any=1 chip=0 kind=2 text='LiDAR: timeout'
+[faults] any=0 chip=7 kind=6 text='unit: reset since configured'
 [wrong name] begin=0
 [schema 0x00] begin=0 fw=1
 [schema 0xFF unprovisioned] begin=0

@@ -139,6 +139,18 @@ int main() {
       printf("[handshake] no firmware response: updateRange=%d range=%d\n", ok, a.getRange());
       Wire.onWrite = saved; }
 
+    // 5d. Faults: the firmware reports a LiDAR fault in status and a latched code; then a unit reset code.
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
+    { Apis a; a.begin(); char pb[48];
+      onReading = [](TwoWire& w) { w.image[0x20] = 0x83; w.image[0x27] = 0x02; };   // ready | LiDAR fault | pan; LiDAR: timeout
+      a.updateRange(); BufferPrint bp(pb, sizeof pb); a.printFault(bp);
+      printf("[faults] faulted(0)=%d faulted(1)=%d any=%d chip=%u kind=%u text='%s'\n",
+             a.faulted(0), a.faulted(1), a.anyFault(), a.faultChip(), a.faultKind(), pb);
+      onReading = [](TwoWire& w) { w.image[0x20] = 0x01; w.image[0x27] = 0xE6; };   // clean reading; unit: reset since configured
+      a.updateRange(); BufferPrint bp2(pb, sizeof pb); a.printFault(bp2);
+      printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.faultChip(), a.faultKind(), pb);
+      onReading = nullptr; }
+
     // 6. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
     { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }

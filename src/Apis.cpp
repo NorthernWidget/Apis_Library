@@ -102,10 +102,40 @@ bool Apis::_takeReading(uint8_t component) {
     unsigned long start = millis();
     while (millis() - start < timeoutGlobal) {
         uint16_t now = _readCounter();
-        if (now != before) { _lastCounter = now; return true; }
+        if (now != before) {
+            _lastCounter = now;
+            // Block 0 of the new reading: status (0x20) and latched fault (0x27)
+            uint8_t b0[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+            _readBytes(REG_STATUS, b0, 8);
+            _status = b0[0];
+            _fault  = b0[7];
+            return true;
+        }
         delay(1);
     }
     return false;
+}
+
+bool    Apis::faulted(uint8_t chip) { return _status & (1 << (chip + 1)); }
+bool    Apis::anyFault()            { return _status & APIS_BIT_PANFAULT; }
+uint8_t Apis::faultChip()           { return _fault >> 5; }
+uint8_t Apis::faultKind()           { return _fault & 0x1F; }
+
+size_t Apis::printFault(Print& out) {
+    static const char* const chips[] = {"LiDAR", "accelerometer"};
+    static const char* const kinds[] = {"none", "no acknowledge", "timeout", "checksum", "out of range",
+                                        "not initialised", "reset since configured", "config rejected",
+                                        "supply fault"};
+    uint8_t chip = faultChip(), kind = faultKind();
+    if (kind == 0) return out.print("none");
+    size_t n = 0;
+    if (chip == 7) n += out.print("unit");
+    else if (chip < 2) n += out.print(chips[chip]);
+    else { n += out.print("chip "); n += out.print(chip); }
+    n += out.print(": ");
+    if (kind < 9) n += out.print(kinds[kind]);
+    else { n += out.print("kind "); n += out.print(kind); }
+    return n;
 }
 
 bool Apis::updateRange() {

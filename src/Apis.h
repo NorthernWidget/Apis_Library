@@ -233,6 +233,35 @@ class Apis
          */
         bool requestReading(uint8_t component = ALL);
 
+        // --- Faults (status byte, live; fault byte, latched) ---
+        /**
+         * @brief True if the given chip (0 = LiDAR, 1 = accelerometer) was
+         * faulted in the status byte of the last reading taken.
+         */
+        bool faulted(uint8_t chip);
+        /** @brief True if any chip was faulted in the last reading (status pan-fault bit). */
+        bool anyFault();
+        /**
+         * @brief Chip index of the most recent latched fault (0 LiDAR,
+         * 1 accelerometer, 7 the unit itself), from the fault byte read with
+         * the last reading; meaningful only when faultKind() != 0.
+         */
+        uint8_t faultChip();
+        /**
+         * @brief Kind of the most recent latched fault, per the spec's table:
+         * 0 none, 1 no-acknowledge, 2 timeout, 3 checksum, 4 out of range,
+         * 5 not initialised, 6 reset since the controller last wrote control,
+         * 7 configuration rejected, 8 supply fault, 16–31 device-specific.
+         * The device clears it on the next control write (requestReading()).
+         */
+        uint8_t faultKind();
+        /**
+         * @brief Print the latched fault as text, e.g. "LiDAR: timeout" or
+         * "unit: reset since configured"; prints "none" when there is no fault.
+         * @return Bytes written.
+         */
+        size_t printFault(Print& out);
+
         /**
          * @brief Take one range reading [cm]: request it, wait for the device's
          * reading counter to advance (up to the timeout), then read range and
@@ -441,6 +470,10 @@ class Apis
 
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
+
+        // Block 0 of the last reading taken: status (live) and fault (latched)
+        uint8_t _status = 0;
+        uint8_t _fault  = 0;
 
         // Reading counter as of the last reading this library stored, and the
         // longest wait for a requested reading (ms). The firmware's cycle is
