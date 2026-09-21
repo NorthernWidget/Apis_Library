@@ -25,4 +25,3 @@ getters: range=-9999 roll=-9999.0000 pitch=-9999.0000 signal=0 mean=-9999.0000 s
 [not measured]
 string: -9998,-9998.00,-9998.00,
 [wrong name] begin=0
-bus transactions total: 199

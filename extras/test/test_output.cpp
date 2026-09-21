@@ -70,6 +70,6 @@ int main() {
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
     { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }
 
-    printf("bus transactions total: %u\n", Wire.transactions);
+    fprintf(stderr, "bus transactions total: %u\n", Wire.transactions);   // metric, not output
     return 0;
 }

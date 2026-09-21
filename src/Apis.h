@@ -303,6 +303,16 @@ class Apis
          */
         void _waitUntilReady();
 
+        /**
+         * @brief Read n consecutive registers starting at reg into buf, in one
+         * I2C transaction (pointer write, then requestFrom with auto-increment).
+         * @return true if the device supplied all n bytes.
+         */
+        bool _readBytes(uint8_t reg, uint8_t* buf, uint8_t n);
+
+        /** @brief Write one byte to register reg. @return true on ACK. */
+        bool _writeByte(uint8_t reg, uint8_t value);
+
         // I2C address
         uint8_t _adr = ADR_DEFAULT;
 

@@ -23,20 +23,31 @@ bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
     // before _waitUntilReady(). Old firmware leaves them 0x00; returning false
     // here prevents misinterpreting the old register map.
     const char expected[4] = {'A', 'p', 'i', 's'};
+    uint8_t name[4];
+    if (!_readBytes(REG_NAME_0, name, 4)) return false;
     for (uint8_t i = 0; i < 4; i++) {
-        Wire.beginTransmission(_adr);
-        Wire.write(REG_NAME_0 + i);
-        Wire.endTransmission();
-        Wire.requestFrom(_adr, 1);
-        if (Wire.read() != expected[i]) return false;
+        if (name[i] != expected[i]) return false;
     }
 
-    Wire.beginTransmission(_adr);
-    Wire.write(REG_CONFIG);
-    Wire.write((uint8_t)_sensitivity);
-    Wire.endTransmission();
+    _writeByte(REG_CONFIG, (uint8_t)_sensitivity);
 
     return true;
+}
+
+bool Apis::_readBytes(uint8_t reg, uint8_t* buf, uint8_t n) {
+    Wire.beginTransmission(_adr);
+    Wire.write(reg);
+    if (Wire.endTransmission() != 0) return false;
+    if (Wire.requestFrom(_adr, n) != n) return false;
+    for (uint8_t i = 0; i < n; i++) buf[i] = Wire.read();
+    return true;
+}
+
+bool Apis::_writeByte(uint8_t reg, uint8_t value) {
+    Wire.beginTransmission(_adr);
+    Wire.write(reg);
+    Wire.write(value);
+    return Wire.endTransmission() == 0;
 }
 
 void Apis::setNRangeReadings(uint16_t n)  { _nRangeReadings = n; }
@@ -46,17 +57,11 @@ void Apis::setOrientStats(bool enable)     { _orientStats = enable; }
 
 void Apis::setRangefinderSensitivity(SensitivityMode mode) {
     _sensitivity = mode;
-    Wire.beginTransmission(_adr);
-    Wire.write(REG_CONFIG);
-    Wire.write((uint8_t)_sensitivity);
-    Wire.endTransmission();
+    _writeByte(REG_CONFIG, (uint8_t)_sensitivity);
 }
 
 void Apis::setI2CAddress(uint8_t newAddress) {
-    Wire.beginTransmission(_adr);
-    Wire.write(REG_I2C_ADDR);
-    Wire.write(newAddress);
-    Wire.endTransmission();
+    _writeByte(REG_I2C_ADDR, newAddress);
 }
 
 bool Apis::updateRange() {
@@ -64,28 +69,11 @@ bool Apis::updateRange() {
         _waitUntilReady();
         _needsStartupDelay = false;
     }
-    uint8_t data1 = 0;
-    uint8_t data2 = 0;
-
-    Wire.beginTransmission(_adr);
-    Wire.write(REG_RANGE_L);
-    Wire.endTransmission();
-    Wire.requestFrom(_adr, 1);
-    data1 = Wire.read();
-
-    Wire.beginTransmission(_adr);
-    Wire.write(REG_RANGE_H);
-    Wire.endTransmission();
-    Wire.requestFrom(_adr, 1);
-    data2 = Wire.read();
-
-    _range = (int16_t)((data2 << 8) | data1);
-
-    Wire.beginTransmission(_adr);
-    Wire.write(REG_SIGNAL_STR);
-    Wire.endTransmission();
-    Wire.requestFrom(_adr, 1);
-    _signalStrength = Wire.read();
+    // Range low/high and signal strength are consecutive (0x08–0x0A): one read.
+    uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
+    _readBytes(REG_RANGE_L, d, 3);
+    _range = (int16_t)((d[1] << 8) | d[0]);
+    _signalStrength = d[2];
 
     if (_range < 0) {
         _range = APIS_ERROR;
@@ -99,42 +87,18 @@ bool Apis::updateOrientation() {
         _waitUntilReady();
         _needsStartupDelay = false;
     }
-    uint8_t data1 = 0, data2 = 0;
     int16_t dataSet[6];
+    uint8_t d[6];
 
-    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x10–0x15)
-    for (int i = 0; i < 3; i++) {
-        Wire.beginTransmission(_adr);
-        Wire.write(REG_ACCEL_BASE + 2*i);
-        Wire.endTransmission();
-        Wire.requestFrom(_adr, 1);
-        data1 = Wire.read();
+    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x10–0x15): one read of six bytes
+    memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
+    _readBytes(REG_ACCEL_BASE, d, 6);
+    for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
 
-        Wire.beginTransmission(_adr);
-        Wire.write(REG_ACCEL_BASE + 2*i + 1);
-        Wire.endTransmission();
-        Wire.requestFrom(_adr, 1);
-        data2 = Wire.read();
-
-        dataSet[i] = ((data2 << 8) | data1);
-    }
-
-    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x18–0x1D)
-    for (int i = 0; i < 3; i++) {
-        Wire.beginTransmission(_adr);
-        Wire.write(REG_OFFSET_BASE + 2*i);
-        Wire.endTransmission();
-        Wire.requestFrom(_adr, 1);
-        data1 = Wire.read();
-
-        Wire.beginTransmission(_adr);
-        Wire.write(REG_OFFSET_BASE + 2*i + 1);
-        Wire.endTransmission();
-        Wire.requestFrom(_adr, 1);
-        data2 = Wire.read();
-
-        dataSet[3+i] = ((data2 << 8) | data1);
-    }
+    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x18–0x1D): one read of six bytes
+    memset(d, 0xFF, sizeof d);
+    _readBytes(REG_OFFSET_BASE, d, 6);
+    for (int i = 0; i < 3; i++) dataSet[3+i] = ((d[2*i + 1] << 8) | d[2*i]);
 
     float gx = dataSet[0], gy = dataSet[1], gz = dataSet[2];
     float offsetX = dataSet[3], offsetY = dataSet[4], offsetZ = dataSet[5];
@@ -169,11 +133,8 @@ void Apis::_waitUntilReady() {
     // sets bit 0 after InitLiDAR(), allowing an early exit.
     uint32_t start = millis();
     while (millis() - start < 150) {
-        Wire.beginTransmission(_adr);
-        Wire.write(REG_STATUS);
-        Wire.endTransmission();
-        Wire.requestFrom(_adr, 1);
-        if (Wire.read() & 0x01) return;
+        uint8_t status = 0;
+        if (_readBytes(REG_STATUS, &status, 1) && (status & 0x01)) return;
         delay(5);
     }
 }
