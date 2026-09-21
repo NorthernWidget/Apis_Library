@@ -35,11 +35,19 @@ bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
 }
 
 bool Apis::_readBytes(uint8_t reg, uint8_t* buf, uint8_t n) {
-    Wire.beginTransmission(_adr);
-    Wire.write(reg);
-    if (Wire.endTransmission() != 0) return false;
-    if (Wire.requestFrom(_adr, n) != n) return false;
-    for (uint8_t i = 0; i < n; i++) buf[i] = Wire.read();
+    // One transaction per byte. The deployed firmware's requestEvent() loads a
+    // single byte per request (two after a repeated start), so a multi-byte
+    // requestFrom() would receive one register and then whatever WireS sends
+    // when its buffer is empty. When the firmware serves auto-incremented
+    // pages (NW-Device-Specification Schema 1), this collapses to one
+    // transaction of n bytes: pointer write, then requestFrom(_adr, n).
+    for (uint8_t i = 0; i < n; i++) {
+        Wire.beginTransmission(_adr);
+        Wire.write(reg + i);
+        if (Wire.endTransmission() != 0) return false;
+        if (Wire.requestFrom(_adr, (uint8_t)1) != 1) return false;
+        buf[i] = Wire.read();
+    }
     return true;
 }
 
