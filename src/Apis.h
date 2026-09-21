@@ -82,14 +82,14 @@ enum SensitivityMode : uint8_t {
 /// and "we haven't asked yet."
 #define APIS_NOT_MEASURED -9998
 
-// NW standard component constants for raw reading interface.
-// TODO: Move to NW template library when created.
+// Deprecated component selectors. Use the class-scoped Apis::ALL, Apis::RANGE,
+// Apis::ORIENT instead (see Apis::Component). Kept so existing sketches compile;
+// values match the enum and will be removed in a future major version.
 #ifndef NW_READING_ALL
   #define NW_READING_ALL       0
   #define NW_READING_PRIMARY   1
   #define NW_READING_SECONDARY 2
 #endif
-// Apis-specific aliases
 #define NW_READING_RANGE  NW_READING_PRIMARY
 #define NW_READING_ORIENT NW_READING_SECONDARY
 
@@ -113,6 +113,19 @@ enum SensitivityMode : uint8_t {
 class Apis
 {
     public:
+        /**
+         * @brief Measurement group: which on-board chip a reading covers.
+         * @details One group per chip, in the order the NW-Device-Specification
+         * Apis appendix numbers them: 0 = LiDAR Lite (range, signal strength),
+         * 1 = LIS2DH12 accelerometer (pitch, roll). ALL selects every chip.
+         * Written as Apis::RANGE etc. at the call site.
+         */
+        enum Component : uint8_t {
+            ALL    = 0,   ///< Every chip: range, then pitch and roll.
+            RANGE  = 1,   ///< LiDAR Lite only.
+            ORIENT = 2    ///< Accelerometer only.
+        };
+
         /**
          * @brief Instantiate Apis object.
          * @param nRangeReadings Number of range readings to average (default 1).
@@ -262,10 +275,9 @@ class Apis
         // --- Raw reading interface (NW standard) ---
         /**
          * @brief Prepare for raw reading collection.
-         * @param component NW_READING_ALL, NW_READING_RANGE (primary), or
-         * NW_READING_ORIENT (secondary).
+         * @param component Apis::ALL, Apis::RANGE, or Apis::ORIENT.
          */
-        void beginRawReadings(uint8_t component = NW_READING_ALL);
+        void beginRawReadings(uint8_t component = ALL);
 
         /**
          * @brief Take one raw reading and write CSV data into buf at offset.
@@ -349,7 +361,7 @@ class Apis
         bool _needsStartupDelay = true;
 
         // Raw reading state
-        uint8_t _rawComponent = NW_READING_ALL;
+        uint8_t _rawComponent = ALL;
 };
 
 #endif

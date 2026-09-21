@@ -245,11 +245,11 @@ void Apis::beginRawReadings(uint8_t component) {
 }
 
 uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
-    if (_rawComponent == NW_READING_ALL || _rawComponent == NW_READING_RANGE) {
+    if (_rawComponent == ALL || _rawComponent == RANGE) {
         updateRange();
         offset += snprintf(buf + offset, 8, "%d,", (int)_range);
     }
-    if (_rawComponent == NW_READING_ALL || _rawComponent == NW_READING_ORIENT) {
+    if (_rawComponent == ALL || _rawComponent == ORIENT) {
         char tmp[10];
         if (updateOrientation()) {
             dtostrf(_pitch, 1, 2, tmp);
