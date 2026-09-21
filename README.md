@@ -4,6 +4,8 @@
 
 Arduino library for the [Apis](https://github.com/NorthernWidget/Project-Apis) LiDAR rangefinder board. Apis manages power supply, firmware watchdog, and I2C communication for a LiDAR Lite unit, and reads a MEMS accelerometer to report pitch and roll — useful when the sensor is not mounted level.
 
+**Requires firmware patch 1 or later** (the [NW-Device-Specification](https://github.com/NorthernWidget/NW-Device-Specification) Schema 1 register map, on Project-Apis `master`) on a board provisioned with [NW-Provision](https://github.com/NorthernWidget/NW-Provision). The default I2C address is `0x41`. Boards running the v0.1.x firmware (address `0x50`) are refused by `begin()`; reflash and provision them, or use Apis_Library v0.1.0.
+
 **Installation:** included in [NorthernWidget-libraries](https://github.com/NorthernWidget/NorthernWidget-libraries). Also available via the Arduino Library Manager.
 
 ```cpp
@@ -13,7 +15,11 @@ Apis rangefinder;
 
 void setup() {
     Serial.begin(9600);
-    rangefinder.begin();
+    if (!rangefinder.begin()) {          // false: no ACK, not Schema 1, wrong name, or firmware too old
+        Serial.print("Apis refused; firmware patch ");
+        Serial.println(rangefinder.getFirmwareVersion());
+        while (1);
+    }
     Serial.println(rangefinder.getHeader());
 }
 
@@ -40,6 +46,10 @@ rangefinder.endReadings();
 ```
 
 `printReading(out)` prints the stored reading without acquiring; `updateMeasurements(component)` reads one chip alone (`Apis::RANGE` or `Apis::ORIENT`) or both; `getRangeCount()` and `getOrientCount()` report how many valid readings are behind the current statistics.
+
+Every reading is requested from the device and waited for through its reading counter, so repeated readings are independent measurements. `setRangeReadings(n)` and `setOrientReadings(n)` set how many are taken per `updateMeasurements()` (clamped to `APIS_RANGE_CAPACITY`, default 64, and `APIS_ORIENT_CAPACITY`, default 8; override either before the include). Statistics over them: `getRangeMean()`, `getRangeStd()`, `getRangeSterr()`, `getRangeMedian()`, and the same for pitch and roll, plus `getRangeCount()`. With `setRangeStats(true)` the std and sterr columns join `getString()`.
+
+Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `faultChip()`, `faultKind()`, `printFault(Serial)`; `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
 
 The v0.1.x names `beginRawReadings()`, `takeRawReading(buf, offset)`, `endRawReadings()` and the `NW_READING_*` selectors still work and are deprecated.
 

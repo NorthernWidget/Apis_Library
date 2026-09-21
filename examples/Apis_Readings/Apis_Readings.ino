@@ -9,7 +9,7 @@ const uint16_t N = 20;
 void setup() {
     Serial.begin(9600);
     if (!rangefinder.begin()) {
-        Serial.println("Apis not found. Check wiring.");
+        Serial.print("Apis refused; firmware patch "); Serial.println(rangefinder.getFirmwareVersion());
         while (1);
     }
     rangefinder.beginReadings(Apis::RANGE);   // range only; Apis::ALL adds pitch and roll
