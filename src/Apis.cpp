@@ -2,9 +2,10 @@
 
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
            uint16_t nOrientReadings, bool orientStats)
-    : _nRangeReadings(nRangeReadings), _rangeStats(rangeStats),
-      _nOrientReadings(nOrientReadings), _orientStats(orientStats)
+    : _rangeStats(rangeStats), _orientStats(orientStats)
 {
+    setRangeReadings(nRangeReadings);
+    setOrientReadings(nOrientReadings);
 }
 
 bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
@@ -60,10 +61,18 @@ bool Apis::_writeByte(uint8_t reg, uint8_t value) {
     return Wire.endTransmission() == 0;
 }
 
-void Apis::setNRangeReadings(uint16_t n)  { _nRangeReadings = n; }
+uint16_t Apis::setRangeReadings(uint16_t n) {
+    _nRangeReadings = (n > APIS_RANGE_CAPACITY) ? APIS_RANGE_CAPACITY : n;
+    return _nRangeReadings;
+}
+uint16_t Apis::setOrientReadings(uint16_t n) {
+    _nOrientReadings = (n > APIS_ORIENT_CAPACITY) ? APIS_ORIENT_CAPACITY : n;
+    return _nOrientReadings;
+}
 void Apis::setRangeStats(bool enable)      { _rangeStats = enable; }
-void Apis::setNOrientReadings(uint16_t n) { _nOrientReadings = n; }
 void Apis::setOrientStats(bool enable)     { _orientStats = enable; }
+void Apis::setNRangeReadings(uint16_t n)   { setRangeReadings(n); }
+void Apis::setNOrientReadings(uint16_t n)  { setOrientReadings(n); }
 
 void Apis::setRangefinderSensitivity(SensitivityMode mode) {
     _sensitivity = mode;
@@ -200,27 +209,26 @@ bool Apis::updateMeasurements(uint8_t component) {
     bool orientOK = true;
 
     if (component == ALL || component == RANGE) {
-    // Welford's online algorithm for range mean, std, sterr
-    float rangeM2 = 0, rangeMean = 0;
+    // Take N range readings into the array, then two-pass mean, std, sterr.
+    // Two-pass in float is exact enough for N up to the array capacity; see
+    // the precision note in Apis.h.
     uint16_t rangeN = 0;
-
     for (uint16_t i = 0; i < _nRangeReadings; i++) {
-        if (updateRange()) {
-            rangeN++;
-            float x = (float)_range;
-            float delta = x - rangeMean;
-            rangeMean += delta / rangeN;
-            rangeM2   += delta * (x - rangeMean);
-        }
+        if (updateRange()) _rangeReadings[rangeN++] = _range;
     }
 
     if (rangeN == 0) {
         _range = APIS_ERROR;
         _rangeMean = _rangeStd = _rangeSterr = APIS_ERROR;
     } else {
-        _rangeMean = rangeMean;
-        _range     = (int16_t)rangeMean;
-        _rangeStd   = (rangeN > 1) ? sqrt(rangeM2 / (rangeN - 1)) : 0;
+        float sum = 0;
+        for (uint16_t i = 0; i < rangeN; i++) sum += _rangeReadings[i];
+        float mean = sum / rangeN;
+        float m2 = 0;
+        for (uint16_t i = 0; i < rangeN; i++) { float d = _rangeReadings[i] - mean; m2 += d * d; }
+        _rangeMean  = mean;
+        _range      = (int16_t)mean;
+        _rangeStd   = (rangeN > 1) ? sqrt(m2 / (rangeN - 1)) : 0;
         _rangeSterr = (rangeN > 1) ? _rangeStd / sqrt((float)rangeN) : 0;
     }
     _rangeCount = rangeN;
@@ -230,32 +238,29 @@ bool Apis::updateMeasurements(uint8_t component) {
     }
 
     if (component == ALL || component == ORIENT) {
-    // Welford's online algorithm for orientation mean, std, sterr
-    float pitchM2 = 0, rollM2 = 0, pitchMean = 0, rollMean = 0;
+    // Take N orientation readings into the arrays, then two-pass statistics.
     uint16_t orientN = 0;
-
     for (uint16_t i = 0; i < _nOrientReadings; i++) {
-        if (updateOrientation()) {
-            orientN++;
-            float dp = _pitch - pitchMean;
-            pitchMean += dp / orientN;
-            pitchM2   += dp * (_pitch - pitchMean);
-
-            float dr = _roll - rollMean;
-            rollMean += dr / orientN;
-            rollM2   += dr * (_roll - rollMean);
-        }
+        if (updateOrientation()) { _pitchReadings[orientN] = _pitch; _rollReadings[orientN] = _roll; orientN++; }
     }
 
     if (orientN == 0) {
         _pitch = _roll = APIS_ERROR;
         _pitchStd = _pitchSterr = _rollStd = _rollSterr = APIS_ERROR;
     } else {
-        _pitch = pitchMean;
-        _roll  = rollMean;
-        _pitchStd   = (orientN > 1) ? sqrt(pitchM2 / (orientN - 1)) : 0;
+        float ps = 0, rs = 0;
+        for (uint16_t i = 0; i < orientN; i++) { ps += _pitchReadings[i]; rs += _rollReadings[i]; }
+        float pm = ps / orientN, rm = rs / orientN;
+        float pm2 = 0, rm2 = 0;
+        for (uint16_t i = 0; i < orientN; i++) {
+            float dp = _pitchReadings[i] - pm; pm2 += dp * dp;
+            float dr = _rollReadings[i]  - rm; rm2 += dr * dr;
+        }
+        _pitch = pm;
+        _roll  = rm;
+        _pitchStd   = (orientN > 1) ? sqrt(pm2 / (orientN - 1)) : 0;
         _pitchSterr = (orientN > 1) ? _pitchStd / sqrt((float)orientN) : 0;
-        _rollStd    = (orientN > 1) ? sqrt(rollM2  / (orientN - 1)) : 0;
+        _rollStd    = (orientN > 1) ? sqrt(rm2 / (orientN - 1)) : 0;
         _rollSterr  = (orientN > 1) ? _rollStd  / sqrt((float)orientN) : 0;
     }
     _orientCount = orientN;
@@ -264,6 +269,29 @@ bool Apis::updateMeasurements(uint8_t component) {
 
     return rangeOK && orientOK;
 }
+
+float Apis::_median(const float* v, uint16_t n) {
+    if (n == 0) return APIS_ERROR;
+    // Copy into a stack buffer no larger than the biggest capacity and sort
+    // (insertion sort: n is small and the copy is already on the stack).
+    float tmp[(APIS_RANGE_CAPACITY > APIS_ORIENT_CAPACITY) ? APIS_RANGE_CAPACITY : APIS_ORIENT_CAPACITY];
+    for (uint16_t i = 0; i < n; i++) tmp[i] = v[i];
+    for (uint16_t i = 1; i < n; i++) {
+        float x = tmp[i]; int16_t j = i - 1;
+        while (j >= 0 && tmp[j] > x) { tmp[j + 1] = tmp[j]; j--; }
+        tmp[j + 1] = x;
+    }
+    return (n & 1) ? tmp[n / 2] : (tmp[n / 2 - 1] + tmp[n / 2]) / 2;
+}
+
+float Apis::getRangeMedian() {
+    if (_rangeCount == 0) return APIS_ERROR;
+    float tmp[APIS_RANGE_CAPACITY];
+    for (uint16_t i = 0; i < _rangeCount; i++) tmp[i] = _rangeReadings[i];
+    return _median(tmp, _rangeCount);
+}
+float Apis::getPitchMedian() { return (_orientCount == 0) ? APIS_ERROR : _median(_pitchReadings, _orientCount); }
+float Apis::getRollMedian()  { return (_orientCount == 0) ? APIS_ERROR : _median(_rollReadings,  _orientCount); }
 
 uint16_t Apis::getRangeCount()  { return _rangeCount; }
 uint16_t Apis::getOrientCount() { return _orientCount; }

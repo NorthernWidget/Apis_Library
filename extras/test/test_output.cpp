@@ -124,6 +124,16 @@ int main() {
       ok = a.updateMeasurements(Apis::ORIENT);
       printf("[per-chip] ORIENT ok=%d string(false): %s\n", ok, a.getString(false).c_str()); }
 
+    // 5b2. Medians and clamping: 7 range readings 300..318 step 3 (median 309), capacity clamp.
+    loadImage(300, 90, 100, 50, 1000, 0, 0, 0);
+    { Apis a; a.begin(); int k = 0;
+      onReading = [&](TwoWire& w) { int16_t r = 300 + 3 * (k++ % 7); w.image[0x28] = r & 0xFF; w.image[0x29] = (r >> 8) & 0xFF; };
+      printf("[median] setRangeReadings(7)=%u setRangeReadings(1000)=%u\n", a.setRangeReadings(7), a.setRangeReadings(1000));
+      a.setRangeReadings(7); a.setOrientReadings(3); a.updateMeasurements();
+      printf("[median] count=%u mean=%.4f median=%.4f std=%.4f pitchMedian=%.4f rollMedian=%.4f\n",
+             a.getRangeCount(), a.getRangeMean(), a.getRangeMedian(), a.getRangeStd(), a.getPitchMedian(), a.getRollMedian());
+      onReading = nullptr; }
+
     // 5c. Handshake: ready/newReading/requestReading against the emulated firmware.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin();

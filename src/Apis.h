@@ -53,6 +53,19 @@ License: GNU GPL v3. You should find a copy in the repository.
 // Page 2 (0x40–0x5F) — calibration, EEPROM-backed
 #define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16
 
+// Reading arrays: each measurement keeps its readings from the last
+// updateMeasurements() in a statically sized array so that median and
+// two-pass statistics can be computed. Capacity is per measurement group;
+// a sketch may override before including this header, e.g.
+//   #define APIS_RANGE_CAPACITY 200
+// No heap is ever used; a request above capacity is clamped to it.
+#ifndef APIS_RANGE_CAPACITY
+  #define APIS_RANGE_CAPACITY 64
+#endif
+#ifndef APIS_ORIENT_CAPACITY
+  #define APIS_ORIENT_CAPACITY 8
+#endif
+
 #define APIS_BIT_READY     0x01
 #define APIS_BIT_PANFAULT  0x80
 #define APIS_CTRL_TRIGGER  0x01
@@ -185,14 +198,22 @@ class Apis
         uint8_t getFirmwareVersion();
 
         // --- Configuration setters ---
-        /** @brief Set number of range readings to average. */
-        void setNRangeReadings(uint16_t n);
+        /**
+         * @brief Set the number of range readings taken per updateMeasurements()
+         * (statistics are computed over them). Clamped to APIS_RANGE_CAPACITY.
+         * @return The number actually set.
+         */
+        uint16_t setRangeReadings(uint16_t n);
         /** @brief Enable or disable range std and sterr in getString(). */
         void setRangeStats(bool enable);
-        /** @brief Set number of orientation readings to average. */
-        void setNOrientReadings(uint16_t n);
+        /** @brief Set the number of orientation readings per updateMeasurements(). Clamped to APIS_ORIENT_CAPACITY. */
+        uint16_t setOrientReadings(uint16_t n);
         /** @brief Enable or disable orientation std and sterr in getString(). */
         void setOrientStats(bool enable);
+        /** @deprecated Use setRangeReadings(). */
+        [[deprecated("Use setRangeReadings()")]] void setNRangeReadings(uint16_t n);
+        /** @deprecated Use setOrientReadings(). */
+        [[deprecated("Use setOrientReadings()")]] void setNOrientReadings(uint16_t n);
         /**
          * @brief Change the rangefinder sensitivity mode after begin().
          * @details Writes the new mode to REG_CONFIG (0x26); the firmware
@@ -316,8 +337,18 @@ class Apis
         uint8_t getSignalStrength();
 
         // --- Statistics getters ---
+        // Computed two-pass in 32-bit float over the readings stored by the last
+        // updateMeasurements(). Adequate for N up to the array capacities
+        // (tens to a few hundred); at N in the thousands the sum of squared
+        // deviations would want double precision, which the AVR lacks.
         /** @brief Return range mean [cm] as float. */
         float getRangeMean();
+        /** @brief Return the median range [cm] of the stored readings (nearest cm for odd N; mean of the middle pair otherwise). */
+        float getRangeMedian();
+        /** @brief Return the median pitch [deg] of the stored readings. */
+        float getPitchMedian();
+        /** @brief Return the median roll [deg] of the stored readings. */
+        float getRollMedian();
         /** @brief Return range standard deviation [cm]. */
         float getRangeStd();
         /** @brief Return range standard error [cm]. */
@@ -461,9 +492,17 @@ class Apis
         float _rollStd    = APIS_NOT_MEASURED;
         float _rollSterr  = APIS_NOT_MEASURED;
 
-        // Valid readings behind the current statistics (set by updateMeasurements)
+        // Readings behind the current statistics (set by updateMeasurements):
+        // one array per measurement, native type, oldest first, and the count
+        // of valid entries.
+        int16_t  _rangeReadings[APIS_RANGE_CAPACITY];
+        float    _pitchReadings[APIS_ORIENT_CAPACITY];
+        float    _rollReadings[APIS_ORIENT_CAPACITY];
         uint16_t _rangeCount  = 0;
         uint16_t _orientCount = 0;
+
+        /** @brief Median of the first n values of a float array (copies and sorts; n <= capacity). */
+        static float _median(const float* v, uint16_t n);
 
         // LiDAR Lite signal strength; updated by updateRange()
         uint8_t _signalStrength = 0;
