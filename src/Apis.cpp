@@ -139,7 +139,11 @@ void Apis::_waitUntilReady() {
     }
 }
 
-bool Apis::updateMeasurements() {
+bool Apis::updateMeasurements(uint8_t component) {
+    bool rangeOK  = true;
+    bool orientOK = true;
+
+    if (component == ALL || component == RANGE) {
     // Welford's online algorithm for range mean, std, sterr
     float rangeM2 = 0, rangeMean = 0;
     uint16_t rangeN = 0;
@@ -163,7 +167,13 @@ bool Apis::updateMeasurements() {
         _rangeStd   = (rangeN > 1) ? sqrt(rangeM2 / (rangeN - 1)) : 0;
         _rangeSterr = (rangeN > 1) ? _rangeStd / sqrt((float)rangeN) : 0;
     }
+    _rangeCount = rangeN;
+    // Float comparisons with APIS_ERROR are safe: the value is assigned directly,
+    // never computed, so the float representation is exact and consistent.
+    rangeOK = (_range != APIS_ERROR);
+    }
 
+    if (component == ALL || component == ORIENT) {
     // Welford's online algorithm for orientation mean, std, sterr
     float pitchM2 = 0, rollM2 = 0, pitchMean = 0, rollMean = 0;
     uint16_t orientN = 0;
@@ -192,11 +202,15 @@ bool Apis::updateMeasurements() {
         _rollStd    = (orientN > 1) ? sqrt(rollM2  / (orientN - 1)) : 0;
         _rollSterr  = (orientN > 1) ? _rollStd  / sqrt((float)orientN) : 0;
     }
+    _orientCount = orientN;
+    orientOK = (_pitch != APIS_ERROR) && (_roll != APIS_ERROR);
+    }
 
-    // Float comparisons with APIS_ERROR are safe: the value is assigned directly,
-    // never computed, so the float representation is exact and consistent.
-    return (_range != APIS_ERROR) && (_pitch != APIS_ERROR) && (_roll != APIS_ERROR);
+    return rangeOK && orientOK;
 }
+
+uint16_t Apis::getRangeCount()  { return _rangeCount; }
+uint16_t Apis::getOrientCount() { return _orientCount; }
 
 int16_t Apis::getRange()          { return _range; }
 float   Apis::getRoll()           { return _roll; }

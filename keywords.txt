@@ -23,6 +23,8 @@ setRangefinderSensitivity	KEYWORD2
 updateRange	KEYWORD2
 updateOrientation	KEYWORD2
 updateMeasurements	KEYWORD2
+getRangeCount	KEYWORD2
+getOrientCount	KEYWORD2
 getRange	KEYWORD2
 getRoll	KEYWORD2
 getPitch	KEYWORD2

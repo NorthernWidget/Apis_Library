@@ -212,12 +212,24 @@ class Apis
         bool updateOrientation();
 
         /**
-         * @brief Measure range [cm], roll [deg] and pitch [deg].
+         * @brief Take a reading: measure range [cm], roll [deg] and pitch [deg],
+         * or one chip's measurements alone.
          * Uses Welford's online algorithm to compute mean, std, and sterr
          * over nRangeReadings and nOrientReadings respectively.
-         * Returns false if any sensor returns an error value.
+         * @param component Apis::ALL (default), Apis::RANGE, or Apis::ORIENT:
+         * which chip(s) to read. Fields of a chip not selected are left as
+         * they were.
+         * @return false if any selected chip returned only error values.
          */
-        bool updateMeasurements();
+        bool updateMeasurements(uint8_t component = ALL);
+
+        /**
+         * @brief Number of valid range readings in the last updateMeasurements()
+         * call (0 to nRangeReadings). The statistics are computed over these.
+         */
+        uint16_t getRangeCount();
+        /** @brief Number of valid orientation readings in the last updateMeasurements(). */
+        uint16_t getOrientCount();
 
         // --- Single-value getters ---
         /** @brief Return range mean [cm], rounded to nearest cm. */
@@ -350,6 +362,10 @@ class Apis
         float _pitchSterr = APIS_NOT_MEASURED;
         float _rollStd    = APIS_NOT_MEASURED;
         float _rollSterr  = APIS_NOT_MEASURED;
+
+        // Valid readings behind the current statistics (set by updateMeasurements)
+        uint16_t _rangeCount  = 0;
+        uint16_t _orientCount = 0;
 
         // LiDAR Lite signal strength; updated by updateRange()
         uint8_t _signalStrength = 0;

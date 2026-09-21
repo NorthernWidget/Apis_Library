@@ -66,6 +66,17 @@ int main() {
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); printf("[not measured]\nstring: %s\n", a.getString(false).c_str()); }
 
+    // 5b. Per-chip reading: RANGE alone must not touch pitch/roll; counts reported.
+    loadImage(400, 50, 100, 50, 1000, 0, 0, 0);
+    { Apis a(4, true, 2, true); a.begin(); a.updateMeasurements();
+      Wire.image[0x08] = 0x2C; Wire.image[0x09] = 0x01;   // range -> 300
+      Wire.image[0x10] = 0x00; Wire.image[0x11] = 0x00;   // ax -> 0 (would change pitch if read)
+      bool ok = a.updateMeasurements(Apis::RANGE);
+      printf("[per-chip] RANGE ok=%d string(false): %s counts=%u/%u\n", ok, a.getString(false).c_str(),
+             a.getRangeCount(), a.getOrientCount());
+      ok = a.updateMeasurements(Apis::ORIENT);
+      printf("[per-chip] ORIENT ok=%d string(false): %s\n", ok, a.getString(false).c_str()); }
+
     // 6. Wrong name: begin() must fail.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
     { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }

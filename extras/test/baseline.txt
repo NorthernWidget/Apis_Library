@@ -24,4 +24,6 @@ raw RANGE (6 bytes): -9999,
 getters: range=-9999 roll=-9999.0000 pitch=-9999.0000 signal=0 mean=-9999.0000 std=-9999.0000 sterr=-9999.0000
 [not measured]
 string: -9998,-9998.00,-9998.00,
+[per-chip] RANGE ok=1 string(false): 300,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00, counts=4/2
+[per-chip] ORIENT ok=1 string(false): 300,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,
 [wrong name] begin=0
