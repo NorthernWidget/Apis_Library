@@ -176,7 +176,7 @@ size_t Apis::printFault(Print& out) {
 }
 
 bool Apis::updateRange() {
-    if (_burstFaulted) {                  // rest of a burst whose LiDAR did not power up
+    if (_batchFaulted) {                  // rest of a batch whose LiDAR did not power up
         _range = APIS_ERROR;
         return false;
     }
@@ -185,7 +185,7 @@ bool Apis::updateRange() {
         return false;
     }
     if (faulted(0) && (faultKind() == 1 || faultKind() == 5) && faultChip() == 0) {
-        _burstFaulted = true;             // no acknowledge / not initialised: the chip is not coming
+        _batchFaulted = true;             // no acknowledge / not initialised: the chip is not coming
         _range = APIS_ERROR;
         return false;
     }
@@ -248,15 +248,15 @@ bool Apis::updateMeasurements(uint8_t component) {
     bool orientOK = true;
     if (component == ALL || component == RANGE) {
     // Tell the device how many readings follow so it holds the LiDAR powered
-    // for the burst (single readings need no word: 0/1 means power down after each).
+    // for the batch (single readings need no word: 0/1 means power down after each).
     if (_nRangeReadings > 1) _writeRequest(_nRangeReadings);
     // Take N range readings; each successful one appends to _rangeReadings[].
     // Statistics are read from the array (two-pass in float, exact enough for N
     // up to the array capacity; see the precision note in Apis.h).
     _resetRange();
-    _burstFaulted = false;
+    _batchFaulted = false;
     for (uint16_t i = 0; i < _nRangeReadings; i++) {
-        if (!updateRange() && _burstFaulted) break;   // LiDAR will not power up: stop the burst
+        if (!updateRange() && _batchFaulted) break;   // LiDAR will not power up: stop the batch
     }
     if (_rangeCount == 0) {
         _range = APIS_ERROR;
@@ -336,7 +336,7 @@ float   Apis::getPitch()          { return _pitch; }
 uint8_t Apis::getSignalStrength() { return _signalStrength; }
 
 // Statistics are computed from the arrays each call (N <= capacity, so cheap),
-// so a burst logged through logReading() has its statistics without re-acquiring.
+// so a batch logged through logReading() has its statistics without re-acquiring.
 static void rangeStatsOf(const int16_t* r, uint16_t n, float& mean, float& sd, float& se) {
     float sum = 0;
     for (uint16_t i = 0; i < n; i++) sum += r[i];
@@ -387,7 +387,7 @@ void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
     if (component == ALL || component == RANGE)  _resetRange();
     if (component == ALL || component == ORIENT) _resetOrient();
-    _burstFaulted = false;
+    _batchFaulted = false;
     if (n > 1 && (component == ALL || component == RANGE)) _writeRequest(n);
 }
 

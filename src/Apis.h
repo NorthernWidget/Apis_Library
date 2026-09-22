@@ -105,7 +105,7 @@ enum SensitivityMode : uint8_t {
  * unit (roll/pitch, firmware lock/reset, power supply).
  * @details Library to communicate with the Apis module, which
  * connects to a LiDAR Lite rangefinder. The Apis is equipped with
- * capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS
+ * capacitors to handle the large batch power draw from the LiDAR Lite, a MEMS
  * accelerometer to note its orientation, a magnet to note a known orientation
  * (often, but not necessarily, horizontal) and the ability to absorb
  * occasional firmware issues that lead to system hangs.
@@ -518,10 +518,10 @@ class Apis
         // for firmware patch 2. Only a device that acknowledges but never
         // completes reaches this ceiling (Project-Apis #25).
         unsigned long timeoutGlobal = 500;
-        // Set when a reading in the current burst reported that the LiDAR could not
-        // be powered up (fault chip 0, kind 1 or 5): the rest of the burst is not
+        // Set when a reading in the current batch reported that the LiDAR could not
+        // be powered up (fault chip 0, kind 1 or 5): the rest of the batch is not
         // acquired, so the sketch's loop finishes quickly with sentinels.
-        bool _burstFaulted = false;
+        bool _batchFaulted = false;
 
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;

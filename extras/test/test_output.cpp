@@ -164,7 +164,7 @@ int main() {
       printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.faultChip(), a.faultKind(), pb);
       onReading = nullptr; }
 
-    // 6. Bursts: the readings-requested word reaches the device before the readings.
+    // 6. Batches: the readings-requested word reaches the device before the readings.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); lastRequest = 0;
       a.setRangeReadings(5); a.updateMeasurements(Apis::RANGE);
@@ -176,12 +176,12 @@ int main() {
       a.beginReadings(Apis::RANGE, 4); for (int i = 0; i < 4; i++) a.logReading(bp); a.endReadings();
       unsigned tx = Wire.transactions;
       printf("[request] beginReadings(RANGE, 4) -> word=%u rows=%s\n", lastRequest, pb);
-      printf("[burst stats] count=%u mean=%.2f std=%.4f median=%.2f transactions during stats=%u\n",
+      printf("[batch stats] count=%u mean=%.2f std=%.4f median=%.2f transactions during stats=%u\n",
              a.getRangeCount(), a.getRangeMean(), a.getRangeStd(), a.getRangeMedian(), Wire.transactions - tx);
       onReading = nullptr; }
 
     // 7. A LiDAR that will not power up: the firmware reports fault chip 0 kind 1 on the first
-    //    reading; the library stops the burst instead of waiting out every reading.
+    //    reading; the library stops the batch instead of waiting out every reading.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); int k = 0;
       onReading = [&](TwoWire& w) { k++; w.image[0x20] = 0x83; w.image[0x27] = 0x01; w.image[0x28] = 0xF1; w.image[0x29] = 0xD8; }; // -9999

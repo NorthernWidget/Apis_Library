@@ -12,7 +12,7 @@ void setup() {
         Serial.print("Apis refused; firmware patch "); Serial.println(rangefinder.getFirmwareVersion());
         while (1);
     }
-    rangefinder.beginReadings(Apis::RANGE, N);   // range only, N readings (LiDAR held powered for the burst); Apis::ALL adds pitch and roll
+    rangefinder.beginReadings(Apis::RANGE, N);   // range only, N readings (LiDAR held powered for the batch); Apis::ALL adds pitch and roll
     Serial.print("n,");
     rangefinder.printHeader(Serial);
     Serial.println();
