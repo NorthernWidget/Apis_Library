@@ -19,6 +19,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <NW_Readings.h>   // NW_Core: fixed-capacity readings with statistics
 
 #ifndef M_PI
   #define M_PI 3.14159265358979323846
@@ -477,26 +478,14 @@ class Apis
         // Readings behind the current statistics (set by updateMeasurements):
         // one array per measurement, native type, oldest first, and the count
         // of valid entries.
-        int16_t  _rangeReadings[APIS_RANGE_CAPACITY];
-        float    _pitchReadings[APIS_ORIENT_CAPACITY];
-        float    _rollReadings[APIS_ORIENT_CAPACITY];
-        uint16_t _rangeCount  = 0;   // readings held (<= capacity)
-        uint16_t _orientCount = 0;
-        uint16_t _rangeNext   = 0;   // next write index; wraps at capacity, keeping the newest readings
-        uint16_t _orientNext  = 0;
         // One storage path: every acquisition appends here (updateRange(),
         // updateOrientation(), whether from updateMeasurements() or logReading());
         // the statistics getters read the arrays; updateMeasurements() and
-        // beginReadings() start a fresh set.
-        void _appendRange(int16_t r);
-        void _appendOrient(float pitch, float roll);
-        void _resetRange()  { _rangeCount = _rangeNext = 0; }
-        void _resetOrient() { _orientCount = _orientNext = 0; }
-        /** @brief Two-pass mean, sample std, and standard error of the first n values (n >= 1). */
-        static void _stats(const float* v, uint16_t n, float& mean, float& sd, float& se);
+        // beginReadings() start a fresh set. (NW_Core)
+        NW_Readings<int16_t, APIS_RANGE_CAPACITY> _rangeReadings;
+        NW_Readings<float, APIS_ORIENT_CAPACITY>  _pitchReadings;
+        NW_Readings<float, APIS_ORIENT_CAPACITY>  _rollReadings;
 
-        /** @brief Median of the first n values of a float array (copies and sorts; n <= capacity). */
-        static float _median(const float* v, uint16_t n);
 
         // LiDAR Lite signal strength; updated by updateRange()
         uint8_t _signalStrength = 0;
