@@ -442,7 +442,7 @@
     </tr>
     <tr>
       <td>void</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-beginreadings">beginReadings</a></strong>(uint8_t component =<a href="/Apis_Library/Classes/classApis/#enumvalue-all">ALL</a>)<br />Begin a run of readings, selecting which chips they cover.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-beginreadings">beginReadings</a></strong>(uint8_t component =<a href="/Apis_Library/Classes/classApis/#enumvalue-all">ALL</a>, uint16_t n =0)<br />Begin a run of readings, selecting which chips they cover.</td>
     </tr>
     <tr>
       <td>void</td>
@@ -470,7 +470,7 @@
 
 <p>Arduino library for the <a href="">Apis</a> board, which manages a LiDAR Lite unit (roll/pitch, firmware lock/reset, power supply).</p>
 
-<p>Library to communicate with the <a href="/Apis_Library/Classes/classApis/">Apis</a> module, which connects to a LiDAR Lite rangefinder. The <a href="/Apis_Library/Classes/classApis/">Apis</a> is equipped with capacitors to handle the large burst power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is placed on a cliff or a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the <a href="/Apis_Library/Classes/classApis/">Apis</a> is essential, and the <a href="/Apis_Library/Classes/classApis/">Apis</a> therefore acts as a buffer to protect the data logger from raw sensor failures.</p>
+<p>Library to communicate with the <a href="/Apis_Library/Classes/classApis/">Apis</a> module, which connects to a LiDAR Lite rangefinder. The <a href="/Apis_Library/Classes/classApis/">Apis</a> is equipped with capacitors to handle the large batch power draw from the LiDAR Lite, a MEMS accelerometer to note its orientation, a magnet to note a known orientation (often, but not necessarily, horizontal) and the ability to absorb occasional firmware issues that lead to system hangs. The leveling helps the user to calculate, for example, a water level when the sensor is placed on a cliff or a tree next to the river but does not have water below it. The level loses absolute accuracy when near plumb, so a Hall-effect sensor connected to the magnet allows the user to set a zero value, thereby correcting for this. Managing failures of the LiDAR Lite within the <a href="/Apis_Library/Classes/classApis/">Apis</a> is essential, and the <a href="/Apis_Library/Classes/classApis/">Apis</a> therefore acts as a buffer to protect the data logger from raw sensor failures.</p>
 
 <h2 id="public-types-documentation">Public Types Documentation</h2>
 
@@ -943,7 +943,8 @@
 <h3 id="function-beginreadings">function beginReadings</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">beginReadings</span><span class="p">(</span>
-    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">ALL</span>
+    <span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span><span class="n">ALL</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">n</span> <span class="o">=</span><span class="mi">0</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
@@ -953,6 +954,7 @@
 
 <ul>
   <li><strong>component</strong> <a href="/Apis_Library/Classes/classApis/#enumvalue-all">Apis::ALL</a>, <a href="/Apis_Library/Classes/classApis/#enumvalue-range">Apis::RANGE</a>, or <a href="/Apis_Library/Classes/classApis/#enumvalue-orient">Apis::ORIENT</a>.</li>
+  <li><strong>n</strong> How many readings the run will take (the number of <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading()</a> calls to follow). With n &gt; 1 the device is told in advance (readings-requested word, registers 0x24-0x25) and keeps the LiDAR powered and initialised for exactly that many readings; with 0 or 1 each reading powers the LiDAR up and down. A run that stops short is abandoned by the device after 2 s with a latched fault.</li>
 </ul>
 
 <h3 id="function-endreadings">function endReadings</h3>
@@ -998,7 +1000,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-22 at 16:55:52 +0000</p>
+<p>Updated on 2026-09-22 at 21:42:38 +0000</p>
 
         
       </section>
