@@ -29,7 +29,7 @@ void loop() {
 }
 ```
 
-See [examples/](examples/) for a complete demo, a many-readings logger, and Margay logger integration (the Margay example adds a `Note` column that names a failed `begin()` or a latched device fault in one word, and reports it on the serial monitor and the logger LED).
+See [examples/](examples/) for a complete demo, a many-readings logger, and Margay logger integration (the Margay example reports a failed `begin()` or a latched device fault in one word through the logger's `Note` column, serial monitor, and LED).
 
 ## Readings
 

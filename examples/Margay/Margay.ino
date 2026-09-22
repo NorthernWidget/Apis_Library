@@ -1,8 +1,7 @@
-// Apis on a Margay data logger: one row per log interval, with a Note column
-// that names a sensor failure in one word so a file reader can see it without
-// the serial monitor. Measurement columns keep -9999 when a reading fails.
-// Note is always the last column and carries no comma after it, so the row
-// ends cleanly: every sensor ends its fields with a comma for the next one.
+// Apis on a Margay data logger: one row per log interval. A failed begin() or
+// a latched device fault is reported in one word through Logger.note(), which
+// writes it in the logger's Note column (always last, no comma after it),
+// prints it to Serial, and pulses the LED. Measurement columns keep -9999.
 #include <Margay.h>
 #include <Apis.h>
 
@@ -14,7 +13,7 @@ String header = "";
 uint32_t updateRate = 60;  // seconds between readings
 
 void setup() {
-    header = rangefinder.getHeader() + "Note";
+    header = rangefinder.getHeader();
     Logger.begin(I2CVals, sizeof(I2CVals), header);
     initialize();
 }
@@ -23,21 +22,16 @@ void loop() {
     Logger.run(update, updateRate);
 }
 
-// One word naming why the last begin() or reading failed; empty when all is well.
-String note = "";
+bool failed = false;
 
-// Report a failure on the serial monitor and the LED, and remember it for the row.
+// One word for the row's Note column, the serial monitor, and the LED.
 void report(const String& what) {
-    note = what;
-    Serial.print(F("Apis: "));
-    Serial.println(what);
-    Logger.LED_Color(ORANGE);
-    delay(300);
-    Logger.LED_Color(OFF);
+    failed = true;
+    Logger.note(what);
 }
 
 String update() {
-    note = "";
+    failed = false;
     if (!initialize()) {
         // begin() refuses for four reasons; tell them apart with what it leaves behind.
         Wire.beginTransmission(ADR_DEFAULT);
@@ -46,7 +40,7 @@ String update() {
         else                                                                report("NotSchema1");
     }
     String row = rangefinder.getString();      // takes the readings; -9999 where one failed
-    if (note.length() == 0 && rangefinder.anyFault()) {
+    if (!failed && rangefinder.anyFault()) {
         // Latched fault from the device: which chip, what kind (NW-Device-Specification Block 0).
         static const char* const chips[] = {"LiDAR", "Accel"};
         static const char* const kinds[] = {"", "NoACK", "Timeout", "Checksum", "Range",
@@ -59,7 +53,7 @@ String update() {
         rangefinder.printFault(Serial);        // the same fault in words, for a person watching
         Serial.println();
     }
-    return row + note;
+    return row;
 }
 
 bool initialize() {
