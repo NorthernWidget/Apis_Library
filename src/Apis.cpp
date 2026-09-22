@@ -4,19 +4,7 @@
 // pages; a controller writes a start address and reads up to 32 bytes with
 // auto-increment. Registers not listed are reserved.
 // Page 0 (0x00–0x1F) — identity, EEPROM-backed
-#define REG_SCHEMA      0x00  // 0x01 = Schema 1; anything else is refused by begin()
-#define REG_NAME        0x01  // 'A','p','i','s', null-padded to 7 bytes (0x01–0x07)
-#define REG_HW_MAJOR    0x08  // Hardware version major
-#define REG_HW_MINOR    0x09  // Hardware version minor
-#define REG_FW_PATCH    0x0A  // Firmware patch version (written by the firmware)
-#define REG_I2C_ADDR    0x1F  // I2C address, writable; persisted; takes effect on next boot
 // Page 1 (0x20–0x3F) — status and sensor data, SRAM
-#define REG_STATUS      0x20  // bit 0 ready; bit 1 LiDAR fault; bit 2 accel fault; bit 7 pan-fault
-#define REG_CTRL        0x21  // writable: bit 0 trigger; bit 1 measure LiDAR; bit 2 measure accel
-#define REG_COUNTER     0x22  // reading counter, uint16 little-endian (0x22–0x23)
-#define REG_REQUEST     0x24  // readings requested, uint16 little-endian (0x24–0x25), writable
-#define REG_CONFIG      0x26  // writable: sensitivity mode bits [1:0]
-#define REG_FAULT       0x27  // latched fault code: bits 7–5 chip, bits 4–0 kind; cleared by a Control write
 #define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
 #define REG_RANGE_H     0x29  // Range high byte
 #define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
@@ -35,60 +23,24 @@ Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
 
 bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
 {
-    _adr = address;
     _sensitivity = sensitivity;
-    Wire.begin();
-
-    // Check ACK.
-    Wire.beginTransmission(_adr);
-    if (Wire.endTransmission() != 0) return false;
-
-    // Page 0 Blocks 0–1 (0x00–0x0F): schema, name, versions. Read in one
-    // transaction; the firmware serves Page 0 from EEPROM so it is valid before
-    // the first reading.
-    uint8_t p0[16];
-    _hwMajor = _hwMinor = _fwPatch = 0;
-    if (!_readBytes(REG_SCHEMA, p0, 16)) return false;
-    _hwMajor = p0[REG_HW_MAJOR];
-    _hwMinor = p0[REG_HW_MINOR];
-    _fwPatch = p0[REG_FW_PATCH];
-    if (p0[REG_SCHEMA] != 0x01) return false;               // not Schema 1 (0x00 legacy, 0xFF unprovisioned, other)
-    const char expected[7] = {'A', 'p', 'i', 's', 0, 0, 0};   // 7-byte name field, null-padded
-    for (uint8_t i = 0; i < 7; i++) {
-        if (p0[REG_NAME + i] != expected[i]) return false;
-    }
-    if (_fwPatch < APIS_FW_MIN_PATCH) return false;          // register map older than this library
-
-    _writeByte(REG_CONFIG, (uint8_t)_sensitivity);
-
+    // NW_Core: ACK, Page 0 read, and the three gates (schema 0x01, name "Apis",
+    // firmware patch >= APIS_FW_MIN_PATCH); versions are stored before any refusal.
+    if (!_dev.begin(address, "Apis", APIS_FW_MIN_PATCH)) return false;
+    _dev.writeConfig((uint8_t)_sensitivity);
     return true;
 }
 
-uint8_t Apis::getHardwareMajor()   { return _hwMajor; }
-uint8_t Apis::getHardwareMinor()   { return _hwMinor; }
-uint8_t Apis::getFirmwareVersion() { return _fwPatch; }
+uint8_t Apis::getHardwareMajor()   { return _dev.hardwareMajor(); }
+uint8_t Apis::getHardwareMinor()   { return _dev.hardwareMinor(); }
+uint8_t Apis::getFirmwareVersion() { return _dev.firmwareVersion(); }
 
-bool Apis::_readBytes(uint8_t reg, uint8_t* buf, uint8_t n) {
-    // One transaction: pointer write, then requestFrom(n). Schema 1 firmware
-    // (patch 1+) serves up to 32 bytes with auto-increment.
-    Wire.beginTransmission(_adr);
-    Wire.write(reg);
-    if (Wire.endTransmission() != 0) return false;
-    if (Wire.requestFrom(_adr, n) != n) return false;
-    for (uint8_t i = 0; i < n; i++) buf[i] = Wire.read();
-    return true;
+uint8_t Apis::_chips(uint8_t component) {
+    uint8_t chips = 0;
+    if (component == ALL || component == RANGE)  chips |= 0x01;   // chip 0: LiDAR Lite
+    if (component == ALL || component == ORIENT) chips |= 0x02;   // chip 1: accelerometer
+    return chips;
 }
-
-bool Apis::_writeByte(uint8_t reg, uint8_t value) {
-    Wire.beginTransmission(_adr);
-    Wire.write(reg);
-    Wire.write(value);
-    return Wire.endTransmission() == 0;
-}
-bool Apis::_writeRequest(uint16_t n) {
-    return _writeByte(REG_REQUEST, n & 0xFF) && _writeByte(REG_REQUEST + 1, n >> 8);
-}
-
 uint16_t Apis::setRangeReadings(uint16_t n) {
     _nRangeReadings = (n > APIS_RANGE_CAPACITY) ? APIS_RANGE_CAPACITY : n;
     return _nRangeReadings;
@@ -104,65 +56,23 @@ void Apis::setNOrientReadings(uint16_t n)  { setOrientReadings(n); }
 
 void Apis::setRangefinderSensitivity(SensitivityMode mode) {
     _sensitivity = mode;
-    _writeByte(REG_CONFIG, (uint8_t)_sensitivity);
+    _dev.writeConfig((uint8_t)_sensitivity);
 }
 
-void Apis::setI2CAddress(uint8_t newAddress) {
-    _writeByte(REG_I2C_ADDR, newAddress);
-}
+void Apis::setI2CAddress(uint8_t newAddress)    { _dev.setI2CAddress(newAddress); }
+bool Apis::ready()                              { return _dev.ready(); }
+bool Apis::newReading()                         { return _dev.newReading(); }
+bool Apis::requestReading(uint8_t component)    { return _dev.requestReading(_chips(component)); }
 
-bool Apis::ready() {
-    uint8_t status = 0;
-    return _readBytes(REG_STATUS, &status, 1) && (status & APIS_BIT_READY);
-}
 
-uint16_t Apis::_readCounter() {
-    uint8_t d[2] = {0xFF, 0xFF};
-    _readBytes(REG_COUNTER, d, 2);
-    return (uint16_t)((d[1] << 8) | d[0]);
-}
-
-bool Apis::newReading() {
-    return _readCounter() != _lastCounter;
-}
-
-bool Apis::requestReading(uint8_t component) {
-    uint8_t ctrl = APIS_CTRL_TRIGGER;
-    if (component == ALL || component == RANGE)  ctrl |= APIS_CTRL_LIDAR;
-    if (component == ALL || component == ORIENT) ctrl |= APIS_CTRL_ACCEL;
-    return _writeByte(REG_CTRL, ctrl);
-}
-
-bool Apis::_takeReading(uint8_t component) {
-    uint16_t before = _readCounter();
-    if (!requestReading(component)) return false;
-    unsigned long start = millis();
-    while (millis() - start < timeoutGlobal) {
-        uint16_t now = _readCounter();
-        if (now != before) {
-            _lastCounter = now;
-            // Block 0 of the new reading: status (0x20) and latched fault (0x27)
-            uint8_t b0[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-            _readBytes(REG_STATUS, b0, 8);
-            _status = b0[0];
-            _fault  = b0[7];
-            return true;
-        }
-        delay(1);
-    }
-    return false;
-}
-
-bool    Apis::faulted(uint8_t chip) { return _status & (1 << (chip + 1)); }
-bool    Apis::anyFault()            { return _status & APIS_BIT_PANFAULT; }
-uint8_t Apis::faultChip()           { return _fault >> 5; }
-uint8_t Apis::faultKind()           { return _fault & 0x1F; }
+bool    Apis::faulted(uint8_t chip) { return _dev.faulted(chip); }
+bool    Apis::anyFault()            { return _dev.anyFault(); }
+uint8_t Apis::faultChip()           { return _dev.faultChip(); }
+uint8_t Apis::faultKind()           { return _dev.faultKind(); }
 
 size_t Apis::printFault(Print& out) {
+    // The chip names are Apis's own; the kind names are universal (NW_Fault).
     static const char* const chips[] = {"LiDAR", "accelerometer"};
-    static const char* const kinds[] = {"none", "no acknowledge", "timeout", "checksum", "out of range",
-                                        "not initialised", "reset since configured", "config rejected",
-                                        "supply fault"};
     uint8_t chip = faultChip(), kind = faultKind();
     if (kind == 0) return out.print("none");
     size_t n = 0;
@@ -170,28 +80,25 @@ size_t Apis::printFault(Print& out) {
     else if (chip < 2) n += out.print(chips[chip]);
     else { n += out.print("chip "); n += out.print(chip); }
     n += out.print(": ");
-    if (kind < 9) n += out.print(kinds[kind]);
-    else { n += out.print("kind "); n += out.print(kind); }
-    return n;
+    return n + _dev.fault().printKind(out);
 }
 
 bool Apis::updateRange() {
-    if (_batchFaulted) {                  // rest of a batch whose LiDAR did not power up
+    if (_dev.batchFaulted(0x01)) {        // rest of a batch whose LiDAR did not power up
         _range = APIS_ERROR;
         return false;
     }
-    if (!_takeReading(RANGE)) {
+    if (!_dev.takeReading(_chips(RANGE))) {
         _range = APIS_ERROR;
         return false;
     }
-    if (faulted(0) && (faultKind() == 1 || faultKind() == 5) && faultChip() == 0) {
-        _batchFaulted = true;             // no acknowledge / not initialised: the chip is not coming
+    if (_dev.batchFaulted(0x01)) {        // no acknowledge / not initialised: the chip is not coming
         _range = APIS_ERROR;
         return false;
     }
     // Range low/high and signal strength are consecutive (0x28–0x2A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
-    _readBytes(REG_RANGE_L, d, 3);
+    _dev.readBytes(REG_RANGE_L, d, 3);
     _range = (int16_t)((d[1] << 8) | d[0]);
     _signalStrength = d[2];
 
@@ -204,7 +111,7 @@ bool Apis::updateRange() {
 }
 
 bool Apis::updateOrientation() {
-    if (!_takeReading(ORIENT)) {
+    if (!_dev.takeReading(_chips(ORIENT))) {
         _pitch = _roll = APIS_ERROR;
         return false;
     }
@@ -213,12 +120,12 @@ bool Apis::updateOrientation() {
 
     // Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35): one read of six bytes
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
-    _readBytes(REG_ACCEL_BASE, d, 6);
+    _dev.readBytes(REG_ACCEL_BASE, d, 6);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
 
     // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2): one read of six bytes
     memset(d, 0xFF, sizeof d);
-    _readBytes(REG_OFFSET_BASE, d, 6);
+    _dev.readBytes(REG_OFFSET_BASE, d, 6);
     for (int i = 0; i < 3; i++) dataSet[3+i] = ((d[2*i + 1] << 8) | d[2*i]);
 
     float gx = dataSet[0], gy = dataSet[1], gz = dataSet[2];
@@ -250,14 +157,14 @@ bool Apis::updateMeasurements(uint8_t component) {
     if (component == ALL || component == RANGE) {
     // Tell the device how many readings follow so it holds the LiDAR powered
     // for the batch (single readings need no word: 0/1 means power down after each).
-    if (_nRangeReadings > 1) _writeRequest(_nRangeReadings);
+    if (_nRangeReadings > 1) _dev.writeBatch(_nRangeReadings);
     // Take N range readings; each successful one appends to _rangeReadings[].
     // Statistics are read from the array (two-pass in float, exact enough for N
     // up to the array capacity; see the precision note in Apis.h).
     _rangeReadings.reset();
-    _batchFaulted = false;
+    _dev.resetBatch();
     for (uint16_t i = 0; i < _nRangeReadings; i++) {
-        if (!updateRange() && _batchFaulted) break;   // LiDAR will not power up: stop the batch
+        if (!updateRange() && _dev.batchFaulted(0x01)) break;   // LiDAR will not power up: stop the batch
     }
     if (_rangeReadings.count() == 0) {
         _range = APIS_ERROR;
@@ -341,8 +248,8 @@ void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
     if (component == ALL || component == RANGE)  _rangeReadings.reset();
     if (component == ALL || component == ORIENT) { _pitchReadings.reset(); _rollReadings.reset(); }
-    _batchFaulted = false;
-    if (n > 1 && (component == ALL || component == RANGE)) _writeRequest(n);
+    _dev.resetBatch();
+    if (n > 1 && (component == ALL || component == RANGE)) _dev.writeBatch(n);
 }
 
 void Apis::endReadings() {

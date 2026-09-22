@@ -19,7 +19,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <NW_Readings.h>   // NW_Core: fixed-capacity readings with statistics
+#include <NW_Core.h>   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Fault
 
 #ifndef M_PI
   #define M_PI 3.14159265358979323846
@@ -431,34 +431,16 @@ class Apis
         void endRawReadings();
 
     private:
-        /**
-         * @brief Request a reading of the given chips and wait until the
-         * device's reading counter advances or timeoutGlobal elapses.
-         * @return true if a new reading arrived.
-         */
-        bool _takeReading(uint8_t component);
 
-        /** @brief Read the 16-bit reading counter (0x22–0x23). */
-        uint16_t _readCounter();
 
-        /**
-         * @brief Read n consecutive registers starting at reg into buf, in one
-         * I2C transaction (pointer write, then requestFrom with auto-increment).
-         * @return true if the device supplied all n bytes.
-         */
-        bool _readBytes(uint8_t reg, uint8_t* buf, uint8_t n);
 
-        /** @brief Write one byte to register reg. @return true on ACK. */
-        bool _writeByte(uint8_t reg, uint8_t value);
-        /** @brief Write the readings-requested word (0x24-0x25): LiDAR held powered for n readings. */
-        bool _writeRequest(uint16_t n);
 
-        // I2C address
-        uint8_t _adr = DEFAULT_ADDRESS;
 
-        // Identity read by begin()
-        uint8_t _hwMajor = 0, _hwMinor = 0, _fwPatch = 0;
 
+        // The Schema 1 device protocol (identity gates, handshake, batches, faults): NW_Core.
+        NW_Device _dev;
+        /** @brief Chip-select mask for a component: bit 0 LiDAR, bit 1 accelerometer. */
+        static uint8_t _chips(uint8_t component);
         // Configuration
         uint16_t _nRangeReadings;
         bool     _rangeStats;
@@ -493,25 +475,7 @@ class Apis
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
 
-        // Block 0 of the last reading taken: status (live) and fault (latched)
-        uint8_t _status = 0;
-        uint8_t _fault  = 0;
 
-        // Reading counter as of the last reading this library stored, and the
-        // longest wait for a requested reading (ms). The firmware's cycle is
-        // ~100 ms plus LiDAR start-up; 500 ms covers it as in Haar.
-        uint16_t _lastCounter = 0xFFFF;
-        // Ceiling on the wait for the reading counter to move after a trigger. Not
-        // a delay: the poll returns as soon as the counter moves. Must exceed the
-        // firmware's slowest path to ready, the failed LiDAR power-up (rail wait +
-        // readiness timeout, retried once, then the accelerometer wait): ~440 ms
-        // for firmware patch 2. Only a device that acknowledges but never
-        // completes reaches this ceiling (Project-Apis #25).
-        unsigned long timeoutGlobal = 500;
-        // Set when a reading in the current batch reported that the LiDAR could not
-        // be powered up (fault chip 0, kind 1 or 5): the rest of the batch is not
-        // acquired, so the sketch's loop finishes quickly with sentinels.
-        bool _batchFaulted = false;
 
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;
