@@ -8,7 +8,7 @@
 Margay Logger(MODEL_3v0);  // update to match your hardware version
 Apis rangefinder;
 
-uint8_t I2CVals[] = {ADR_DEFAULT};
+uint8_t I2CVals[] = {Apis::DEFAULT_ADDRESS};
 String header = "";
 uint32_t updateRate = 60;  // seconds between readings
 
@@ -34,7 +34,7 @@ String update() {
     failed = false;
     if (!initialize()) {
         // begin() refuses for four reasons; tell them apart with what it leaves behind.
-        Wire.beginTransmission(ADR_DEFAULT);
+        Wire.beginTransmission(Apis::DEFAULT_ADDRESS);
         if (Wire.endTransmission() != 0)                                  report("NoACK");
         else if (rangefinder.getFirmwareVersion() < APIS_FW_MIN_PATCH)     report("OldFirmware");
         else                                                                report("NotSchema1");

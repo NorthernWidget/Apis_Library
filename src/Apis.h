@@ -24,8 +24,6 @@ License: GNU GPL v3. You should find a copy in the repository.
   #define M_PI 3.14159265358979323846
 #endif
 
-#define ADR_DEFAULT 0x41   // NW-Device-Specification Schema 1: 'A'. Firmware v0.1.x used 0x50.
-
 // Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is
 // the first firmware serving the Schema 1 register map.
 #define APIS_FW_MIN_PATCH 2
@@ -120,6 +118,9 @@ enum SensitivityMode : uint8_t {
 class Apis
 {
     public:
+        /** @brief Default I2C address: NW-Device-Specification Schema 1 'A' (0x41). Firmware v0.1.x used 0x50. */
+        static constexpr uint8_t DEFAULT_ADDRESS = 0x41;
+
         /**
          * @brief Measurement group: which on-board chip a reading covers.
          * @details One group per chip, in the order the NW-Device-Specification
@@ -160,14 +161,14 @@ class Apis
          * name "Apis"; a firmware patch of at least APIS_FW_MIN_PATCH. Stores
          * the hardware and firmware versions for the getters below, and writes
          * the initial sensitivity mode to REG_CONFIG (0x26).
-         * @param address I2C address (default ADR_DEFAULT = 0x41).
+         * @param address I2C address (default DEFAULT_ADDRESS = 0x41).
          * @param sensitivity One of the SensitivityMode values
          * (default SENSITIVITY_BALANCED). See SensitivityMode.
          * @return true if the device acknowledges and passes all three checks;
          *         false otherwise. Call getFirmwareVersion() after a refusal
          *         to see what the device reported (0 if unreadable).
          */
-        bool begin(uint8_t address = ADR_DEFAULT,
+        bool begin(uint8_t address = DEFAULT_ADDRESS,
                    SensitivityMode sensitivity = SENSITIVITY_BALANCED);
 
         /** @brief Hardware version major, from Page 0 (valid after begin()). */
@@ -452,7 +453,7 @@ class Apis
         bool _writeRequest(uint16_t n);
 
         // I2C address
-        uint8_t _adr = ADR_DEFAULT;
+        uint8_t _adr = DEFAULT_ADDRESS;
 
         // Identity read by begin()
         uint8_t _hwMajor = 0, _hwMinor = 0, _fwPatch = 0;
@@ -526,5 +527,10 @@ class Apis
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;
 };
+
+/** @deprecated Use Apis::DEFAULT_ADDRESS. Every NW library defined this same macro
+ *  with a different value, so a sketch including two of them got the last one.
+ *  Removed at the next major version. */
+#define ADR_DEFAULT Apis::DEFAULT_ADDRESS
 
 #endif
