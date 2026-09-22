@@ -342,7 +342,7 @@
     </tr>
     <tr>
       <td>size_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printfault">printFault</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br /><a href="/Apis_Library/Classes/classPrint/">Print</a> the latched fault as text, e.g. “LiDAR: timeout” or “unit: reset since configured”; prints “none” when there is no fault.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printfault">printFault</a></strong>(Print &amp; out)<br />Print the latched fault as text, e.g. “LiDAR: timeout” or “unit: reset since configured”; prints “none” when there is no fault.</td>
     </tr>
     <tr>
       <td>bool</td>
@@ -421,24 +421,24 @@
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getrollsterr">getRollSterr</a></strong>()<br />Return roll standard error [deg].</td>
     </tr>
     <tr>
-      <td><a href="/Apis_Library/Classes/classString/">String</a></td>
+      <td>String</td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getheader">getHeader</a></strong>()<br />Return a comma-separated header matching <a href="">getString()</a> output. Includes statistics columns when rangeStats or orientStats are enabled and nReadings &gt; 1.</td>
     </tr>
     <tr>
-      <td><a href="/Apis_Library/Classes/classString/">String</a></td>
+      <td>String</td>
       <td><strong><a href="/Apis_Library/Classes/classApis/#function-getstring">getString</a></strong>(bool takeNewReadings =true)<br />Return comma-separated data values.</td>
     </tr>
     <tr>
       <td>size_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printheader">printHeader</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br /><a href="/Apis_Library/Classes/classPrint/">Print</a> the header matching <a href="">printReading()</a>: column names with units, each followed by a comma, for the chips selected by <a href="">beginReadings()</a>. No statistics columns: one reading has none.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printheader">printHeader</a></strong>(Print &amp; out)<br />Print the header matching <a href="">printReading()</a>: column names with units, each followed by a comma, for the chips selected by <a href="">beginReadings()</a>. No statistics columns: one reading has none.</td>
     </tr>
     <tr>
       <td>size_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printreading">printReading</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br /><a href="/Apis_Library/Classes/classPrint/">Print</a> the stored reading of the selected chips, each value followed by a comma. Does not acquire: call <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>, <a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation()</a>, or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printreading">printReading</a></strong>(Print &amp; out)<br />Print the stored reading of the selected chips, each value followed by a comma. Does not acquire: call <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>, <a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation()</a>, or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL.</td>
     </tr>
     <tr>
       <td>size_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-logreading">logReading</a></strong>(<a href="/Apis_Library/Classes/classPrint/">Print</a> &amp; out)<br />Take ONE reading of the selected chips and print it: the one-reading primitive for collecting many readings to a file. Uses <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>/updateOrientation(), not <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>, so each call is a single acquisition regardless of nRangeReadings.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-logreading">logReading</a></strong>(Print &amp; out)<br />Take ONE reading of the selected chips and print it: the one-reading primitive for collecting many readings to a file. Uses <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>/updateOrientation(), not <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a>, so each call is a single acquisition regardless of nRangeReadings.</td>
     </tr>
     <tr>
       <td>void</td>
@@ -745,7 +745,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p><a href="/Apis_Library/Classes/classPrint/">Print</a> the latched fault as text, e.g. “LiDAR: timeout” or “unit: reset since configured”; prints “none” when there is no fault.</p>
+<p>Print the latched fault as text, e.g. “LiDAR: timeout” or “unit: reset since configured”; prints “none” when there is no fault.</p>
 
 <p><strong>Return</strong>: Bytes written.</p>
 
@@ -925,12 +925,12 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p><a href="/Apis_Library/Classes/classPrint/">Print</a> the header matching <a href="">printReading()</a>: column names with units, each followed by a comma, for the chips selected by <a href="">beginReadings()</a>. No statistics columns: one reading has none.</p>
+<p>Print the header matching <a href="">printReading()</a>: column names with units, each followed by a comma, for the chips selected by <a href="">beginReadings()</a>. No statistics columns: one reading has none.</p>
 
 <p><strong>Parameters</strong>:</p>
 
 <ul>
-  <li><strong>out</strong> Any <a href="/Apis_Library/Classes/classPrint/">Print</a> destination (SdFat File, Serial, …).</li>
+  <li><strong>out</strong> Any Print destination (SdFat File, Serial, …).</li>
 </ul>
 
 <p><strong>Return</strong>: Bytes written.</p>
@@ -942,7 +942,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p><a href="/Apis_Library/Classes/classPrint/">Print</a> the stored reading of the selected chips, each value followed by a comma. Does not acquire: call <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>, <a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation()</a>, or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL.</p>
+<p>Print the stored reading of the selected chips, each value followed by a comma. Does not acquire: call <a href="/Apis_Library/Classes/classApis/#function-updaterange">updateRange()</a>, <a href="/Apis_Library/Classes/classApis/#function-updateorientation">updateOrientation()</a>, or <a href="/Apis_Library/Classes/classApis/#function-updatemeasurements">updateMeasurements()</a> first, or use <a href="">logReading()</a>. Writes: range [cm] for RANGE; pitch [deg], roll [deg] for ORIENT; range, pitch, roll for ALL.</p>
 
 <p><strong>Return</strong>: Bytes written.</p>
 
@@ -1002,7 +1002,7 @@
 
 <p><strong>Deprecated</strong>:</p>
 
-<p>Use <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading(Print&amp;)</a> with an SdFat File, Serial, or a buffer-backed <a href="/Apis_Library/Classes/classPrint/">Print</a>. Kept for v0.1.x sketches: takes one raw reading and writes CSV into buf at offset (range for RANGE; pitch, roll for ORIENT; all three for ALL). Max bytes: 7 (RANGE), 18 (ORIENT), 25 (ALL).</p>
+<p>Use <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading(Print&amp;)</a> with an SdFat File, Serial, or a buffer-backed Print. Kept for v0.1.x sketches: takes one raw reading and writes CSV into buf at offset (range for RANGE; pitch, roll for ORIENT; all three for ALL). Max bytes: 7 (RANGE), 18 (ORIENT), 25 (ALL).</p>
 
 <p><strong>Return</strong>: New offset after writing.</p>
 
@@ -1026,7 +1026,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-22 at 22:04:10 +0000</p>
+<p>Updated on 2026-09-22 at 23:10:27 +0000</p>
 
         
       </section>

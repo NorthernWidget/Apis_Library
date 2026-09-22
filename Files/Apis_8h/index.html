@@ -507,6 +507,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 </span>
 <span class="cp">#include</span> <span class="cpf">&lt;Arduino.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;Wire.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;NW_Core.h&gt;</span><span class="c1">   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Fault</span><span class="cp">
 </span>
 <span class="cp">#ifndef M_PI
 </span>  <span class="cp">#define M_PI 3.14159265358979323846
@@ -663,21 +664,15 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="kt">void</span> <span class="nf">endRawReadings</span><span class="p">();</span>
 
     <span class="k">private</span><span class="o">:</span>
-        <span class="kt">bool</span> <span class="nf">_takeReading</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">);</span>
 
-        <span class="kt">uint16_t</span> <span class="nf">_readCounter</span><span class="p">();</span>
 
-        <span class="kt">bool</span> <span class="nf">_readBytes</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">n</span><span class="p">);</span>
 
-        <span class="kt">bool</span> <span class="nf">_writeByte</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">reg</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">value</span><span class="p">);</span>
-        <span class="kt">bool</span> <span class="nf">_writeRequest</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">);</span>
 
-        <span class="c1">// I2C address</span>
-        <span class="kt">uint8_t</span> <span class="n">_adr</span> <span class="o">=</span> <span class="n">DEFAULT_ADDRESS</span><span class="p">;</span>
 
-        <span class="c1">// Identity read by begin()</span>
-        <span class="kt">uint8_t</span> <span class="n">_hwMajor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_hwMinor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_fwPatch</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
+        <span class="c1">// The Schema 1 device protocol (identity gates, handshake, batches, faults): NW_Core.</span>
+        <span class="n">NW_Device</span> <span class="n">_dev</span><span class="p">;</span>
+        <span class="k">static</span> <span class="kt">uint8_t</span> <span class="nf">_chips</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">);</span>
         <span class="c1">// Configuration</span>
         <span class="kt">uint16_t</span> <span class="n">_nRangeReadings</span><span class="p">;</span>
         <span class="kt">bool</span>     <span class="n">_rangeStats</span><span class="p">;</span>
@@ -697,24 +692,14 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="c1">// Readings behind the current statistics (set by updateMeasurements):</span>
         <span class="c1">// one array per measurement, native type, oldest first, and the count</span>
         <span class="c1">// of valid entries.</span>
-        <span class="kt">int16_t</span>  <span class="n">_rangeReadings</span><span class="p">[</span><span class="n">APIS_RANGE_CAPACITY</span><span class="p">];</span>
-        <span class="kt">float</span>    <span class="n">_pitchReadings</span><span class="p">[</span><span class="n">APIS_ORIENT_CAPACITY</span><span class="p">];</span>
-        <span class="kt">float</span>    <span class="n">_rollReadings</span><span class="p">[</span><span class="n">APIS_ORIENT_CAPACITY</span><span class="p">];</span>
-        <span class="kt">uint16_t</span> <span class="n">_rangeCount</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">// readings held (&lt;= capacity)</span>
-        <span class="kt">uint16_t</span> <span class="n">_orientCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="kt">uint16_t</span> <span class="n">_rangeNext</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="c1">// next write index; wraps at capacity, keeping the newest readings</span>
-        <span class="kt">uint16_t</span> <span class="n">_orientNext</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="c1">// One storage path: every acquisition appends here (updateRange(),</span>
         <span class="c1">// updateOrientation(), whether from updateMeasurements() or logReading());</span>
         <span class="c1">// the statistics getters read the arrays; updateMeasurements() and</span>
-        <span class="c1">// beginReadings() start a fresh set.</span>
-        <span class="kt">void</span> <span class="nf">_appendRange</span><span class="p">(</span><span class="kt">int16_t</span> <span class="n">r</span><span class="p">);</span>
-        <span class="kt">void</span> <span class="nf">_appendOrient</span><span class="p">(</span><span class="kt">float</span> <span class="n">pitch</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roll</span><span class="p">);</span>
-        <span class="kt">void</span> <span class="nf">_resetRange</span><span class="p">()</span>  <span class="p">{</span> <span class="n">_rangeCount</span> <span class="o">=</span> <span class="n">_rangeNext</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
-        <span class="kt">void</span> <span class="nf">_resetOrient</span><span class="p">()</span> <span class="p">{</span> <span class="n">_orientCount</span> <span class="o">=</span> <span class="n">_orientNext</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="nf">_stats</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">n</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">mean</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">sd</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">se</span><span class="p">);</span>
+        <span class="c1">// beginReadings() start a fresh set. (NW_Core)</span>
+        <span class="n">NW_Readings</span><span class="o">&lt;</span><span class="kt">int16_t</span><span class="p">,</span> <span class="n">APIS_RANGE_CAPACITY</span><span class="o">&gt;</span> <span class="n">_rangeReadings</span><span class="p">;</span>
+        <span class="n">NW_Readings</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="n">APIS_ORIENT_CAPACITY</span><span class="o">&gt;</span>  <span class="n">_pitchReadings</span><span class="p">;</span>
+        <span class="n">NW_Readings</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="n">APIS_ORIENT_CAPACITY</span><span class="o">&gt;</span>  <span class="n">_rollReadings</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="kt">float</span> <span class="nf">_median</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">v</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">n</span><span class="p">);</span>
 
         <span class="c1">// LiDAR Lite signal strength; updated by updateRange()</span>
         <span class="kt">uint8_t</span> <span class="n">_signalStrength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -722,25 +707,7 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="c1">// Sensor sensitivity; set initially to default "balanced" mode</span>
         <span class="n">SensitivityMode</span> <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">SENSITIVITY_BALANCED</span><span class="p">;</span>
 
-        <span class="c1">// Block 0 of the last reading taken: status (live) and fault (latched)</span>
-        <span class="kt">uint8_t</span> <span class="n">_status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="kt">uint8_t</span> <span class="n">_fault</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        <span class="c1">// Reading counter as of the last reading this library stored, and the</span>
-        <span class="c1">// longest wait for a requested reading (ms). The firmware's cycle is</span>
-        <span class="c1">// ~100 ms plus LiDAR start-up; 500 ms covers it as in Haar.</span>
-        <span class="kt">uint16_t</span> <span class="n">_lastCounter</span> <span class="o">=</span> <span class="mh">0xFFFF</span><span class="p">;</span>
-        <span class="c1">// Ceiling on the wait for the reading counter to move after a trigger. Not</span>
-        <span class="c1">// a delay: the poll returns as soon as the counter moves. Must exceed the</span>
-        <span class="c1">// firmware's slowest path to ready, the failed LiDAR power-up (rail wait +</span>
-        <span class="c1">// readiness timeout, retried once, then the accelerometer wait): ~440 ms</span>
-        <span class="c1">// for firmware patch 2. Only a device that acknowledges but never</span>
-        <span class="c1">// completes reaches this ceiling (Project-Apis #25).</span>
-        <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">timeoutGlobal</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
-        <span class="c1">// Set when a reading in the current batch reported that the LiDAR could not</span>
-        <span class="c1">// be powered up (fault chip 0, kind 1 or 5): the rest of the batch is not</span>
-        <span class="c1">// acquired, so the sketch's loop finishes quickly with sentinels.</span>
-        <span class="kt">bool</span> <span class="n">_batchFaulted</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 
         <span class="c1">// Chips covered by the current run of readings (beginReadings)</span>
         <span class="kt">uint8_t</span> <span class="n">_rawComponent</span> <span class="o">=</span> <span class="n">ALL</span><span class="p">;</span>
@@ -753,7 +720,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 <hr />
 
-<p>Updated on 2026-09-22 at 22:04:10 +0000</p>
+<p>Updated on 2026-09-22 at 23:10:27 +0000</p>
 
         
       </section>

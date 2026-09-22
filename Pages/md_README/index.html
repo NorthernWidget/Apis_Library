@@ -235,7 +235,7 @@
 
 <p><strong>Requires firmware patch 2 or later</strong> (the <a href="https://github.com/NorthernWidget/NW-Device-Specification">NW-Device-Specification</a> Schema 1 register map, on Project-Apis <code class="language-plaintext highlighter-rouge">master</code>) on a board provisioned with <a href="https://github.com/NorthernWidget/NW-Provision">NW-Provision</a>. The default I2C address is <code class="language-plaintext highlighter-rouge">0x41</code>. Boards running the v0.1.x firmware (address <code class="language-plaintext highlighter-rouge">0x50</code>) are refused by <code class="language-plaintext highlighter-rouge">begin()</code>; reflash and provision them, or use Apis_Library v0.1.0.</p>
 
-<p><strong>Installation:</strong> included in <a href="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</a>. Also available via the Arduino Library Manager.</p>
+<p><strong>Installation:</strong> included in <a href="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</a>. Also available via the Arduino Library Manager. Requires <a href="https://github.com/NorthernWidget/NW_Core">NW_Core</a>, the shared foundation (device protocol, readings and statistics, faults), which the Library Manager installs as a dependency once both are registered; until then, install it beside this library.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="cp">#include</span> <span class="cpf">&lt;Apis.h&gt;</span><span class="cp">
@@ -262,7 +262,7 @@
 
 <h1 id="readings">Readings</h1>
 
-<p><code class="language-plaintext highlighter-rouge">getString()</code> takes a reading (or several, with statistics, when configured) and returns one CSV row. For writing many individual readings to a file or the serial monitor without building <code class="language-plaintext highlighter-rouge">[String](/Apis_Library/Classes/classString/)</code>s, use the reading interface, which prints to any Arduino <code class="language-plaintext highlighter-rouge">[Print](/Apis_Library/Classes/classPrint/)</code> (an SdFat <code class="language-plaintext highlighter-rouge">File</code>, <code class="language-plaintext highlighter-rouge">Serial</code>, …):</p>
+<p><code class="language-plaintext highlighter-rouge">getString()</code> takes a reading (or several, with statistics, when configured) and returns one CSV row. For writing many individual readings to a file or the serial monitor without building <code class="language-plaintext highlighter-rouge">String</code>s, use the reading interface, which prints to any Arduino <code class="language-plaintext highlighter-rouge">Print</code> (an SdFat <code class="language-plaintext highlighter-rouge">File</code>, <code class="language-plaintext highlighter-rouge">Serial</code>, …):</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="n">rangefinder</span><span class="p">.</span><span class="n">beginReadings</span><span class="p">(</span><span class="n">Apis</span><span class="o">::</span><span class="n">RANGE</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>  <span class="c1">// Apis::ALL, Apis::RANGE, or Apis::ORIENT; 100 readings follow</span>
@@ -289,13 +289,13 @@
 
 <h1 id="testing">Testing</h1>
 
-<p><code class="language-plaintext highlighter-rouge">extras/test/run.sh</code> compiles the library on a desktop against stub <code class="language-plaintext highlighter-rouge">[Arduino.h]</code> and <code class="language-plaintext highlighter-rouge">[Wire.h]</code> and checks that <code class="language-plaintext highlighter-rouge">getHeader()</code>, <code class="language-plaintext highlighter-rouge">getString()</code> and the reading interface produce byte-identical output to <code class="language-plaintext highlighter-rouge">extras/test/baseline.txt</code> for fixed register images. Run it after any change; <code class="language-plaintext highlighter-rouge">--record</code> rewrites the baseline when an output change is intended.</p>
+<p><code class="language-plaintext highlighter-rouge">extras/test/run.sh</code> compiles the library on a desktop against stub <code class="language-plaintext highlighter-rouge">Arduino.h</code> and <code class="language-plaintext highlighter-rouge">Wire.h</code> and checks that <code class="language-plaintext highlighter-rouge">getHeader()</code>, <code class="language-plaintext highlighter-rouge">getString()</code> and the reading interface produce byte-identical output to <code class="language-plaintext highlighter-rouge">extras/test/baseline.txt</code> for fixed register images. Run it after any change; <code class="language-plaintext highlighter-rouge">--record</code> rewrites the baseline when an output change is intended.</p>
 
 <p><strong>Full API reference:</strong><a href="https://docs.northernwidget.com/Apis_Library/">https://docs.northernwidget.com/Apis_Library/</a></p>
 
 <hr />
 
-<p>Updated on 2026-09-22 at 22:04:10 +0000</p>
+<p>Updated on 2026-09-22 at 23:10:27 +0000</p>
 
         
       </section>

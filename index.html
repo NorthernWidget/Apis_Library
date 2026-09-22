@@ -237,7 +237,7 @@
 
 <p><strong>Requires firmware patch 2 or later</strong> (the <a href="https://github.com/NorthernWidget/NW-Device-Specification">NW-Device-Specification</a> Schema 1 register map, on Project-Apis <code class="language-plaintext highlighter-rouge">master</code>) on a board provisioned with <a href="https://github.com/NorthernWidget/NW-Provision">NW-Provision</a>. The default I2C address is <code class="language-plaintext highlighter-rouge">0x41</code>. Boards running the v0.1.x firmware (address <code class="language-plaintext highlighter-rouge">0x50</code>) are refused by <code class="language-plaintext highlighter-rouge">begin()</code>; reflash and provision them, or use Apis_Library v0.1.0.</p>
 
-<p><strong>Installation:</strong> included in <a href="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</a>. Also available via the Arduino Library Manager.</p>
+<p><strong>Installation:</strong> included in <a href="https://github.com/NorthernWidget/NorthernWidget-libraries">NorthernWidget-libraries</a>. Also available via the Arduino Library Manager. Requires <a href="https://github.com/NorthernWidget/NW_Core">NW_Core</a>, the shared foundation (device protocol, readings and statistics, faults), which the Library Manager installs as a dependency once both are registered; until then, install it beside this library.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;Apis.h&gt;</span><span class="cp">
 </span>
