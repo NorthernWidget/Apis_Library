@@ -1,6 +1,8 @@
 // Apis on a Margay data logger: one row per log interval, with a Note column
 // that names a sensor failure in one word so a file reader can see it without
 // the serial monitor. Measurement columns keep -9999 when a reading fails.
+// Note is always the last column and carries no comma after it, so the row
+// ends cleanly: every sensor ends its fields with a comma for the next one.
 #include <Margay.h>
 #include <Apis.h>
 
@@ -12,7 +14,7 @@ String header = "";
 uint32_t updateRate = 60;  // seconds between readings
 
 void setup() {
-    header = rangefinder.getHeader() + "Note,";
+    header = rangefinder.getHeader() + "Note";
     Logger.begin(I2CVals, sizeof(I2CVals), header);
     initialize();
 }
@@ -57,7 +59,7 @@ String update() {
         rangefinder.printFault(Serial);        // the same fault in words, for a person watching
         Serial.println();
     }
-    return row + note + ",";
+    return row + note;
 }
 
 bool initialize() {
