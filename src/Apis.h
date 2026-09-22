@@ -28,7 +28,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 // Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is
 // the first firmware serving the Schema 1 register map.
-#define APIS_FW_MIN_PATCH 1
+#define APIS_FW_MIN_PATCH 2
 
 // Register addresses and bit masks are implementation details and live in
 // Apis.cpp (NW convention: no public names for them). Sketches use the API.
@@ -397,8 +397,14 @@ class Apis
         /**
          * @brief Begin a run of readings, selecting which chips they cover.
          * @param component Apis::ALL, Apis::RANGE, or Apis::ORIENT.
+         * @param n How many readings the run will take (the number of
+         * logReading() calls to follow). With n > 1 the device is told in
+         * advance (readings-requested word, registers 0x24-0x25) and keeps the
+         * LiDAR powered and initialised for exactly that many readings; with
+         * 0 or 1 each reading powers the LiDAR up and down. A run that stops
+         * short is abandoned by the device after 2 s with a latched fault.
          */
-        void beginReadings(uint8_t component = ALL);
+        void beginReadings(uint8_t component = ALL, uint16_t n = 0);
 
         /** @brief End a run of readings. */
         void endReadings();
@@ -442,6 +448,8 @@ class Apis
 
         /** @brief Write one byte to register reg. @return true on ACK. */
         bool _writeByte(uint8_t reg, uint8_t value);
+        /** @brief Write the readings-requested word (0x24-0x25): LiDAR held powered for n readings. */
+        bool _writeRequest(uint16_t n);
 
         // I2C address
         uint8_t _adr = ADR_DEFAULT;

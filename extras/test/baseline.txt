@@ -52,8 +52,11 @@ string: -9998,-9998.00,-9998.00,
 [handshake] no firmware response: updateRange=0 range=-9999
 [faults] faulted(0)=1 faulted(1)=0 any=1 chip=0 kind=2 text='LiDAR: timeout'
 [faults] any=0 chip=7 kind=6 text='unit: reset since configured'
+[request] updateMeasurements N=5 -> word=5
+[request] updateMeasurements N=1 -> word=0 (no write)
+[request] beginReadings(RANGE, 4) -> word=4 rows=250,250,250,250,
 [wrong name] begin=0
 [schema 0x00] begin=0 fw=1
 [schema 0xFF unprovisioned] begin=0
-[fw patch 0 < min 1] begin=0 fw=0
-[versions] begin=1 hw=0.1 fw=1
+[fw patch 0 < min 2] begin=0 fw=0
+[versions] begin=1 hw=0.1 fw=2

@@ -14,7 +14,7 @@ static uint8_t crc8(const uint8_t* d, uint8_t n) {           // CRC-8/SMBUS, as 
 // Build a Schema 1 register image: Page 0 as NW-Provision writes it (with the
 // firmware's patch at 0x0A), Page 1 with a complete reading, Page 2 offsets.
 static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int16_t az,
-                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 1, uint8_t schema = 0x01) {
+                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 2, uint8_t schema = 0x01) {
     uint8_t* r = Wire.image; memset(r, 0, sizeof(Wire.image));
     r[0x00] = schema; r[0x01] = 'A'; r[0x02] = 'p'; r[0x03] = 'i'; r[0x04] = 's';
     r[0x08] = 0; r[0x09] = 1; r[0x0A] = fwPatch;                       // HW 0.1, FW patch
@@ -69,8 +69,11 @@ static void report(const char* name, Apis& a) {
 // completes a reading at once — counter +1, ready set, trigger and sleep
 // bits cleared, fault byte cleared. A per-test hook can vary the data.
 static std::function<void(TwoWire&)> onReading;
+static uint16_t lastRequest = 0;   // readings-requested word as the stub firmware saw it
 static void installFirmwareEmulation() {
     Wire.onWrite = [](TwoWire& w, uint8_t reg, uint8_t val) {
+        if (reg == 0x24) lastRequest = (lastRequest & 0xFF00) | val;
+        if (reg == 0x25) lastRequest = (lastRequest & 0x00FF) | (val << 8);
         if (reg != 0x21) return;
         w.image[0x27] = 0;                                  // any control write acknowledges the fault
         if (!(val & 0x01)) return;
@@ -161,7 +164,18 @@ int main() {
       printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.faultChip(), a.faultKind(), pb);
       onReading = nullptr; }
 
-    // 6. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
+    // 6. Bursts: the readings-requested word reaches the device before the readings.
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
+    { Apis a; a.begin(); lastRequest = 0;
+      a.setRangeReadings(5); a.updateMeasurements(Apis::RANGE);
+      printf("[request] updateMeasurements N=5 -> word=%u\n", lastRequest);
+      lastRequest = 0; a.setRangeReadings(1); a.updateMeasurements(Apis::RANGE);
+      printf("[request] updateMeasurements N=1 -> word=%u (no write)\n", lastRequest);
+      lastRequest = 0; char pb[128]; BufferPrint bp(pb, sizeof pb);
+      a.beginReadings(Apis::RANGE, 4); for (int i = 0; i < 4; i++) a.logReading(bp); a.endReadings();
+      printf("[request] beginReadings(RANGE, 4) -> word=%u rows=%s\n", lastRequest, pb); }
+
+    // 7. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
     { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0x00);

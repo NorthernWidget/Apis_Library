@@ -14,6 +14,7 @@
 #define REG_STATUS      0x20  // bit 0 ready; bit 1 LiDAR fault; bit 2 accel fault; bit 7 pan-fault
 #define REG_CTRL        0x21  // writable: bit 0 trigger; bit 1 measure LiDAR; bit 2 measure accel
 #define REG_COUNTER     0x22  // reading counter, uint16 little-endian (0x22–0x23)
+#define REG_REQUEST     0x24  // readings requested, uint16 little-endian (0x24–0x25), writable
 #define REG_CONFIG      0x26  // writable: sensitivity mode bits [1:0]
 #define REG_FAULT       0x27  // latched fault code: bits 7–5 chip, bits 4–0 kind; cleared by a Control write
 #define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
@@ -83,6 +84,9 @@ bool Apis::_writeByte(uint8_t reg, uint8_t value) {
     Wire.write(reg);
     Wire.write(value);
     return Wire.endTransmission() == 0;
+}
+bool Apis::_writeRequest(uint16_t n) {
+    return _writeByte(REG_REQUEST, n & 0xFF) && _writeByte(REG_REQUEST + 1, n >> 8);
 }
 
 uint16_t Apis::setRangeReadings(uint16_t n) {
@@ -233,6 +237,9 @@ bool Apis::updateMeasurements(uint8_t component) {
     bool orientOK = true;
 
     if (component == ALL || component == RANGE) {
+    // Tell the device how many readings follow so it holds the LiDAR powered
+    // for the burst (single readings need no word: 0/1 means power down after each).
+    if (_nRangeReadings > 1) _writeRequest(_nRangeReadings);
     // Take N range readings into the array, then two-pass mean, std, sterr.
     // Two-pass in float is exact enough for N up to the array capacity; see
     // the precision note in Apis.h.
@@ -362,8 +369,9 @@ String Apis::getHeader() {
     return h;
 }
 
-void Apis::beginReadings(uint8_t component) {
+void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
+    if (n > 1 && (component == ALL || component == RANGE)) _writeRequest(n);
 }
 
 void Apis::endReadings() {
