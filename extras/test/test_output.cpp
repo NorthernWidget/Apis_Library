@@ -180,7 +180,17 @@ int main() {
              a.getRangeCount(), a.getRangeMean(), a.getRangeStd(), a.getRangeMedian(), Wire.transactions - tx);
       onReading = nullptr; }
 
-    // 7. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
+    // 7. A LiDAR that will not power up: the firmware reports fault chip 0 kind 1 on the first
+    //    reading; the library stops the burst instead of waiting out every reading.
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
+    { Apis a; a.begin(); int k = 0;
+      onReading = [&](TwoWire& w) { k++; w.image[0x20] = 0x83; w.image[0x27] = 0x01; w.image[0x28] = 0xF1; w.image[0x29] = 0xD8; }; // -9999
+      a.setRangeReadings(10); bool ok = a.updateMeasurements(Apis::RANGE);
+      char fb[64]; BufferPrint fbp(fb, sizeof fb); a.printFault(fbp);
+      printf("[dead LiDAR] N=10: ok=%d readings taken=%d range=%d fault='%s'\n", ok, k, a.getRange(), fb);
+      onReading = nullptr; }
+
+    // 8. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
     { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0x00);

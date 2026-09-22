@@ -176,7 +176,16 @@ size_t Apis::printFault(Print& out) {
 }
 
 bool Apis::updateRange() {
+    if (_burstFaulted) {                  // rest of a burst whose LiDAR did not power up
+        _range = APIS_ERROR;
+        return false;
+    }
     if (!_takeReading(RANGE)) {
+        _range = APIS_ERROR;
+        return false;
+    }
+    if (faulted(0) && (faultKind() == 1 || faultKind() == 5) && faultChip() == 0) {
+        _burstFaulted = true;             // no acknowledge / not initialised: the chip is not coming
         _range = APIS_ERROR;
         return false;
     }
@@ -245,7 +254,10 @@ bool Apis::updateMeasurements(uint8_t component) {
     // Statistics are read from the array (two-pass in float, exact enough for N
     // up to the array capacity; see the precision note in Apis.h).
     _resetRange();
-    for (uint16_t i = 0; i < _nRangeReadings; i++) updateRange();
+    _burstFaulted = false;
+    for (uint16_t i = 0; i < _nRangeReadings; i++) {
+        if (!updateRange() && _burstFaulted) break;   // LiDAR will not power up: stop the burst
+    }
     if (_rangeCount == 0) {
         _range = APIS_ERROR;
     } else {
@@ -375,6 +387,7 @@ void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
     if (component == ALL || component == RANGE)  _resetRange();
     if (component == ALL || component == ORIENT) _resetOrient();
+    _burstFaulted = false;
     if (n > 1 && (component == ALL || component == RANGE)) _writeRequest(n);
 }
 

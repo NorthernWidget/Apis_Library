@@ -511,7 +511,17 @@ class Apis
         // longest wait for a requested reading (ms). The firmware's cycle is
         // ~100 ms plus LiDAR start-up; 500 ms covers it as in Haar.
         uint16_t _lastCounter = 0xFFFF;
+        // Ceiling on the wait for the reading counter to move after a trigger. Not
+        // a delay: the poll returns as soon as the counter moves. Must exceed the
+        // firmware's slowest path to ready, the failed LiDAR power-up (rail wait +
+        // readiness timeout, retried once, then the accelerometer wait): ~440 ms
+        // for firmware patch 2. Only a device that acknowledges but never
+        // completes reaches this ceiling (Project-Apis #25).
         unsigned long timeoutGlobal = 500;
+        // Set when a reading in the current burst reported that the LiDAR could not
+        // be powered up (fault chip 0, kind 1 or 5): the rest of the burst is not
+        // acquired, so the sketch's loop finishes quickly with sentinels.
+        bool _burstFaulted = false;
 
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;

@@ -56,6 +56,7 @@ string: -9998,-9998.00,-9998.00,
 [request] updateMeasurements N=1 -> word=0 (no write)
 [request] beginReadings(RANGE, 4) -> word=4 rows=240,250,260,270,
 [burst stats] count=4 mean=255.00 std=12.9099 median=255.00 transactions during stats=0
+[dead LiDAR] N=10: ok=0 readings taken=1 range=-9999 fault='LiDAR: no acknowledge'
 [wrong name] begin=0
 [schema 0x00] begin=0 fw=1
 [schema 0xFF unprovisioned] begin=0
