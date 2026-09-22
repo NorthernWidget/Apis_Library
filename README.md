@@ -6,7 +6,7 @@ Arduino library for the [Apis](https://github.com/NorthernWidget/Project-Apis) L
 
 **Requires firmware patch 2 or later** (the [NW-Device-Specification](https://github.com/NorthernWidget/NW-Device-Specification) Schema 1 register map, on Project-Apis `master`) on a board provisioned with [NW-Provision](https://github.com/NorthernWidget/NW-Provision). The default I2C address is `0x41`. Boards running the v0.1.x firmware (address `0x50`) are refused by `begin()`; reflash and provision them, or use Apis_Library v0.1.0.
 
-**Installation:** included in [NorthernWidget-libraries](https://github.com/NorthernWidget/NorthernWidget-libraries). Also available via the Arduino Library Manager.
+**Installation:** included in [NorthernWidget-libraries](https://github.com/NorthernWidget/NorthernWidget-libraries). Also available via the Arduino Library Manager. Requires [NW_Core](https://github.com/NorthernWidget/NW_Core), the shared foundation (device protocol, readings and statistics, faults), which the Library Manager installs as a dependency once both are registered; until then, install it beside this library.
 
 ```cpp
 #include <Apis.h>
