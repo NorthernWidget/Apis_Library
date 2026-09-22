@@ -225,7 +225,7 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#classes">Classes</a></li><li><a href="#types">Types</a></li><li><a href="#defines">Defines</a></li><li><a href="#types-documentation">Types Documentation</a><ul><li><a href="#enum-sensitivitymode">enum SensitivityMode</a></li></ul></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-m_pi">define M_PI</a></li><li><a href="#define-adr_default">define ADR_DEFAULT</a></li><li><a href="#define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</a></li><li><a href="#define-apis_range_capacity">define APIS_RANGE_CAPACITY</a></li><li><a href="#define-apis_orient_capacity">define APIS_ORIENT_CAPACITY</a></li><li><a href="#define-apis_bit_ready">define APIS_BIT_READY</a></li><li><a href="#define-apis_bit_panfault">define APIS_BIT_PANFAULT</a></li><li><a href="#define-apis_ctrl_trigger">define APIS_CTRL_TRIGGER</a></li><li><a href="#define-apis_ctrl_lidar">define APIS_CTRL_LIDAR</a></li><li><a href="#define-apis_ctrl_accel">define APIS_CTRL_ACCEL</a></li><li><a href="#define-apis_error">define APIS_ERROR</a></li><li><a href="#define-apis_not_measured">define APIS_NOT_MEASURED</a></li><li><a href="#define-nw_reading_all">define NW_READING_ALL</a></li><li><a href="#define-nw_reading_primary">define NW_READING_PRIMARY</a></li><li><a href="#define-nw_reading_secondary">define NW_READING_SECONDARY</a></li><li><a href="#define-nw_reading_range">define NW_READING_RANGE</a></li><li><a href="#define-nw_reading_orient">define NW_READING_ORIENT</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
+              <ul class="toc__menu"><li><a href="#classes">Classes</a></li><li><a href="#types">Types</a></li><li><a href="#defines">Defines</a></li><li><a href="#types-documentation">Types Documentation</a><ul><li><a href="#enum-sensitivitymode">enum SensitivityMode</a></li></ul></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-m_pi">define M_PI</a></li><li><a href="#define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</a></li><li><a href="#define-apis_range_capacity">define APIS_RANGE_CAPACITY</a></li><li><a href="#define-apis_orient_capacity">define APIS_ORIENT_CAPACITY</a></li><li><a href="#define-apis_bit_ready">define APIS_BIT_READY</a></li><li><a href="#define-apis_bit_panfault">define APIS_BIT_PANFAULT</a></li><li><a href="#define-apis_ctrl_trigger">define APIS_CTRL_TRIGGER</a></li><li><a href="#define-apis_ctrl_lidar">define APIS_CTRL_LIDAR</a></li><li><a href="#define-apis_ctrl_accel">define APIS_CTRL_ACCEL</a></li><li><a href="#define-apis_error">define APIS_ERROR</a></li><li><a href="#define-apis_not_measured">define APIS_NOT_MEASURED</a></li><li><a href="#define-nw_reading_all">define NW_READING_ALL</a></li><li><a href="#define-nw_reading_primary">define NW_READING_PRIMARY</a></li><li><a href="#define-nw_reading_secondary">define NW_READING_SECONDARY</a></li><li><a href="#define-nw_reading_range">define NW_READING_RANGE</a></li><li><a href="#define-nw_reading_orient">define NW_READING_ORIENT</a></li><li><a href="#define-adr_default">define ADR_DEFAULT</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
             </nav>
           </aside>
         
@@ -276,10 +276,6 @@
     <tr>
       <td> </td>
       <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-m-pi">M_PI</a></strong></td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-adr-default">ADR_DEFAULT</a></strong></td>
     </tr>
     <tr>
       <td> </td>
@@ -341,6 +337,10 @@
       <td> </td>
       <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-nw-reading-orient">NW_READING_ORIENT</a></strong></td>
     </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-adr-default">ADR_DEFAULT</a></strong></td>
+    </tr>
   </tbody>
 </table>
 
@@ -394,11 +394,6 @@
 <h3 id="define-m_pi">define M_PI</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define M_PI 3.14159265358979323846
-</span></code></pre></div></div>
-
-<h3 id="define-adr_default">define ADR_DEFAULT</h3>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define ADR_DEFAULT 0x41
 </span></code></pre></div></div>
 
 <h3 id="define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</h3>
@@ -480,6 +475,15 @@
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_ORIENT NW_READING_SECONDARY
 </span></code></pre></div></div>
 
+<h3 id="define-adr_default">define ADR_DEFAULT</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define ADR_DEFAULT Apis::DEFAULT_ADDRESS
+</span></code></pre></div></div>
+
+<p><strong>Deprecated</strong>:</p>
+
+<p>Use <a href="/Apis_Library/Classes/classApis/#variable-default-address">Apis::DEFAULT_ADDRESS</a>. Every NW library defined this same macro with a different value, so a sketch including two of them got the last one. Removed at the next major version.</p>
+
 <h2 id="source-code">Source code</h2>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/******************************************************************************
@@ -507,8 +511,6 @@ License: GNU GPL v3. You should find a copy in the repository.
 <span class="cp">#ifndef M_PI
 </span>  <span class="cp">#define M_PI 3.14159265358979323846
 #endif
-</span>
-<span class="cp">#define ADR_DEFAULT 0x41   // NW-Device-Specification Schema 1: 'A'. Firmware v0.1.x used 0x50.
 </span>
 <span class="c1">// Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is</span>
 <span class="c1">// the first firmware serving the Schema 1 register map.</span>
@@ -561,6 +563,8 @@ License: GNU GPL v3. You should find a copy in the repository.
 <span class="k">class</span> <span class="nc">Apis</span>
 <span class="p">{</span>
     <span class="nl">public:</span>
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">DEFAULT_ADDRESS</span> <span class="o">=</span> <span class="mh">0x41</span><span class="p">;</span>
+
         <span class="k">enum</span> <span class="n">Component</span> <span class="o">:</span> <span class="kt">uint8_t</span> <span class="p">{</span>
             <span class="n">ALL</span>    <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>   
             <span class="n">RANGE</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>   
@@ -570,7 +574,7 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="n">Apis</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nRangeReadings</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">rangeStats</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span>
              <span class="kt">uint16_t</span> <span class="n">nOrientReadings</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">orientStats</span> <span class="o">=</span> <span class="nb">false</span><span class="p">);</span>
 
-        <span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">address</span> <span class="o">=</span> <span class="n">ADR_DEFAULT</span><span class="p">,</span>
+        <span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">address</span> <span class="o">=</span> <span class="n">DEFAULT_ADDRESS</span><span class="p">,</span>
                    <span class="n">SensitivityMode</span> <span class="n">sensitivity</span> <span class="o">=</span> <span class="n">SENSITIVITY_BALANCED</span><span class="p">);</span>
 
         <span class="kt">uint8_t</span> <span class="nf">getHardwareMajor</span><span class="p">();</span>
@@ -669,7 +673,7 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="kt">bool</span> <span class="nf">_writeRequest</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">n</span><span class="p">);</span>
 
         <span class="c1">// I2C address</span>
-        <span class="kt">uint8_t</span> <span class="n">_adr</span> <span class="o">=</span> <span class="n">ADR_DEFAULT</span><span class="p">;</span>
+        <span class="kt">uint8_t</span> <span class="n">_adr</span> <span class="o">=</span> <span class="n">DEFAULT_ADDRESS</span><span class="p">;</span>
 
         <span class="c1">// Identity read by begin()</span>
         <span class="kt">uint8_t</span> <span class="n">_hwMajor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_hwMinor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_fwPatch</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -742,12 +746,14 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="kt">uint8_t</span> <span class="n">_rawComponent</span> <span class="o">=</span> <span class="n">ALL</span><span class="p">;</span>
 <span class="p">};</span>
 
+<span class="cp">#define ADR_DEFAULT Apis::DEFAULT_ADDRESS
+</span>
 <span class="cp">#endif
 </span></code></pre></div></div>
 
 <hr />
 
-<p>Updated on 2026-09-22 at 21:42:38 +0000</p>
+<p>Updated on 2026-09-22 at 22:04:10 +0000</p>
 
         
       </section>
