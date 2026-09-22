@@ -470,15 +470,8 @@ class Apis
         float   _roll  = APIS_NOT_MEASURED;
 
         // Range statistics
-        float _rangeMean  = APIS_NOT_MEASURED;
-        float _rangeStd   = APIS_NOT_MEASURED;
-        float _rangeSterr = APIS_NOT_MEASURED;
 
         // Orientation statistics
-        float _pitchStd   = APIS_NOT_MEASURED;
-        float _pitchSterr = APIS_NOT_MEASURED;
-        float _rollStd    = APIS_NOT_MEASURED;
-        float _rollSterr  = APIS_NOT_MEASURED;
 
         // Readings behind the current statistics (set by updateMeasurements):
         // one array per measurement, native type, oldest first, and the count
@@ -486,8 +479,20 @@ class Apis
         int16_t  _rangeReadings[APIS_RANGE_CAPACITY];
         float    _pitchReadings[APIS_ORIENT_CAPACITY];
         float    _rollReadings[APIS_ORIENT_CAPACITY];
-        uint16_t _rangeCount  = 0;
+        uint16_t _rangeCount  = 0;   // readings held (<= capacity)
         uint16_t _orientCount = 0;
+        uint16_t _rangeNext   = 0;   // next write index; wraps at capacity, keeping the newest readings
+        uint16_t _orientNext  = 0;
+        // One storage path: every acquisition appends here (updateRange(),
+        // updateOrientation(), whether from updateMeasurements() or logReading());
+        // the statistics getters read the arrays; updateMeasurements() and
+        // beginReadings() start a fresh set.
+        void _appendRange(int16_t r);
+        void _appendOrient(float pitch, float roll);
+        void _resetRange()  { _rangeCount = _rangeNext = 0; }
+        void _resetOrient() { _orientCount = _orientNext = 0; }
+        /** @brief Two-pass mean, sample std, and standard error of the first n values (n >= 1). */
+        static void _stats(const float* v, uint16_t n, float& mean, float& sd, float& se);
 
         /** @brief Median of the first n values of a float array (copies and sorts; n <= capacity). */
         static float _median(const float* v, uint16_t n);

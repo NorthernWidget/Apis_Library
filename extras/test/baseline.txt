@@ -25,7 +25,7 @@ header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],Pitch 
 string: 306,4.74,2.12,-6.11,2.85,0.40,0.23,0.00,0.00,
 raw ALL (15 bytes): 312,-6.11,2.85,
 raw RANGE (4 bytes): 303,
-getters: range=303 roll=2.8462 pitch=-6.1074 signal=90 mean=306.0000 std=4.7434 sterr=2.1213
+getters: range=303 roll=2.8462 pitch=-6.1074 signal=90 mean=306.4286 std=4.7208 sterr=1.7843
 printHeader ALL: Range [cm],Pitch [deg],Roll [deg],
 printReading ALL (stored): 303,-6.11,2.85,
 logReading ALL (15 bytes): 306,-6.11,2.85,
@@ -54,7 +54,8 @@ string: -9998,-9998.00,-9998.00,
 [faults] any=0 chip=7 kind=6 text='unit: reset since configured'
 [request] updateMeasurements N=5 -> word=5
 [request] updateMeasurements N=1 -> word=0 (no write)
-[request] beginReadings(RANGE, 4) -> word=4 rows=250,250,250,250,
+[request] beginReadings(RANGE, 4) -> word=4 rows=240,250,260,270,
+[burst stats] count=4 mean=255.00 std=12.9099 median=255.00 transactions during stats=0
 [wrong name] begin=0
 [schema 0x00] begin=0 fw=1
 [schema 0xFF unprovisioned] begin=0

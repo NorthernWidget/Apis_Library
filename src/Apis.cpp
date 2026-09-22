@@ -190,6 +190,7 @@ bool Apis::updateRange() {
         _range = APIS_ERROR;
         return false;
     }
+    _appendRange(_range);
     return true;
 }
 
@@ -229,76 +230,66 @@ bool Apis::updateOrientation() {
         _roll  = (atan(gy / sqrt(pow(gx, 2) + pow(gz, 2)))
                 - atan(offsetY / sqrt(pow(offsetX, 2) + pow(offsetZ, 2)))) * 180. / M_PI;
     }
+    _appendOrient(_pitch, _roll);
     return true;
 }
 
 bool Apis::updateMeasurements(uint8_t component) {
     bool rangeOK  = true;
     bool orientOK = true;
-
     if (component == ALL || component == RANGE) {
     // Tell the device how many readings follow so it holds the LiDAR powered
     // for the burst (single readings need no word: 0/1 means power down after each).
     if (_nRangeReadings > 1) _writeRequest(_nRangeReadings);
-    // Take N range readings into the array, then two-pass mean, std, sterr.
-    // Two-pass in float is exact enough for N up to the array capacity; see
-    // the precision note in Apis.h.
-    uint16_t rangeN = 0;
-    for (uint16_t i = 0; i < _nRangeReadings; i++) {
-        if (updateRange()) _rangeReadings[rangeN++] = _range;
-    }
-
-    if (rangeN == 0) {
+    // Take N range readings; each successful one appends to _rangeReadings[].
+    // Statistics are read from the array (two-pass in float, exact enough for N
+    // up to the array capacity; see the precision note in Apis.h).
+    _resetRange();
+    for (uint16_t i = 0; i < _nRangeReadings; i++) updateRange();
+    if (_rangeCount == 0) {
         _range = APIS_ERROR;
-        _rangeMean = _rangeStd = _rangeSterr = APIS_ERROR;
     } else {
-        float sum = 0;
-        for (uint16_t i = 0; i < rangeN; i++) sum += _rangeReadings[i];
-        float mean = sum / rangeN;
-        float m2 = 0;
-        for (uint16_t i = 0; i < rangeN; i++) { float d = _rangeReadings[i] - mean; m2 += d * d; }
-        _rangeMean  = mean;
-        _range      = (int16_t)mean;
-        _rangeStd   = (rangeN > 1) ? sqrt(m2 / (rangeN - 1)) : 0;
-        _rangeSterr = (rangeN > 1) ? _rangeStd / sqrt((float)rangeN) : 0;
+        _range = (int16_t)getRangeMean();
     }
-    _rangeCount = rangeN;
     // Float comparisons with APIS_ERROR are safe: the value is assigned directly,
     // never computed, so the float representation is exact and consistent.
     rangeOK = (_range != APIS_ERROR);
     }
-
     if (component == ALL || component == ORIENT) {
-    // Take N orientation readings into the arrays, then two-pass statistics.
-    uint16_t orientN = 0;
-    for (uint16_t i = 0; i < _nOrientReadings; i++) {
-        if (updateOrientation()) { _pitchReadings[orientN] = _pitch; _rollReadings[orientN] = _roll; orientN++; }
-    }
-
-    if (orientN == 0) {
+    // Take N orientation readings; each successful one appends to the arrays.
+    _resetOrient();
+    for (uint16_t i = 0; i < _nOrientReadings; i++) updateOrientation();
+    if (_orientCount == 0) {
         _pitch = _roll = APIS_ERROR;
-        _pitchStd = _pitchSterr = _rollStd = _rollSterr = APIS_ERROR;
     } else {
-        float ps = 0, rs = 0;
-        for (uint16_t i = 0; i < orientN; i++) { ps += _pitchReadings[i]; rs += _rollReadings[i]; }
-        float pm = ps / orientN, rm = rs / orientN;
-        float pm2 = 0, rm2 = 0;
-        for (uint16_t i = 0; i < orientN; i++) {
-            float dp = _pitchReadings[i] - pm; pm2 += dp * dp;
-            float dr = _rollReadings[i]  - rm; rm2 += dr * dr;
-        }
-        _pitch = pm;
-        _roll  = rm;
-        _pitchStd   = (orientN > 1) ? sqrt(pm2 / (orientN - 1)) : 0;
-        _pitchSterr = (orientN > 1) ? _pitchStd / sqrt((float)orientN) : 0;
-        _rollStd    = (orientN > 1) ? sqrt(rm2 / (orientN - 1)) : 0;
-        _rollSterr  = (orientN > 1) ? _rollStd  / sqrt((float)orientN) : 0;
+        float sd, se;
+        _stats(_pitchReadings, _orientCount, _pitch, sd, se);
+        _stats(_rollReadings,  _orientCount, _roll,  sd, se);
     }
-    _orientCount = orientN;
     orientOK = (_pitch != APIS_ERROR) && (_roll != APIS_ERROR);
     }
-
     return rangeOK && orientOK;
+}
+
+void Apis::_appendRange(int16_t r) {
+    _rangeReadings[_rangeNext] = r;
+    _rangeNext = (_rangeNext + 1) % APIS_RANGE_CAPACITY;
+    if (_rangeCount < APIS_RANGE_CAPACITY) _rangeCount++;
+}
+void Apis::_appendOrient(float pitch, float roll) {
+    _pitchReadings[_orientNext] = pitch;
+    _rollReadings[_orientNext]  = roll;
+    _orientNext = (_orientNext + 1) % APIS_ORIENT_CAPACITY;
+    if (_orientCount < APIS_ORIENT_CAPACITY) _orientCount++;
+}
+void Apis::_stats(const float* v, uint16_t n, float& mean, float& sd, float& se) {
+    float sum = 0;
+    for (uint16_t i = 0; i < n; i++) sum += v[i];
+    mean = sum / n;
+    float m2 = 0;
+    for (uint16_t i = 0; i < n; i++) { float d = v[i] - mean; m2 += d * d; }
+    sd = (n > 1) ? sqrt(m2 / (n - 1)) : 0;
+    se = (n > 1) ? sd / sqrt((float)n) : 0;
 }
 
 float Apis::_median(const float* v, uint16_t n) {
@@ -332,13 +323,24 @@ float   Apis::getRoll()           { return _roll; }
 float   Apis::getPitch()          { return _pitch; }
 uint8_t Apis::getSignalStrength() { return _signalStrength; }
 
-float Apis::getRangeMean()  { return _rangeMean; }
-float Apis::getRangeStd()   { return _rangeStd; }
-float Apis::getRangeSterr() { return _rangeSterr; }
-float Apis::getPitchStd()   { return _pitchStd; }
-float Apis::getPitchSterr() { return _pitchSterr; }
-float Apis::getRollStd()    { return _rollStd; }
-float Apis::getRollSterr()  { return _rollSterr; }
+// Statistics are computed from the arrays each call (N <= capacity, so cheap),
+// so a burst logged through logReading() has its statistics without re-acquiring.
+static void rangeStatsOf(const int16_t* r, uint16_t n, float& mean, float& sd, float& se) {
+    float sum = 0;
+    for (uint16_t i = 0; i < n; i++) sum += r[i];
+    mean = sum / n;
+    float m2 = 0;
+    for (uint16_t i = 0; i < n; i++) { float d = r[i] - mean; m2 += d * d; }
+    sd = (n > 1) ? sqrt(m2 / (n - 1)) : 0;
+    se = (n > 1) ? sd / sqrt((float)n) : 0;
+}
+float Apis::getRangeMean()  { if (_rangeCount == 0) return APIS_ERROR; float m, sd, se; rangeStatsOf(_rangeReadings, _rangeCount, m, sd, se); return m; }
+float Apis::getRangeStd()   { if (_rangeCount == 0) return APIS_ERROR; float m, sd, se; rangeStatsOf(_rangeReadings, _rangeCount, m, sd, se); return sd; }
+float Apis::getRangeSterr() { if (_rangeCount == 0) return APIS_ERROR; float m, sd, se; rangeStatsOf(_rangeReadings, _rangeCount, m, sd, se); return se; }
+float Apis::getPitchStd()   { if (_orientCount == 0) return APIS_ERROR; float m, sd, se; _stats(_pitchReadings, _orientCount, m, sd, se); return sd; }
+float Apis::getPitchSterr() { if (_orientCount == 0) return APIS_ERROR; float m, sd, se; _stats(_pitchReadings, _orientCount, m, sd, se); return se; }
+float Apis::getRollStd()    { if (_orientCount == 0) return APIS_ERROR; float m, sd, se; _stats(_rollReadings,  _orientCount, m, sd, se); return sd; }
+float Apis::getRollSterr()  { if (_orientCount == 0) return APIS_ERROR; float m, sd, se; _stats(_rollReadings,  _orientCount, m, sd, se); return se; }
 
 String Apis::getString(bool takeNewReadings) {
     if (takeNewReadings) {
@@ -346,12 +348,12 @@ String Apis::getString(bool takeNewReadings) {
     }
     String s = String(_range) + ",";
     if (_rangeStats && _nRangeReadings > 1) {
-        s += String(_rangeStd) + "," + String(_rangeSterr) + ",";
+        s += String(getRangeStd()) + "," + String(getRangeSterr()) + ",";
     }
     s += String(_pitch) + "," + String(_roll) + ",";
     if (_orientStats && _nOrientReadings > 1) {
-        s += String(_pitchStd)   + "," + String(_pitchSterr) + ","
-           + String(_rollStd)    + "," + String(_rollSterr)  + ",";
+        s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
+           + String(getRollStd())    + "," + String(getRollSterr())  + ",";
     }
     return s;
 }
@@ -371,6 +373,8 @@ String Apis::getHeader() {
 
 void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
+    if (component == ALL || component == RANGE)  _resetRange();
+    if (component == ALL || component == ORIENT) _resetOrient();
     if (n > 1 && (component == ALL || component == RANGE)) _writeRequest(n);
 }
 

@@ -172,8 +172,13 @@ int main() {
       lastRequest = 0; a.setRangeReadings(1); a.updateMeasurements(Apis::RANGE);
       printf("[request] updateMeasurements N=1 -> word=%u (no write)\n", lastRequest);
       lastRequest = 0; char pb[128]; BufferPrint bp(pb, sizeof pb);
+      int k = 0; onReading = [&](TwoWire& w) { int16_t r = 240 + 10 * (k++); w.image[0x28] = r & 0xFF; w.image[0x29] = (r >> 8) & 0xFF; };
       a.beginReadings(Apis::RANGE, 4); for (int i = 0; i < 4; i++) a.logReading(bp); a.endReadings();
-      printf("[request] beginReadings(RANGE, 4) -> word=%u rows=%s\n", lastRequest, pb); }
+      unsigned tx = Wire.transactions;
+      printf("[request] beginReadings(RANGE, 4) -> word=%u rows=%s\n", lastRequest, pb);
+      printf("[burst stats] count=%u mean=%.2f std=%.4f median=%.2f transactions during stats=%u\n",
+             a.getRangeCount(), a.getRangeMean(), a.getRangeStd(), a.getRangeMedian(), Wire.transactions - tx);
+      onReading = nullptr; }
 
     // 7. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
