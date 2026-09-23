@@ -27,7 +27,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 // Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is
 // the first firmware serving the Schema 1 register map.
-#define APIS_FW_MIN_PATCH 2
+#define APIS_FW_MIN_PATCH 3
 
 // Register addresses and bit masks are implementation details and live in
 // Apis.cpp (NW convention: no public names for them). Sketches use the API.
@@ -317,6 +317,16 @@ class Apis
          * Returns 0 before the first measurement.
          */
         uint8_t getSignalStrength();
+        /**
+         * @brief The accelerometer's own temperature at the last orientation
+         * reading, in the LIS3DH's relative digits (1 per degree C, no absolute
+         * reference; firmware patch 3). Logged beside pitch and roll so that a
+         * per-unit drift correction can be fitted later; APIS_NOT_MEASURED before
+         * the first reading.
+         */
+        int16_t getAccelTemperature();
+        /** @brief The same digit at the moment the Hall-effect zero was taken (Page 2). */
+        int16_t getZeroTemperature();
 
         // --- Statistics getters ---
         // Computed two-pass in 32-bit float over the readings stored by the last
@@ -355,7 +365,7 @@ class Apis
          * @brief Return comma-separated data values.
          * @details This is the most likely function (alongside getHeader) for
          * an end user to use.
-         * Always includes: Range [cm], Pitch [deg], Roll [deg].
+         * Always includes: Range [cm], Pitch [deg], Roll [deg], AccelT [C].
          * Appends range std and sterr when rangeStats is true and
          * nRangeReadings > 1.
          * Appends orientation std and sterr when orientStats is true and
@@ -469,6 +479,9 @@ class Apis
 
         // LiDAR Lite signal strength; updated by updateRange()
         uint8_t _signalStrength = 0;
+        // Accelerometer temperature digits (relative); updated by updateOrientation()
+        int16_t _accelTemp = APIS_NOT_MEASURED;
+        int16_t _zeroTemp  = APIS_NOT_MEASURED;
 
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;

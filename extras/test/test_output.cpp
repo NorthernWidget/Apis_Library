@@ -11,13 +11,16 @@ TwoWire Wire;
 // Build a Schema 1 register image: Page 0 as NW-Provision writes it (with the
 // firmware's patch at 0x0A), Page 1 with a complete reading, Page 2 offsets.
 static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int16_t az,
-                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 2, uint8_t schema = 0x01) {
+                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 3, uint8_t schema = 0x01,
+                      int8_t accelT = 21, int8_t zeroT = 24) {
     uint8_t* r = Wire.image;
     nwLoadPage0(r, "Apis", 0x41, 1, fwPatch, schema);                 // Page 0 and Block 0, HW 0.1
     r[0x28] = range & 0xFF; r[0x29] = (range >> 8) & 0xFF; r[0x2A] = signal;
     int16_t a[3] = {ax, ay, az}, o[3] = {ox, oy, oz};
     for (int i = 0; i < 3; i++) { r[0x30 + 2*i] = a[i] & 0xFF; r[0x31 + 2*i] = (a[i] >> 8) & 0xFF;
                                   r[0x40 + 2*i] = o[i] & 0xFF; r[0x41 + 2*i] = (o[i] >> 8) & 0xFF; }
+    r[0x36] = 0x00; r[0x37] = (uint8_t)accelT;                         // OUT_ADC3 word: the digit in the high byte
+    r[0x46] = 0x00; r[0x47] = (uint8_t)zeroT;
 }
 
 #pragma GCC diagnostic push

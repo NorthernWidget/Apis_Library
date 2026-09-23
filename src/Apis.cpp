@@ -8,9 +8,9 @@
 #define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
 #define REG_RANGE_H     0x29  // Range high byte
 #define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
-#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16
+#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16; 0x36–0x37 the temperature word
 // Page 2 (0x40–0x5F) — calibration, EEPROM-backed
-#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16
+#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16; 0x46–0x47 the temperature word at the zero
 
 
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
@@ -106,20 +106,23 @@ bool Apis::updateRange() {
 bool Apis::updateOrientation() {
     if (!_dev.takeReading(_chips(ORIENT))) {
         _pitch = _roll = NW_ERROR;
+        _accelTemp = NW_ERROR;
         return false;
     }
     int16_t dataSet[6];
-    uint8_t d[6];
+    uint8_t d[8];
 
-    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35): one read of six bytes
+    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35) and the temperature word (0x36–0x37): one read of eight bytes
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
-    _dev.readData(REG_ACCEL_BASE, d, 6);
+    _dev.readData(REG_ACCEL_BASE, d, 8);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
+    _accelTemp = (int8_t)d[7];           // the LIS3DH digit is the word's high byte (1 per degree C, relative)
 
-    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2): one read of six bytes
+    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2) and the temperature at the zero (0x46–0x47): one read of eight bytes
     memset(d, 0xFF, sizeof d);
-    _dev.readBytes(REG_OFFSET_BASE, d, 6);
+    _dev.readBytes(REG_OFFSET_BASE, d, 8);
     for (int i = 0; i < 3; i++) dataSet[3+i] = ((d[2*i + 1] << 8) | d[2*i]);
+    _zeroTemp = (int8_t)d[7];
 
     float gx = dataSet[0], gy = dataSet[1], gz = dataSet[2];
     float offsetX = dataSet[3], offsetY = dataSet[4], offsetZ = dataSet[5];
@@ -130,6 +133,7 @@ bool Apis::updateOrientation() {
     // failure signature, not a physical accelerometer reading.
     if (gx == gy && gx == gz && gx == -1) {
         _pitch = _roll = NW_ERROR;
+        _accelTemp = NW_ERROR;
         return false;
     } else if (offsetX == offsetY && offsetX == offsetZ && offsetX == 0) {
         _pitch = atan(-gx/gz) * 180. / M_PI;
@@ -218,7 +222,16 @@ String Apis::getString(bool takeNewReadings) {
         s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
            + String(getRollStd())    + "," + String(getRollSterr())  + ",";
     }
+    s += String(_accelTemp) + ",";
     return s;
+}
+
+int16_t Apis::getAccelTemperature() {
+    return _accelTemp;
+}
+
+int16_t Apis::getZeroTemperature() {
+    return _zeroTemp;
 }
 
 String Apis::getHeader() {
@@ -231,6 +244,7 @@ String Apis::getHeader() {
         h += "Pitch std [deg],Pitch sterr [deg],"
              "Roll std [deg],Roll sterr [deg],";
     }
+    h += "AccelT [C],";
     return h;
 }
 
@@ -252,7 +266,7 @@ size_t Apis::printHeader(Print& out) {
         n += out.print("Range [cm],");
     }
     if (_rawComponent & ORIENT) {
-        n += out.print("Pitch [deg],Roll [deg],");
+        n += out.print("Pitch [deg],Roll [deg],AccelT [C],");
     }
     return n;
 }
@@ -265,6 +279,7 @@ size_t Apis::printReading(Print& out) {
     if (_rawComponent & ORIENT) {
         n += out.print(_pitch);  n += out.print(',');
         n += out.print(_roll);   n += out.print(',');
+        n += out.print(_accelTemp); n += out.print(',');
     }
     return n;
 }
