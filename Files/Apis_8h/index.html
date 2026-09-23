@@ -225,7 +225,7 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#classes">Classes</a></li><li><a href="#types">Types</a></li><li><a href="#defines">Defines</a></li><li><a href="#types-documentation">Types Documentation</a><ul><li><a href="#enum-sensitivitymode">enum SensitivityMode</a></li></ul></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-m_pi">define M_PI</a></li><li><a href="#define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</a></li><li><a href="#define-apis_range_capacity">define APIS_RANGE_CAPACITY</a></li><li><a href="#define-apis_orient_capacity">define APIS_ORIENT_CAPACITY</a></li><li><a href="#define-apis_error">define APIS_ERROR</a></li><li><a href="#define-apis_not_measured">define APIS_NOT_MEASURED</a></li><li><a href="#define-nw_reading_all">define NW_READING_ALL</a></li><li><a href="#define-nw_reading_primary">define NW_READING_PRIMARY</a></li><li><a href="#define-nw_reading_secondary">define NW_READING_SECONDARY</a></li><li><a href="#define-nw_reading_range">define NW_READING_RANGE</a></li><li><a href="#define-nw_reading_orient">define NW_READING_ORIENT</a></li><li><a href="#define-adr_default">define ADR_DEFAULT</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
+              <ul class="toc__menu"><li><a href="#classes">Classes</a></li><li><a href="#types">Types</a></li><li><a href="#defines">Defines</a></li><li><a href="#types-documentation">Types Documentation</a><ul><li><a href="#enum-sensitivitymode">enum SensitivityMode</a></li></ul></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-m_pi">define M_PI</a></li><li><a href="#define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</a></li><li><a href="#define-apis_library_version">define APIS_LIBRARY_VERSION</a></li><li><a href="#define-apis_library_commit">define APIS_LIBRARY_COMMIT</a></li><li><a href="#define-apis_range_capacity">define APIS_RANGE_CAPACITY</a></li><li><a href="#define-apis_orient_capacity">define APIS_ORIENT_CAPACITY</a></li><li><a href="#define-apis_error">define APIS_ERROR</a></li><li><a href="#define-apis_not_measured">define APIS_NOT_MEASURED</a></li><li><a href="#define-nw_reading_all">define NW_READING_ALL</a></li><li><a href="#define-nw_reading_primary">define NW_READING_PRIMARY</a></li><li><a href="#define-nw_reading_secondary">define NW_READING_SECONDARY</a></li><li><a href="#define-nw_reading_range">define NW_READING_RANGE</a></li><li><a href="#define-nw_reading_orient">define NW_READING_ORIENT</a></li><li><a href="#define-adr_default">define ADR_DEFAULT</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
             </nav>
           </aside>
         
@@ -280,6 +280,14 @@
     <tr>
       <td> </td>
       <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-apis-fw-min-patch">APIS_FW_MIN_PATCH</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-apis-library-version">APIS_LIBRARY_VERSION</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8h/#define-apis-library-commit">APIS_LIBRARY_COMMIT</a></strong></td>
     </tr>
     <tr>
       <td> </td>
@@ -378,7 +386,17 @@
 
 <h3 id="define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define APIS_FW_MIN_PATCH 3
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define APIS_FW_MIN_PATCH 5
+</span></code></pre></div></div>
+
+<h3 id="define-apis_library_version">define APIS_LIBRARY_VERSION</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define APIS_LIBRARY_VERSION "0.1.0"
+</span></code></pre></div></div>
+
+<h3 id="define-apis_library_commit">define APIS_LIBRARY_COMMIT</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define APIS_LIBRARY_COMMIT ""
 </span></code></pre></div></div>
 
 <h3 id="define-apis_range_capacity">define APIS_RANGE_CAPACITY</h3>
@@ -469,8 +487,17 @@ License: GNU GPL v3. You should find a copy in the repository.
 #endif
 </span>
 <span class="c1">// Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is</span>
-<span class="c1">// the first firmware serving the Schema 1 register map.</span>
-<span class="cp">#define APIS_FW_MIN_PATCH 3
+<span class="c1">// the first firmware serving the Schema 1 register map; patch 5 serves the</span>
+<span class="c1">// zero generation with every reading, which this library reads.</span>
+<span class="cp">#define APIS_FW_MIN_PATCH 5
+</span>
+<span class="c1">// Build identity: this library's version (held equal to library.properties by</span>
+<span class="c1">// NW-Tests/version_check.py) and its build commit, set by the NW-Build wrapper from</span>
+<span class="c1">// git and blank in an Arduino IDE build. Both go into a logger's status file.</span>
+<span class="cp">#define APIS_LIBRARY_VERSION "0.1.0"
+#ifndef APIS_LIBRARY_COMMIT
+#define APIS_LIBRARY_COMMIT ""
+#endif
 </span>
 <span class="c1">// Register addresses and bit masks are implementation details and live in</span>
 <span class="c1">// Apis.cpp (NW convention: no public names for them). Sketches use the API.</span>
@@ -573,6 +600,9 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="kt">uint8_t</span> <span class="nf">getSignalStrength</span><span class="p">();</span>
         <span class="kt">int16_t</span> <span class="nf">getAccelTemperature</span><span class="p">();</span>
         <span class="kt">int16_t</span> <span class="nf">getZeroTemperature</span><span class="p">();</span>
+        <span class="kt">uint16_t</span> <span class="nf">getZeroGeneration</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="nf">zeroChanged</span><span class="p">();</span>
+        <span class="kt">size_t</span> <span class="nf">dumpZeros</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
 
         <span class="c1">// --- Statistics getters ---</span>
         <span class="c1">// Computed two-pass in 32-bit float over the readings stored by the last</span>
@@ -656,6 +686,10 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="c1">// Accelerometer temperature digits (relative); updated by updateOrientation()</span>
         <span class="kt">int16_t</span> <span class="n">_accelTemp</span> <span class="o">=</span> <span class="n">APIS_NOT_MEASURED</span><span class="p">;</span>
         <span class="kt">int16_t</span> <span class="n">_zeroTemp</span>  <span class="o">=</span> <span class="n">APIS_NOT_MEASURED</span><span class="p">;</span>
+        <span class="c1">// Zero generation carried by the last orientation reading (begin() seeds it</span>
+        <span class="c1">// from Page 1), and whether it moved between the last two readings</span>
+        <span class="kt">uint16_t</span> <span class="n">_zeroGen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">_zeroChanged</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 
         <span class="c1">// Sensor sensitivity; set initially to default "balanced" mode</span>
         <span class="n">SensitivityMode</span> <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">SENSITIVITY_BALANCED</span><span class="p">;</span>
@@ -683,7 +717,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 <hr />
 
-<p>Updated on 2026-09-23 at 20:56:38 +0000</p>
+<p>Updated on 2026-09-23 at 22:42:21 +0000</p>
 
         
       </section>

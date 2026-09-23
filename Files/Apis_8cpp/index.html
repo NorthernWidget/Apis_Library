@@ -225,7 +225,7 @@
           <aside class="sidebar__right sticky">
             <nav class="toc" aria-label="Table of contents">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#defines">Defines</a></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-reg_offset_base">define REG_OFFSET_BASE</a></li><li><a href="#define-reg_range_l">define REG_RANGE_L</a></li><li><a href="#define-reg_range_h">define REG_RANGE_H</a></li><li><a href="#define-reg_signal_str">define REG_SIGNAL_STR</a></li><li><a href="#define-reg_accel_base">define REG_ACCEL_BASE</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
+              <ul class="toc__menu"><li><a href="#defines">Defines</a></li><li><a href="#macros-documentation">Macros Documentation</a><ul><li><a href="#define-reg_offset_base">define REG_OFFSET_BASE</a></li><li><a href="#define-reg_zero_gen">define REG_ZERO_GEN</a></li><li><a href="#define-reg_range_l">define REG_RANGE_L</a></li><li><a href="#define-reg_range_h">define REG_RANGE_H</a></li><li><a href="#define-reg_signal_str">define REG_SIGNAL_STR</a></li><li><a href="#define-reg_accel_base">define REG_ACCEL_BASE</a></li></ul></li><li><a href="#source-code">Source code</a></li></ul>
             </nav>
           </aside>
         
@@ -242,6 +242,10 @@
     <tr>
       <td> </td>
       <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-offset-base">REG_OFFSET_BASE</a></strong></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong><a href="/Apis_Library/Files/Apis_8cpp/#define-reg-zero-gen">REG_ZERO_GEN</a></strong></td>
     </tr>
     <tr>
       <td> </td>
@@ -267,6 +271,11 @@
 <h3 id="define-reg_offset_base">define REG_OFFSET_BASE</h3>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_OFFSET_BASE 0x20
+</span></code></pre></div></div>
+
+<h3 id="define-reg_zero_gen">define REG_ZERO_GEN</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define REG_ZERO_GEN 0x38
 </span></code></pre></div></div>
 
 <h3 id="define-reg_range_l">define REG_RANGE_L</h3>
@@ -301,12 +310,15 @@
 <span class="c1">// Page 0 (0x00–0x1F): identity, EEPROM-backed</span>
 <span class="c1">// Page 1 (0x20–0x3F): calibration, EEPROM-backed</span>
 <span class="cp">#define REG_OFFSET_BASE 0x20  // Accel offset X low byte; X/Y/Z span 0x20–0x25, little-endian int16; 0x26–0x27 the temperature word at the zero
+</span><span class="c1">// 0x28–0x2F and 0x30–0x37: the two zeros before the current one, same form (firmware patch 5)</span>
+<span class="cp">#define REG_ZERO_GEN    0x38  // Zero generation, little-endian uint16: zeros stored since manufacture, 0 never (patch 5)
 </span><span class="c1">// Page 2 (0x40–0x5F): status and sensor data, SRAM</span>
 <span class="cp">#define REG_RANGE_L     0x48  // Range low byte  (little-endian int16, cm)
 #define REG_RANGE_H     0x49  // Range high byte
 #define REG_SIGNAL_STR  0x4A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
 #define REG_ACCEL_BASE  0x50  // Accel raw X low byte; X/Y/Z span 0x50–0x55, little-endian int16; 0x56–0x57 the temperature word
-</span>
+</span><span class="c1">// 0x58–0x59: the zero generation again, mirrored from Page 1 with every reading (patch 5)</span>
+
 
 <span class="n">Apis</span><span class="o">::</span><span class="n">Apis</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nRangeReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">rangeStats</span><span class="p">,</span>
            <span class="kt">uint16_t</span> <span class="n">nOrientReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">orientStats</span><span class="p">)</span>
@@ -324,6 +336,11 @@
     <span class="c1">// firmware patch &gt;= APIS_FW_MIN_PATCH); versions are stored before any refusal.</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_dev</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="s">"Apis"</span><span class="p">,</span> <span class="n">APIS_FW_MIN_PATCH</span><span class="p">))</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="n">_dev</span><span class="p">.</span><span class="n">writeConfig</span><span class="p">((</span><span class="kt">uint8_t</span><span class="p">)</span><span class="n">_sensitivity</span><span class="p">);</span>
+    <span class="c1">// Page 1's zero generation once, so zeroChanged() has a reference before the first reading</span>
+    <span class="kt">uint8_t</span> <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+    <span class="n">_dev</span><span class="p">.</span><span class="n">readBytes</span><span class="p">(</span><span class="n">REG_ZERO_GEN</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">_zeroGen</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="n">_zeroChanged</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -365,7 +382,7 @@
 
 <span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printStatus</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">boot</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"Accel"</span><span class="p">};</span>
-    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">printSnapshot</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">boot</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">printSnapshot</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">boot</span><span class="p">,</span> <span class="n">APIS_LIBRARY_VERSION</span><span class="p">,</span> <span class="n">APIS_LIBRARY_COMMIT</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">bool</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">reportIsFault</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">report</span><span class="p">().</span><span class="n">isFault</span><span class="p">();</span> <span class="p">}</span>
@@ -414,13 +431,14 @@
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="kt">int16_t</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
 
-    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x50–0x55) and the temperature word (0x56–0x57): one read of eight bytes</span>
+    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x50–0x55), the temperature word (0x56–0x57) and the zero generation (0x58–0x59): one read of ten bytes</span>
     <span class="n">memset</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">d</span><span class="p">);</span>           <span class="c1">// 0xFF mirrors what Wire.read() yields on a failed request</span>
-    <span class="n">_dev</span><span class="p">.</span><span class="n">readData</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="n">_dev</span><span class="p">.</span><span class="n">readData</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">dataSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span>
     <span class="n">_accelTemp</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int8_t</span><span class="p">)</span><span class="n">d</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>           <span class="c1">// the LIS3DH digit is the word's high byte (1 per degree C, relative)</span>
+    <span class="kt">uint16_t</span> <span class="n">generation</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">);</span>
 
     <span class="c1">// Accel offsets X/Y/Z at REG_OFFSET_BASE (0x20–0x25, Page 1) and the temperature at the zero (0x26–0x27): one read of eight bytes</span>
     <span class="n">memset</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">d</span><span class="p">);</span>
@@ -439,7 +457,10 @@
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="n">_accelTemp</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetY</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetZ</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="n">_zeroChanged</span> <span class="o">=</span> <span class="p">(</span><span class="n">generation</span> <span class="o">!=</span> <span class="n">_zeroGen</span><span class="p">);</span>   <span class="c1">// a reading that reached us: its generation against the last one seen</span>
+    <span class="n">_zeroGen</span> <span class="o">=</span> <span class="n">generation</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetY</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetZ</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="o">-</span><span class="n">gx</span><span class="o">/</span><span class="n">gz</span><span class="p">)</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
         <span class="n">_roll</span>  <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="n">gy</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="n">gx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">gz</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -538,6 +559,36 @@
     <span class="k">return</span> <span class="n">_zeroTemp</span><span class="p">;</span>
 <span class="p">}</span>
 
+<span class="kt">uint16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getZeroGeneration</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_zeroGen</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">zeroChanged</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_zeroChanged</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">dumpZeros</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Page 1 in one read (calibration, not a reading, so readBytes): Blocks 0–2 hold</span>
+    <span class="c1">// the current zero and the two before it, 0x38–0x39 the generation. Newest first;</span>
+    <span class="c1">// only zeros that were stored are printed (generation counts them).</span>
+    <span class="kt">uint8_t</span> <span class="n">p</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">p</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_dev</span><span class="p">.</span><span class="n">readBytes</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">uint16_t</span> <span class="n">generation</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">REG_ZERO_GEN</span> <span class="o">-</span> <span class="n">REG_OFFSET_BASE</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">REG_ZERO_GEN</span> <span class="o">-</span> <span class="n">REG_OFFSET_BASE</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint8_t</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">generation</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">z</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">k</span><span class="p">;</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)(</span><span class="n">generation</span> <span class="o">-</span> <span class="n">k</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="kt">int16_t</span><span class="p">)((</span><span class="n">z</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">z</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]));</span>
+        <span class="p">}</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">println</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="kt">int8_t</span><span class="p">)</span><span class="n">z</span><span class="p">[</span><span class="mi">7</span><span class="p">]);</span>   <span class="c1">// the temperature digit at that zero, as getZeroTemperature() gives it</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
 <span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getHeader</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">String</span> <span class="n">h</span> <span class="o">=</span> <span class="s">"Range [cm],"</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">_rangeCfg</span><span class="p">.</span><span class="n">columns</span><span class="p">())</span> <span class="p">{</span>
@@ -630,7 +681,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-23 at 20:56:38 +0000</p>
+<p>Updated on 2026-09-23 at 22:42:21 +0000</p>
 
         
       </section>
