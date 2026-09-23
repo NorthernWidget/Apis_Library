@@ -376,17 +376,31 @@
     <span class="k">return</span> <span class="n">n</span> <span class="o">+</span> <span class="n">_dev</span><span class="p">.</span><span class="n">fault</span><span class="p">().</span><span class="n">printKind</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
 <span class="p">}</span>
 
+<span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">faultNote</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// One word for a data-table note: the chip, then the kind ("LiDARTimeout").</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"Accel"</span><span class="p">};</span>
+    <span class="kt">uint8_t</span> <span class="n">chip</span> <span class="o">=</span> <span class="n">faultChip</span><span class="p">();</span>
+    <span class="n">String</span> <span class="n">w</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">chip</span> <span class="o">==</span> <span class="mi">7</span><span class="p">)</span> <span class="n">w</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="s">"Unit"</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">chip</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">w</span> <span class="o">=</span> <span class="n">chips</span><span class="p">[</span><span class="n">chip</span><span class="p">];</span>
+    <span class="k">else</span> <span class="p">{</span> <span class="n">w</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="s">"Chip"</span><span class="p">);</span> <span class="n">w</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">chip</span><span class="p">);</span> <span class="p">}</span>
+    <span class="n">w</span> <span class="o">+=</span> <span class="n">_dev</span><span class="p">.</span><span class="n">fault</span><span class="p">().</span><span class="n">kindWord</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">w</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">beginFailure</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">beginFailure</span><span class="p">();</span> <span class="p">}</span>
+
 <span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateRange</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">_dev</span><span class="p">.</span><span class="n">batchFaulted</span><span class="p">(</span><span class="mh">0x01</span><span class="p">))</span> <span class="p">{</span>        <span class="c1">// rest of a batch whose LiDAR did not power up</span>
-        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_dev</span><span class="p">.</span><span class="n">takeReading</span><span class="p">(</span><span class="n">_chips</span><span class="p">(</span><span class="n">RANGE</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">_dev</span><span class="p">.</span><span class="n">batchFaulted</span><span class="p">(</span><span class="mh">0x01</span><span class="p">))</span> <span class="p">{</span>        <span class="c1">// no acknowledge / not initialised: the chip is not coming</span>
-        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="c1">// Range low/high and signal strength are consecutive (0x28–0x2A): one read.</span>
@@ -396,7 +410,7 @@
     <span class="n">_signalStrength</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">_range</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="n">_rangeReadings</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">_range</span><span class="p">);</span>
@@ -405,7 +419,7 @@
 
 <span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateOrientation</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_dev</span><span class="p">.</span><span class="n">takeReading</span><span class="p">(</span><span class="n">_chips</span><span class="p">(</span><span class="n">ORIENT</span><span class="p">)))</span> <span class="p">{</span>
-        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="kt">int16_t</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
@@ -429,7 +443,7 @@
     <span class="c1">// (arithmetic shift). All three axes equal to -1 is therefore the I2C bus</span>
     <span class="c1">// failure signature, not a physical accelerometer reading.</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">gx</span> <span class="o">==</span> <span class="n">gy</span> <span class="o">&amp;&amp;</span> <span class="n">gx</span> <span class="o">==</span> <span class="n">gz</span> <span class="o">&amp;&amp;</span> <span class="n">gx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetY</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetZ</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="o">-</span><span class="n">gx</span><span class="o">/</span><span class="n">gz</span><span class="p">)</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
@@ -460,13 +474,13 @@
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">updateRange</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">_dev</span><span class="p">.</span><span class="n">batchFaulted</span><span class="p">(</span><span class="mh">0x01</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>   <span class="c1">// LiDAR will not power up: stop the batch</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">_rangeReadings</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_range</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="n">_range</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">getRangeMean</span><span class="p">();</span>
     <span class="p">}</span>
-    <span class="c1">// Float comparisons with APIS_ERROR are safe: the value is assigned directly,</span>
+    <span class="c1">// Float comparisons with NW_ERROR are safe: the value is assigned directly,</span>
     <span class="c1">// never computed, so the float representation is exact and consistent.</span>
-    <span class="n">rangeOK</span> <span class="o">=</span> <span class="p">(</span><span class="n">_range</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
+    <span class="n">rangeOK</span> <span class="o">=</span> <span class="p">(</span><span class="n">_range</span> <span class="o">!=</span> <span class="n">NW_ERROR</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">component</span> <span class="o">==</span> <span class="n">ALL</span> <span class="o">||</span> <span class="n">component</span> <span class="o">==</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Take N orientation readings; each successful one appends to the arrays.</span>
@@ -474,12 +488,12 @@
     <span class="n">_rollReadings</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">uint16_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_nOrientReadings</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">updateOrientation</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">_pitchReadings</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">APIS_ERROR</span><span class="p">;</span>
+        <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_pitchReadings</span><span class="p">.</span><span class="n">mean</span><span class="p">();</span>
         <span class="n">_roll</span>  <span class="o">=</span> <span class="n">_rollReadings</span><span class="p">.</span><span class="n">mean</span><span class="p">();</span>
     <span class="p">}</span>
-    <span class="n">orientOK</span> <span class="o">=</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">!=</span> <span class="n">APIS_ERROR</span><span class="p">);</span>
+    <span class="n">orientOK</span> <span class="o">=</span> <span class="p">(</span><span class="n">_pitch</span> <span class="o">!=</span> <span class="n">NW_ERROR</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_roll</span> <span class="o">!=</span> <span class="n">NW_ERROR</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">rangeOK</span> <span class="o">&amp;&amp;</span> <span class="n">orientOK</span><span class="p">;</span>
 <span class="p">}</span>
@@ -598,7 +612,7 @@
             <span class="n">dtostrf</span><span class="p">(</span><span class="n">_roll</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
             <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">"%s,"</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="s">"-9999,-9999,"</span><span class="p">);</span> <span class="c1">// APIS_ERROR twice; string</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="s">"-9999,-9999,"</span><span class="p">);</span> <span class="c1">// NW_ERROR twice; string</span>
                                                                   <span class="c1">// literal used because the</span>
                                                                   <span class="c1">// buffer size (13) is tied to</span>
                                                                   <span class="c1">// the digit count of -9999.</span>
@@ -614,7 +628,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-22 at 23:10:27 +0000</p>
+<p>Updated on 2026-09-23 at 04:50:39 +0000</p>
 
         
       </section>
