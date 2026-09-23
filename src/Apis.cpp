@@ -96,7 +96,7 @@ bool Apis::updateRange() {
         _range = NW_ERROR;
         return false;
     }
-    if (_dev.batchFaulted(0x01)) {        // no acknowledge / not initialised: the chip is not coming
+    if (_dev.batchFaulted(0x01)) {        // not answering / self-test failed: the chip is not coming
         _range = NW_ERROR;
         return false;
     }

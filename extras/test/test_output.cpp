@@ -124,11 +124,11 @@ int main() {
       a.updateRange(); BufferPrint bp(pb, sizeof pb); a.printReport(bp);
       printf("[faults] faulted(0)=%d faulted(1)=%d any=%d chip=%u kind=%u text='%s'\n",
              a.faulted(0), a.faulted(1), a.anyFault(), a.reportChip(), a.reportKind(), pb);
-      onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0xE6; };   // clean reading; unit: reset since configured
+      onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0xE6; };   // clean reading; unit: restarted since configured
       a.updateRange(); BufferPrint bp2(pb, sizeof pb); a.printReport(bp2);
       printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.reportChip(), a.reportKind(), pb);
       printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.reportNote().c_str(), a.beginFailure().c_str());
-      onReading = [](TwoWire& w) { w.image[0x40] = 0x85; w.image[0x47] = 0x21; };   // accelerometer: no acknowledge
+      onReading = [](TwoWire& w) { w.image[0x40] = 0x85; w.image[0x47] = 0x21; };   // accelerometer: not answering
       a.updateRange(); printf("[faults] note='%s' (accel no ack)\n", a.reportNote().c_str());
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0x29; };   // clean reading; accelerometer: calibration stored (a notice)
       a.updateRange(); printf("[notice] any=%d chip=%u kind=%u note='%s' (calibration stored: no status bit, data stand)\n", a.anyFault(), a.reportChip(), a.reportKind(), a.reportNote().c_str());

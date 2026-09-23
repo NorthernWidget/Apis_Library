@@ -248,13 +248,13 @@ class Apis : public NW_Sensor
         uint8_t reportKind();
         /**
          * @brief Print the report as text, e.g. "LiDAR: timeout" or
-         * "unit: reset since configured"; prints "none" when there is no fault.
+         * "unit: restarted since configured"; prints "none" when there is no fault.
          * @return Bytes written.
          */
         size_t printReport(Print& out);
         /**
          * @brief The report as one word for a data-table note column,
-         * chip then kind: "LiDARTimeout", "AccelNoACK", "UnitReset";
+         * chip then kind: "LiDARTimeout", "AccelNotAnswering", "UnitRestarted";
          * "UnitNone" when there is no fault (check anyFault() first).
          */
         String reportNote();
@@ -271,7 +271,7 @@ class Apis : public NW_Sensor
         uint8_t bootReportKind() override;
         void clearBootReport() override;
         /**
-         * @brief Why the last begin() refused, as one word: "NoACK",
+         * @brief Why the last begin() refused, as one word: "NotAnswering",
          * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
          * after a successful begin().
          */

@@ -20,7 +20,7 @@ void loop() {
 
 String update() {
     bool ok = initialize();
-    if (!ok) Logger.note(rangefinder.beginFailure());  // e.g. NoACK
+    if (!ok) Logger.note(rangefinder.beginFailure());  // e.g. NotAnswering
     String row = rangefinder.getString();  // -9999 where a reading failed
     if (ok && rangefinder.anyFault()) {
         Logger.note(rangefinder.reportNote());  // e.g. LiDARTimeout
