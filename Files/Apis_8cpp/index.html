@@ -363,10 +363,14 @@
     <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">report</span><span class="p">().</span><span class="n">print</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printStatus</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printStatus</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">boot</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"Accel"</span><span class="p">};</span>
-    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">printSnapshot</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">printSnapshot</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">boot</span><span class="p">);</span>
 <span class="p">}</span>
+
+<span class="kt">bool</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">reportIsFault</span><span class="p">()</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">report</span><span class="p">().</span><span class="n">isFault</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">bootReportKind</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">bootReport</span><span class="p">().</span><span class="n">kind</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">void</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">clearBootReport</span><span class="p">()</span> <span class="p">{</span> <span class="n">_dev</span><span class="p">.</span><span class="n">clearBootReport</span><span class="p">();</span> <span class="p">}</span>
 
 <span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">reportNote</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// One word for a data-table note: the chip, then the kind ("LiDARTimeout").</span>
@@ -385,7 +389,7 @@
         <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">_dev</span><span class="p">.</span><span class="n">batchFaulted</span><span class="p">(</span><span class="mh">0x01</span><span class="p">))</span> <span class="p">{</span>        <span class="c1">// no acknowledge / not initialised: the chip is not coming</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_dev</span><span class="p">.</span><span class="n">batchFaulted</span><span class="p">(</span><span class="mh">0x01</span><span class="p">))</span> <span class="p">{</span>        <span class="c1">// not answering / self-test failed: the chip is not coming</span>
         <span class="n">_range</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
@@ -626,7 +630,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-23 at 20:12:21 +0000</p>
+<p>Updated on 2026-09-23 at 20:56:38 +0000</p>
 
         
       </section>
