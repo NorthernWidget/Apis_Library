@@ -301,9 +301,9 @@
 <span class="cp">#define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
 #define REG_RANGE_H     0x29  // Range high byte
 #define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
-#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16
+#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16; 0x36–0x37 the temperature word
 </span><span class="c1">// Page 2 (0x40–0x5F) — calibration, EEPROM-backed</span>
-<span class="cp">#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16
+<span class="cp">#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16; 0x46–0x47 the temperature word at the zero
 </span>
 
 <span class="n">Apis</span><span class="o">::</span><span class="n">Apis</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nRangeReadings</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">rangeStats</span><span class="p">,</span>
@@ -352,19 +352,24 @@
 
 <span class="kt">bool</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">faulted</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">chip</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">faulted</span><span class="p">(</span><span class="n">chip</span><span class="p">);</span> <span class="p">}</span>
 <span class="kt">bool</span>    <span class="n">Apis</span><span class="o">::</span><span class="n">anyFault</span><span class="p">()</span>            <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">anyFault</span><span class="p">();</span> <span class="p">}</span>
-<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">faultChip</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">faultChip</span><span class="p">();</span> <span class="p">}</span>
-<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">faultKind</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">faultKind</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">reportChip</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">reportChip</span><span class="p">();</span> <span class="p">}</span>
+<span class="kt">uint8_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">reportKind</span><span class="p">()</span>           <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">reportKind</span><span class="p">();</span> <span class="p">}</span>
 
-<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printFault</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// The chip names are Apis's own (the spec's chip table); NW_Fault prints the rest.</span>
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printReport</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// The chip names are Apis's own (the spec's chip table); NW_Report prints the rest.</span>
     <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"accelerometer"</span><span class="p">};</span>
-    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">fault</span><span class="p">().</span><span class="n">print</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">report</span><span class="p">().</span><span class="n">print</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">faultNote</span><span class="p">()</span> <span class="p">{</span>
+<span class="kt">size_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">printStatus</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"Accel"</span><span class="p">};</span>
+    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">printSnapshot</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">reportNote</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// One word for a data-table note: the chip, then the kind ("LiDARTimeout").</span>
     <span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">chips</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="s">"LiDAR"</span><span class="p">,</span> <span class="s">"Accel"</span><span class="p">};</span>
-    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">fault</span><span class="p">().</span><span class="n">note</span><span class="p">(</span><span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">report</span><span class="p">().</span><span class="n">note</span><span class="p">(</span><span class="n">chips</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">beginFailure</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_dev</span><span class="p">.</span><span class="n">beginFailure</span><span class="p">();</span> <span class="p">}</span>
@@ -399,20 +404,23 @@
 <span class="kt">bool</span> <span class="n">Apis</span><span class="o">::</span><span class="n">updateOrientation</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_dev</span><span class="p">.</span><span class="n">takeReading</span><span class="p">(</span><span class="n">_chips</span><span class="p">(</span><span class="n">ORIENT</span><span class="p">)))</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
+        <span class="n">_accelTemp</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="kt">int16_t</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
-    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+    <span class="kt">uint8_t</span> <span class="n">d</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
 
-    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35): one read of six bytes</span>
+    <span class="c1">// Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35) and the temperature word (0x36–0x37): one read of eight bytes</span>
     <span class="n">memset</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">d</span><span class="p">);</span>           <span class="c1">// 0xFF mirrors what Wire.read() yields on a failed request</span>
-    <span class="n">_dev</span><span class="p">.</span><span class="n">readData</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+    <span class="n">_dev</span><span class="p">.</span><span class="n">readData</span><span class="p">(</span><span class="n">REG_ACCEL_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">dataSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">_accelTemp</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int8_t</span><span class="p">)</span><span class="n">d</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>           <span class="c1">// the LIS3DH digit is the word's high byte (1 per degree C, relative)</span>
 
-    <span class="c1">// Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2): one read of six bytes</span>
+    <span class="c1">// Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2) and the temperature at the zero (0x46–0x47): one read of eight bytes</span>
     <span class="n">memset</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="k">sizeof</span> <span class="n">d</span><span class="p">);</span>
-    <span class="n">_dev</span><span class="p">.</span><span class="n">readBytes</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+    <span class="n">_dev</span><span class="p">.</span><span class="n">readBytes</span><span class="p">(</span><span class="n">REG_OFFSET_BASE</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">_zeroTemp</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int8_t</span><span class="p">)</span><span class="n">d</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>
 
     <span class="kt">float</span> <span class="n">gx</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gz</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
     <span class="kt">float</span> <span class="n">offsetX</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">offsetY</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">offsetZ</span> <span class="o">=</span> <span class="n">dataSet</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
@@ -423,6 +431,7 @@
     <span class="c1">// failure signature, not a physical accelerometer reading.</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">gx</span> <span class="o">==</span> <span class="n">gy</span> <span class="o">&amp;&amp;</span> <span class="n">gx</span> <span class="o">==</span> <span class="n">gz</span> <span class="o">&amp;&amp;</span> <span class="n">gx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">_roll</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
+        <span class="n">_accelTemp</span> <span class="o">=</span> <span class="n">NW_ERROR</span><span class="p">;</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetY</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="n">offsetZ</span> <span class="o">&amp;&amp;</span> <span class="n">offsetX</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">_pitch</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="o">-</span><span class="n">gx</span><span class="o">/</span><span class="n">gz</span><span class="p">)</span> <span class="o">*</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">M_PI</span><span class="p">;</span>
@@ -511,7 +520,16 @@
         <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">getPitchStd</span><span class="p">())</span>   <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">getPitchSterr</span><span class="p">())</span> <span class="o">+</span> <span class="s">","</span>
            <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">getRollStd</span><span class="p">())</span>    <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">getRollSterr</span><span class="p">())</span>  <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
     <span class="p">}</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="n">String</span><span class="p">(</span><span class="n">_accelTemp</span><span class="p">)</span> <span class="o">+</span> <span class="s">","</span><span class="p">;</span>
     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getAccelTemperature</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_accelTemp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int16_t</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getZeroTemperature</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_zeroTemp</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="n">String</span> <span class="n">Apis</span><span class="o">::</span><span class="n">getHeader</span><span class="p">()</span> <span class="p">{</span>
@@ -524,6 +542,7 @@
         <span class="n">h</span> <span class="o">+=</span> <span class="s">"Pitch std [deg],Pitch sterr [deg],"</span>
              <span class="s">"Roll std [deg],Roll sterr [deg],"</span><span class="p">;</span>
     <span class="p">}</span>
+    <span class="n">h</span> <span class="o">+=</span> <span class="s">"AccelT [C],"</span><span class="p">;</span>
     <span class="k">return</span> <span class="n">h</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -545,7 +564,7 @@
         <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Range [cm],"</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">&amp;</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Pitch [deg],Roll [deg],"</span><span class="p">);</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Pitch [deg],Roll [deg],AccelT [C],"</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
 <span class="p">}</span>
@@ -558,6 +577,7 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">_rawComponent</span> <span class="o">&amp;</span> <span class="n">ORIENT</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">_pitch</span><span class="p">);</span>  <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
         <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">_roll</span><span class="p">);</span>   <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">_accelTemp</span><span class="p">);</span> <span class="n">n</span> <span class="o">+=</span> <span class="n">out</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
 <span class="p">}</span>
@@ -604,7 +624,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-23 at 16:11:20 +0000</p>
+<p>Updated on 2026-09-23 at 17:21:28 +0000</p>
 
         
       </section>

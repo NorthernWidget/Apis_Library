@@ -378,7 +378,7 @@
 
 <h3 id="define-apis_fw_min_patch">define APIS_FW_MIN_PATCH</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define APIS_FW_MIN_PATCH 2
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define APIS_FW_MIN_PATCH 3
 </span></code></pre></div></div>
 
 <h3 id="define-apis_range_capacity">define APIS_RANGE_CAPACITY</h3>
@@ -462,7 +462,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 </span>
 <span class="cp">#include</span> <span class="cpf">&lt;Arduino.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;Wire.h&gt;</span><span class="cp">
-#include</span> <span class="cpf">&lt;NW_Core.h&gt;</span><span class="c1">   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Fault</span><span class="cp">
+#include</span> <span class="cpf">&lt;NW_Core.h&gt;</span><span class="c1">   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Report</span><span class="cp">
 </span>
 <span class="cp">#ifndef M_PI
 </span>  <span class="cp">#define M_PI 3.14159265358979323846
@@ -470,7 +470,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 </span>
 <span class="c1">// Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is</span>
 <span class="c1">// the first firmware serving the Schema 1 register map.</span>
-<span class="cp">#define APIS_FW_MIN_PATCH 2
+<span class="cp">#define APIS_FW_MIN_PATCH 3
 </span>
 <span class="c1">// Register addresses and bit masks are implementation details and live in</span>
 <span class="c1">// Apis.cpp (NW convention: no public names for them). Sketches use the API.</span>
@@ -542,13 +542,14 @@ License: GNU GPL v3. You should find a copy in the repository.
 
         <span class="kt">bool</span> <span class="nf">requestReading</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span> <span class="o">=</span> <span class="n">ALL</span><span class="p">);</span>
 
-        <span class="c1">// --- Faults (status byte, live; fault byte, latched) ---</span>
+        <span class="c1">// --- Faults (status byte, live; Report register, latched) ---</span>
         <span class="kt">bool</span> <span class="nf">faulted</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">chip</span><span class="p">);</span>
         <span class="kt">bool</span> <span class="nf">anyFault</span><span class="p">();</span>
-        <span class="kt">uint8_t</span> <span class="nf">faultChip</span><span class="p">();</span>
-        <span class="kt">uint8_t</span> <span class="nf">faultKind</span><span class="p">();</span>
-        <span class="kt">size_t</span> <span class="nf">printFault</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
-        <span class="n">String</span> <span class="nf">faultNote</span><span class="p">();</span>
+        <span class="kt">uint8_t</span> <span class="nf">reportChip</span><span class="p">();</span>
+        <span class="kt">uint8_t</span> <span class="nf">reportKind</span><span class="p">();</span>
+        <span class="kt">size_t</span> <span class="nf">printReport</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
+        <span class="n">String</span> <span class="nf">reportNote</span><span class="p">();</span>
+        <span class="kt">size_t</span> <span class="nf">printStatus</span><span class="p">(</span><span class="n">Print</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">);</span>
         <span class="n">String</span> <span class="nf">beginFailure</span><span class="p">();</span>
 
         <span class="kt">bool</span> <span class="nf">updateRange</span><span class="p">();</span>
@@ -565,6 +566,8 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="kt">float</span> <span class="nf">getRoll</span><span class="p">();</span>
         <span class="kt">float</span> <span class="nf">getPitch</span><span class="p">();</span>
         <span class="kt">uint8_t</span> <span class="nf">getSignalStrength</span><span class="p">();</span>
+        <span class="kt">int16_t</span> <span class="nf">getAccelTemperature</span><span class="p">();</span>
+        <span class="kt">int16_t</span> <span class="nf">getZeroTemperature</span><span class="p">();</span>
 
         <span class="c1">// --- Statistics getters ---</span>
         <span class="c1">// Computed two-pass in 32-bit float over the readings stored by the last</span>
@@ -645,6 +648,9 @@ License: GNU GPL v3. You should find a copy in the repository.
 
         <span class="c1">// LiDAR Lite signal strength; updated by updateRange()</span>
         <span class="kt">uint8_t</span> <span class="n">_signalStrength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="c1">// Accelerometer temperature digits (relative); updated by updateOrientation()</span>
+        <span class="kt">int16_t</span> <span class="n">_accelTemp</span> <span class="o">=</span> <span class="n">APIS_NOT_MEASURED</span><span class="p">;</span>
+        <span class="kt">int16_t</span> <span class="n">_zeroTemp</span>  <span class="o">=</span> <span class="n">APIS_NOT_MEASURED</span><span class="p">;</span>
 
         <span class="c1">// Sensor sensitivity; set initially to default "balanced" mode</span>
         <span class="n">SensitivityMode</span> <span class="n">_sensitivity</span> <span class="o">=</span> <span class="n">SENSITIVITY_BALANCED</span><span class="p">;</span>
@@ -672,7 +678,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 <hr />
 
-<p>Updated on 2026-09-23 at 16:11:20 +0000</p>
+<p>Updated on 2026-09-23 at 17:21:28 +0000</p>
 
         
       </section>
