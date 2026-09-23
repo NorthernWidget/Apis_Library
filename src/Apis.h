@@ -45,12 +45,6 @@ License: GNU GPL v3. You should find a copy in the repository.
   #define APIS_ORIENT_CAPACITY 8
 #endif
 
-#define APIS_BIT_READY     0x01
-#define APIS_BIT_PANFAULT  0x80
-#define APIS_CTRL_TRIGGER  0x01
-#define APIS_CTRL_LIDAR    0x02
-#define APIS_CTRL_ACCEL    0x04
-
 /**
  * @brief Sensitivity mode for the LiDAR Lite acquisition pipeline.
  * @details Written to REG_CONFIG (0x0B) by begin(); applied on every
@@ -78,8 +72,9 @@ enum SensitivityMode : uint8_t {
 /// Sentinel returned by all getters and printed by getString() when a
 /// measurement fails due to hardware fault, I2C failure, or out-of-range
 /// reading. Applies to all measurement types: range, pitch, roll, and all
-/// derived statistics (mean, std, sterr).
-#define APIS_ERROR        -9999
+/// derived statistics (mean, std, sterr). The same value as NW_ERROR, which
+/// every NW library uses; APIS_ERROR is the Apis spelling of it.
+#define APIS_ERROR        NW_ERROR
 
 /// Sentinel returned by all getters and printed by getString() when begin()
 /// has been called but no successful updateMeasurements() (or
