@@ -91,7 +91,7 @@ bool Apis::updateRange() {
     }
     // Range low/high and signal strength are consecutive (0x28–0x2A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
-    _dev.readBytes(REG_RANGE_L, d, 3);
+    _dev.readData(REG_RANGE_L, d, 3);
     _range = (int16_t)((d[1] << 8) | d[0]);
     _signalStrength = d[2];
 
@@ -113,7 +113,7 @@ bool Apis::updateOrientation() {
 
     // Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35): one read of six bytes
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
-    _dev.readBytes(REG_ACCEL_BASE, d, 6);
+    _dev.readData(REG_ACCEL_BASE, d, 6);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
 
     // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2): one read of six bytes
