@@ -86,13 +86,6 @@ enum SensitivityMode : uint8_t {
 // Deprecated component selectors. Use the class-scoped Apis::ALL, Apis::RANGE,
 // Apis::ORIENT instead (see Apis::Component). Kept so existing sketches compile;
 // values match the enum and will be removed in a future major version.
-#ifndef NW_READING_ALL
-  #define NW_READING_ALL       0
-  #define NW_READING_PRIMARY   1
-  #define NW_READING_SECONDARY 2
-#endif
-#define NW_READING_RANGE  NW_READING_PRIMARY
-#define NW_READING_ORIENT NW_READING_SECONDARY
 
 /**
  * @brief Arduino library for the Apis board, which manages a LiDAR Lite
@@ -125,9 +118,9 @@ class Apis
          * Written as Apis::RANGE etc. at the call site.
          */
         enum Component : uint8_t {
-            ALL    = 0,   ///< Every chip: range, then pitch and roll.
-            RANGE  = 1,   ///< LiDAR Lite only.
-            ORIENT = 2    ///< Accelerometer only.
+            RANGE  = 0x01,  ///< LiDAR Lite only (chip 0: the control chip-select bit).
+            ORIENT = 0x02,  ///< Accelerometer only (chip 1).
+            ALL    = 0x03   ///< Every chip: range, then pitch and roll.
         };
 
         /**
@@ -485,6 +478,16 @@ class Apis
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;
 };
+
+// Deprecated component selectors (v0.1.x): the class-scoped Apis::ALL,
+// Apis::RANGE, Apis::ORIENT replace them. Kept so existing sketches compile.
+#ifndef NW_READING_ALL
+  #define NW_READING_ALL       Apis::ALL
+  #define NW_READING_PRIMARY   Apis::RANGE
+  #define NW_READING_SECONDARY Apis::ORIENT
+#endif
+#define NW_READING_RANGE  NW_READING_PRIMARY
+#define NW_READING_ORIENT NW_READING_SECONDARY
 
 /** @deprecated Use Apis::DEFAULT_ADDRESS. Every NW library defined this same macro
  *  with a different value, so a sketch including two of them got the last one.

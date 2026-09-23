@@ -37,10 +37,7 @@ uint8_t Apis::getHardwareMinor()   { return _dev.hardwareMinor(); }
 uint8_t Apis::getFirmwareVersion() { return _dev.firmwareVersion(); }
 
 uint8_t Apis::_chips(uint8_t component) {
-    uint8_t chips = 0;
-    if (component == ALL || component == RANGE)  chips |= 0x01;   // chip 0: LiDAR Lite
-    if (component == ALL || component == ORIENT) chips |= 0x02;   // chip 1: accelerometer
-    return chips;
+    return component & ALL;   // the selectors are the chip-select bits: RANGE chip 0, ORIENT chip 1
 }
 uint16_t Apis::setRangeReadings(uint16_t n)  { return _rangeCfg.set(n, APIS_RANGE_CAPACITY); }
 uint16_t Apis::setOrientReadings(uint16_t n) { return _orientCfg.set(n, APIS_ORIENT_CAPACITY); }
@@ -150,7 +147,7 @@ bool Apis::updateOrientation() {
 bool Apis::updateMeasurements(uint8_t component) {
     bool rangeOK  = true;
     bool orientOK = true;
-    if (component == ALL || component == RANGE) {
+    if (component & RANGE) {
     // Take N range readings; each successful one appends to _rangeReadings[].
     // The device is told how many follow so it holds the LiDAR powered for the
     // batch (0/1 means power down after each), and a LiDAR that will not power
@@ -168,7 +165,7 @@ bool Apis::updateMeasurements(uint8_t component) {
     // never computed, so the float representation is exact and consistent.
     rangeOK = (_range != NW_ERROR);
     }
-    if (component == ALL || component == ORIENT) {
+    if (component & ORIENT) {
     // Take N orientation readings; each successful one appends to the arrays.
     _pitchReadings.reset();
     _rollReadings.reset();
@@ -239,10 +236,10 @@ String Apis::getHeader() {
 
 void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
-    if (component == ALL || component == RANGE)  _rangeReadings.reset();
-    if (component == ALL || component == ORIENT) { _pitchReadings.reset(); _rollReadings.reset(); }
+    if (component & RANGE)  _rangeReadings.reset();
+    if (component & ORIENT) { _pitchReadings.reset(); _rollReadings.reset(); }
     _dev.resetBatch();
-    if (n > 1 && (component == ALL || component == RANGE)) _dev.writeBatch(n);
+    if (n > 1 && (component & RANGE)) _dev.writeBatch(n);
 }
 
 void Apis::endReadings() {
@@ -251,10 +248,10 @@ void Apis::endReadings() {
 
 size_t Apis::printHeader(Print& out) {
     size_t n = 0;
-    if (_rawComponent == ALL || _rawComponent == RANGE) {
+    if (_rawComponent & RANGE) {
         n += out.print("Range [cm],");
     }
-    if (_rawComponent == ALL || _rawComponent == ORIENT) {
+    if (_rawComponent & ORIENT) {
         n += out.print("Pitch [deg],Roll [deg],");
     }
     return n;
@@ -262,10 +259,10 @@ size_t Apis::printHeader(Print& out) {
 
 size_t Apis::printReading(Print& out) {
     size_t n = 0;
-    if (_rawComponent == ALL || _rawComponent == RANGE) {
+    if (_rawComponent & RANGE) {
         n += out.print(_range);  n += out.print(',');
     }
-    if (_rawComponent == ALL || _rawComponent == ORIENT) {
+    if (_rawComponent & ORIENT) {
         n += out.print(_pitch);  n += out.print(',');
         n += out.print(_roll);   n += out.print(',');
     }
@@ -273,8 +270,8 @@ size_t Apis::printReading(Print& out) {
 }
 
 size_t Apis::logReading(Print& out) {
-    if (_rawComponent == ALL || _rawComponent == RANGE)  updateRange();
-    if (_rawComponent == ALL || _rawComponent == ORIENT) updateOrientation();
+    if (_rawComponent & RANGE)  updateRange();
+    if (_rawComponent & ORIENT) updateOrientation();
     return printReading(out);
 }
 
@@ -286,11 +283,11 @@ void Apis::beginRawReadings(uint8_t component) {
 }
 
 uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
-    if (_rawComponent == ALL || _rawComponent == RANGE) {
+    if (_rawComponent & RANGE) {
         updateRange();
         offset += snprintf(buf + offset, 8, "%d,", (int)_range);
     }
-    if (_rawComponent == ALL || _rawComponent == ORIENT) {
+    if (_rawComponent & ORIENT) {
         char tmp[10];
         if (updateOrientation()) {
             dtostrf(_pitch, 1, 2, tmp);
