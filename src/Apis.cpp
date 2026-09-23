@@ -80,7 +80,7 @@ size_t Apis::printReport(Print& out) {
 
 size_t Apis::printStatus(Print& out, bool boot) {
     static const char* const chips[] = {"LiDAR", "Accel"};
-    return _dev.printSnapshot(out, chips, 2, boot);
+    return _dev.printSnapshot(out, chips, 2, boot, APIS_LIBRARY_VERSION, APIS_LIBRARY_COMMIT);
 }
 
 bool    Apis::reportIsFault()  { return _dev.report().isFault(); }

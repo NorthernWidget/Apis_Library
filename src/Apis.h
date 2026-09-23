@@ -30,6 +30,14 @@ License: GNU GPL v3. You should find a copy in the repository.
 // zero generation with every reading, which this library reads.
 #define APIS_FW_MIN_PATCH 5
 
+// Build identity: this library's version (held equal to library.properties by
+// NW-Tests/version_check.py) and its build commit, set by the NW-Build wrapper from
+// git and blank in an Arduino IDE build. Both go into a logger's status file.
+#define APIS_LIBRARY_VERSION "0.1.0"
+#ifndef APIS_LIBRARY_COMMIT
+#define APIS_LIBRARY_COMMIT ""
+#endif
+
 // Register addresses and bit masks are implementation details and live in
 // Apis.cpp (NW convention: no public names for them). Sketches use the API.
 
