@@ -70,10 +70,14 @@ size_t Apis::printReport(Print& out) {
     return _dev.report().print(out, chips, 2);
 }
 
-size_t Apis::printStatus(Print& out) {
+size_t Apis::printStatus(Print& out, bool boot) {
     static const char* const chips[] = {"LiDAR", "Accel"};
-    return _dev.printSnapshot(out, chips, 2);
+    return _dev.printSnapshot(out, chips, 2, boot);
 }
+
+bool    Apis::reportIsFault()  { return _dev.report().isFault(); }
+uint8_t Apis::bootReportKind() { return _dev.bootReport().kind(); }
+void    Apis::clearBootReport() { _dev.clearBootReport(); }
 
 String Apis::reportNote() {
     // One word for a data-table note: the chip, then the kind ("LiDARTimeout").

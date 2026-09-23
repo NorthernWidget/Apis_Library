@@ -104,7 +104,7 @@ enum SensitivityMode : uint8_t {
  * within the Apis is essential, and the Apis therefore acts as a
  * buffer to protect the data logger from raw sensor failures.
  */
-class Apis
+class Apis : public NW_Sensor
 {
     public:
         /** @brief Default I2C address: NW-Device-Specification Schema 1 'A' (0x41). Firmware v0.1.x used 0x50. */
@@ -264,7 +264,12 @@ class Apis
          * comma separated, no newline. The logger prints its timestamp first.
          * Three page reads, no write: the report is not acknowledged.
          */
-        size_t printStatus(Print& out);
+        size_t printStatus(Print& out, bool boot = false) override;
+        // --- NW_Sensor: the logger's view (Margay::watch) ---
+        const char* name() const override { return "Apis"; }
+        bool reportIsFault() override;
+        uint8_t bootReportKind() override;
+        void clearBootReport() override;
         /**
          * @brief Why the last begin() refused, as one word: "NoACK",
          * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
