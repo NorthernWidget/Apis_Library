@@ -43,6 +43,8 @@ getOrientCount	KEYWORD2
 getRange	KEYWORD2
 getRoll	KEYWORD2
 getPitch	KEYWORD2
+getAccelTemperature	KEYWORD2
+getZeroTemperature	KEYWORD2
 getRangeMean	KEYWORD2
 getRangeMedian	KEYWORD2
 getPitchMedian	KEYWORD2
