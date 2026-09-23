@@ -169,17 +169,14 @@ bool Apis::updateMeasurements(uint8_t component) {
     bool rangeOK  = true;
     bool orientOK = true;
     if (component == ALL || component == RANGE) {
-    // Tell the device how many readings follow so it holds the LiDAR powered
-    // for the batch (single readings need no word: 0/1 means power down after each).
-    if (_nRangeReadings > 1) _dev.writeBatch(_nRangeReadings);
     // Take N range readings; each successful one appends to _rangeReadings[].
-    // Statistics are read from the array (two-pass in float, exact enough for N
-    // up to the array capacity; see the precision note in Apis.h).
+    // The device is told how many follow so it holds the LiDAR powered for the
+    // batch (0/1 means power down after each), and a LiDAR that will not power
+    // up stops the batch (NW_Device::takeReadings). Statistics are read from
+    // the array (two-pass in float, exact enough for N up to the array
+    // capacity; see the precision note in Apis.h).
     _rangeReadings.reset();
-    _dev.resetBatch();
-    for (uint16_t i = 0; i < _nRangeReadings; i++) {
-        if (!updateRange() && _dev.batchFaulted(0x01)) break;   // LiDAR will not power up: stop the batch
-    }
+    _dev.takeReadings(0x01, _nRangeReadings, [this] { return updateRange(); });
     if (_rangeReadings.count() == 0) {
         _range = NW_ERROR;
     } else {
@@ -193,7 +190,7 @@ bool Apis::updateMeasurements(uint8_t component) {
     // Take N orientation readings; each successful one appends to the arrays.
     _pitchReadings.reset();
     _rollReadings.reset();
-    for (uint16_t i = 0; i < _nOrientReadings; i++) updateOrientation();
+    _dev.takeReadings(0x02, _nOrientReadings, [this] { return updateOrientation(); });
     if (_pitchReadings.count() == 0) {
         _pitch = _roll = NW_ERROR;
     } else {
