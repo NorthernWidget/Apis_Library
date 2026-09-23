@@ -46,6 +46,9 @@ getRoll	KEYWORD2
 getPitch	KEYWORD2
 getAccelTemperature	KEYWORD2
 getZeroTemperature	KEYWORD2
+getZeroGeneration	KEYWORD2
+zeroChanged	KEYWORD2
+dumpZeros	KEYWORD2
 getRangeMean	KEYWORD2
 getRangeMedian	KEYWORD2
 getPitchMedian	KEYWORD2

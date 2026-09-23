@@ -8,11 +8,14 @@
 // Page 0 (0x00–0x1F): identity, EEPROM-backed
 // Page 1 (0x20–0x3F): calibration, EEPROM-backed
 #define REG_OFFSET_BASE 0x20  // Accel offset X low byte; X/Y/Z span 0x20–0x25, little-endian int16; 0x26–0x27 the temperature word at the zero
+// 0x28–0x2F and 0x30–0x37: the two zeros before the current one, same form (firmware patch 5)
+#define REG_ZERO_GEN    0x38  // Zero generation, little-endian uint16: zeros stored since manufacture, 0 never (patch 5)
 // Page 2 (0x40–0x5F): status and sensor data, SRAM
 #define REG_RANGE_L     0x48  // Range low byte  (little-endian int16, cm)
 #define REG_RANGE_H     0x49  // Range high byte
 #define REG_SIGNAL_STR  0x4A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
 #define REG_ACCEL_BASE  0x50  // Accel raw X low byte; X/Y/Z span 0x50–0x55, little-endian int16; 0x56–0x57 the temperature word
+// 0x58–0x59: the zero generation again, mirrored from Page 1 with every reading (patch 5)
 
 
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
@@ -31,6 +34,11 @@ bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
     // firmware patch >= APIS_FW_MIN_PATCH); versions are stored before any refusal.
     if (!_dev.begin(address, "Apis", APIS_FW_MIN_PATCH)) return false;
     _dev.writeConfig((uint8_t)_sensitivity);
+    // Page 1's zero generation once, so zeroChanged() has a reference before the first reading
+    uint8_t g[2] = {0, 0};
+    _dev.readBytes(REG_ZERO_GEN, g, 2);
+    _zeroGen = g[0] | (g[1] << 8);
+    _zeroChanged = false;
     return true;
 }
 
@@ -121,13 +129,14 @@ bool Apis::updateOrientation() {
         return false;
     }
     int16_t dataSet[6];
-    uint8_t d[8];
+    uint8_t d[10];
 
-    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x50–0x55) and the temperature word (0x56–0x57): one read of eight bytes
+    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x50–0x55), the temperature word (0x56–0x57) and the zero generation (0x58–0x59): one read of ten bytes
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
-    _dev.readData(REG_ACCEL_BASE, d, 8);
+    _dev.readData(REG_ACCEL_BASE, d, 10);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
     _accelTemp = (int8_t)d[7];           // the LIS3DH digit is the word's high byte (1 per degree C, relative)
+    uint16_t generation = d[8] | (d[9] << 8);
 
     // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x20–0x25, Page 1) and the temperature at the zero (0x26–0x27): one read of eight bytes
     memset(d, 0xFF, sizeof d);
@@ -146,7 +155,10 @@ bool Apis::updateOrientation() {
         _pitch = _roll = NW_ERROR;
         _accelTemp = NW_ERROR;
         return false;
-    } else if (offsetX == offsetY && offsetX == offsetZ && offsetX == 0) {
+    }
+    _zeroChanged = (generation != _zeroGen);   // a reading that reached us: its generation against the last one seen
+    _zeroGen = generation;
+    if (offsetX == offsetY && offsetX == offsetZ && offsetX == 0) {
         _pitch = atan(-gx/gz) * 180. / M_PI;
         _roll  = atan(gy / sqrt(pow(gx, 2) + pow(gz, 2))) * 180. / M_PI;
     } else {
@@ -243,6 +255,36 @@ int16_t Apis::getAccelTemperature() {
 
 int16_t Apis::getZeroTemperature() {
     return _zeroTemp;
+}
+
+uint16_t Apis::getZeroGeneration() {
+    return _zeroGen;
+}
+
+bool Apis::zeroChanged() {
+    return _zeroChanged;
+}
+
+size_t Apis::dumpZeros(Print& out) {
+    // Page 1 in one read (calibration, not a reading, so readBytes): Blocks 0–2 hold
+    // the current zero and the two before it, 0x38–0x39 the generation. Newest first;
+    // only zeros that were stored are printed (generation counts them).
+    uint8_t p[32];
+    memset(p, 0, sizeof p);
+    if (!_dev.readBytes(REG_OFFSET_BASE, p, 32)) return 0;
+    uint16_t generation = p[REG_ZERO_GEN - REG_OFFSET_BASE] | (p[REG_ZERO_GEN - REG_OFFSET_BASE + 1] << 8);
+    size_t n = 0;
+    for (uint8_t k = 0; k < 3 && k < generation; k++) {
+        const uint8_t* z = p + 8*k;
+        n += out.print((unsigned int)(generation - k));
+        for (int i = 0; i < 3; i++) {
+            n += out.print(',');
+            n += out.print((int)(int16_t)((z[2*i + 1] << 8) | z[2*i]));
+        }
+        n += out.print(',');
+        n += out.println((int)(int8_t)z[7]);   // the temperature digit at that zero, as getZeroTemperature() gives it
+    }
+    return n;
 }
 
 String Apis::getHeader() {

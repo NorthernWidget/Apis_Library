@@ -26,8 +26,9 @@ License: GNU GPL v3. You should find a copy in the repository.
 #endif
 
 // Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is
-// the first firmware serving the Schema 1 register map.
-#define APIS_FW_MIN_PATCH 3
+// the first firmware serving the Schema 1 register map; patch 5 serves the
+// zero generation with every reading, which this library reads.
+#define APIS_FW_MIN_PATCH 5
 
 // Register addresses and bit masks are implementation details and live in
 // Apis.cpp (NW convention: no public names for them). Sketches use the API.
@@ -339,6 +340,28 @@ class Apis : public NW_Sensor
         int16_t getAccelTemperature();
         /** @brief The same digit at the moment the Hall-effect zero was taken (Page 1). */
         int16_t getZeroTemperature();
+        /**
+         * @brief How many zeros the unit has stored since manufacture (0 =
+         * never), from the copy the reading carries (0x58–0x59, firmware
+         * patch 5). Read with the axes, so it belongs to the last orientation
+         * reading; the value seen at begin() before then.
+         */
+        uint16_t getZeroGeneration();
+        /**
+         * @brief True when the last orientation reading's generation differs
+         * from the one seen at the reading before it, or at begin(), which
+         * reads Page 1's generation once: the unit has stored a new zero.
+         */
+        bool zeroChanged();
+        /**
+         * @brief Print the record of zeros from Page 1: the current zero and
+         * the two before it, newest first, one line each as
+         * generation,X,Y,Z,T (offsets in counts; T the temperature digit at
+         * the zero). Zeros never stored print nothing, so a unit zeroed once
+         * prints one line. Reads calibration, not a reading: no acquisition.
+         * @return Bytes written.
+         */
+        size_t dumpZeros(Print& out);
 
         // --- Statistics getters ---
         // Computed two-pass in 32-bit float over the readings stored by the last
@@ -494,6 +517,10 @@ class Apis : public NW_Sensor
         // Accelerometer temperature digits (relative); updated by updateOrientation()
         int16_t _accelTemp = APIS_NOT_MEASURED;
         int16_t _zeroTemp  = APIS_NOT_MEASURED;
+        // Zero generation carried by the last orientation reading (begin() seeds it
+        // from Page 1), and whether it moved between the last two readings
+        uint16_t _zeroGen = 0;
+        bool _zeroChanged = false;
 
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
