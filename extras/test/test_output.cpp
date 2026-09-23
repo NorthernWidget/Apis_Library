@@ -6,38 +6,19 @@
 TwoWire Wire;
 #include "../../src/Apis.cpp"
 
-static uint8_t crc8(const uint8_t* d, uint8_t n) {           // CRC-8/SMBUS, as NW-Provision writes it
-    uint8_t c = 0; for (uint8_t i = 0; i < n; i++) { c ^= d[i]; for (int b = 0; b < 8; b++) c = (c & 0x80) ? (c << 1) ^ 0x07 : (c << 1); }
-    return c;
-}
+#include "NW_TestSupport.h"
 
 // Build a Schema 1 register image: Page 0 as NW-Provision writes it (with the
 // firmware's patch at 0x0A), Page 1 with a complete reading, Page 2 offsets.
 static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int16_t az,
                       int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 2, uint8_t schema = 0x01) {
-    uint8_t* r = Wire.image; memset(r, 0, sizeof(Wire.image));
-    r[0x00] = schema; r[0x01] = 'A'; r[0x02] = 'p'; r[0x03] = 'i'; r[0x04] = 's';
-    r[0x08] = 0; r[0x09] = 1; r[0x0A] = fwPatch;                       // HW 0.1, FW patch
-    r[0x10] = 0x41; r[0x11] = 0x01; r[0x12] = 0; r[0x13] = 7; r[0x14] = 0; r[0x15] = 42;
-    r[0x1D] = 0x4E; r[0x1E] = crc8(r, 0x1E); r[0x1F] = 0x41;
-    r[0x20] = 0x01;                                                   // ready
-    r[0x21] = 0x06;                                                   // both chips selected
-    r[0x22] = 1; r[0x23] = 0;                                         // reading counter = 1
-    r[0x26] = 0x00; r[0x27] = 0x00;
+    uint8_t* r = Wire.image;
+    nwLoadPage0(r, "Apis", 0x41, 1, fwPatch, schema);                 // Page 0 and Block 0, HW 0.1
     r[0x28] = range & 0xFF; r[0x29] = (range >> 8) & 0xFF; r[0x2A] = signal;
     int16_t a[3] = {ax, ay, az}, o[3] = {ox, oy, oz};
     for (int i = 0; i < 3; i++) { r[0x30 + 2*i] = a[i] & 0xFF; r[0x31 + 2*i] = (a[i] >> 8) & 0xFF;
                                   r[0x40 + 2*i] = o[i] & 0xFF; r[0x41 + 2*i] = (o[i] >> 8) & 0xFF; }
 }
-
-// Print into a fixed buffer: the in-memory Print destination from the design.
-class BufferPrint : public Print {
-    char* _buf; size_t _cap, _len = 0;
-  public:
-    BufferPrint(char* buf, size_t cap) : _buf(buf), _cap(cap) { _buf[0] = 0; }
-    size_t write(uint8_t c) override { if (_len + 1 >= _cap) return 0; _buf[_len++] = c; _buf[_len] = 0; return 1; }
-    size_t length() const { return _len; }
-};
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"   // the deprecated names are under test on purpose
@@ -65,27 +46,8 @@ static void report(const char* name, Apis& a) {
 }
 #pragma GCC diagnostic pop
 
-// Emulate the Schema 1 firmware's response to a control write: a trigger
-// completes a reading at once — counter +1, ready set, trigger and sleep
-// bits cleared, fault byte cleared. A per-test hook can vary the data.
-static std::function<void(TwoWire&)> onReading;
-static uint16_t lastRequest = 0;   // readings-requested word as the stub firmware saw it
-static void installFirmwareEmulation() {
-    Wire.onWrite = [](TwoWire& w, uint8_t reg, uint8_t val) {
-        if (reg == 0x24) lastRequest = (lastRequest & 0xFF00) | val;
-        if (reg == 0x25) lastRequest = (lastRequest & 0x00FF) | (val << 8);
-        if (reg != 0x21) return;
-        w.image[0x27] = 0;                                  // any control write acknowledges the fault
-        if (!(val & 0x01)) return;
-        w.image[0x21] = val & 0x7E;                         // trigger and sleep consumed
-        if (onReading) onReading(w);
-        uint16_t c = w.image[0x22] | (w.image[0x23] << 8); c++;
-        w.image[0x22] = c & 0xFF; w.image[0x23] = c >> 8;
-        w.image[0x20] |= 0x01;
-    };
-}
-
 int main() {
+    Wire.deviceAddress = 0x41;
     installFirmwareEmulation();
     // 1. Single reading, no statistics, level board.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
