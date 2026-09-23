@@ -99,15 +99,15 @@ String Apis::beginFailure() { return _dev.beginFailure(); }
 
 bool Apis::updateRange() {
     if (_dev.batchFaulted(0x01)) {        // rest of a batch whose LiDAR did not power up
-        _range = APIS_ERROR;
+        _range = NW_ERROR;
         return false;
     }
     if (!_dev.takeReading(_chips(RANGE))) {
-        _range = APIS_ERROR;
+        _range = NW_ERROR;
         return false;
     }
     if (_dev.batchFaulted(0x01)) {        // no acknowledge / not initialised: the chip is not coming
-        _range = APIS_ERROR;
+        _range = NW_ERROR;
         return false;
     }
     // Range low/high and signal strength are consecutive (0x28–0x2A): one read.
@@ -117,7 +117,7 @@ bool Apis::updateRange() {
     _signalStrength = d[2];
 
     if (_range < 0) {
-        _range = APIS_ERROR;
+        _range = NW_ERROR;
         return false;
     }
     _rangeReadings.append(_range);
@@ -126,7 +126,7 @@ bool Apis::updateRange() {
 
 bool Apis::updateOrientation() {
     if (!_dev.takeReading(_chips(ORIENT))) {
-        _pitch = _roll = APIS_ERROR;
+        _pitch = _roll = NW_ERROR;
         return false;
     }
     int16_t dataSet[6];
@@ -150,7 +150,7 @@ bool Apis::updateOrientation() {
     // (arithmetic shift). All three axes equal to -1 is therefore the I2C bus
     // failure signature, not a physical accelerometer reading.
     if (gx == gy && gx == gz && gx == -1) {
-        _pitch = _roll = APIS_ERROR;
+        _pitch = _roll = NW_ERROR;
         return false;
     } else if (offsetX == offsetY && offsetX == offsetZ && offsetX == 0) {
         _pitch = atan(-gx/gz) * 180. / M_PI;
@@ -181,13 +181,13 @@ bool Apis::updateMeasurements(uint8_t component) {
         if (!updateRange() && _dev.batchFaulted(0x01)) break;   // LiDAR will not power up: stop the batch
     }
     if (_rangeReadings.count() == 0) {
-        _range = APIS_ERROR;
+        _range = NW_ERROR;
     } else {
         _range = (int16_t)getRangeMean();
     }
-    // Float comparisons with APIS_ERROR are safe: the value is assigned directly,
+    // Float comparisons with NW_ERROR are safe: the value is assigned directly,
     // never computed, so the float representation is exact and consistent.
-    rangeOK = (_range != APIS_ERROR);
+    rangeOK = (_range != NW_ERROR);
     }
     if (component == ALL || component == ORIENT) {
     // Take N orientation readings; each successful one appends to the arrays.
@@ -195,12 +195,12 @@ bool Apis::updateMeasurements(uint8_t component) {
     _rollReadings.reset();
     for (uint16_t i = 0; i < _nOrientReadings; i++) updateOrientation();
     if (_pitchReadings.count() == 0) {
-        _pitch = _roll = APIS_ERROR;
+        _pitch = _roll = NW_ERROR;
     } else {
         _pitch = _pitchReadings.mean();
         _roll  = _rollReadings.mean();
     }
-    orientOK = (_pitch != APIS_ERROR) && (_roll != APIS_ERROR);
+    orientOK = (_pitch != NW_ERROR) && (_roll != NW_ERROR);
     }
     return rangeOK && orientOK;
 }
@@ -319,7 +319,7 @@ uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
             dtostrf(_roll, 1, 2, tmp);
             offset += snprintf(buf + offset, 10, "%s,", tmp);
         } else {
-            offset += snprintf(buf + offset, 13, "-9999,-9999,"); // APIS_ERROR twice; string
+            offset += snprintf(buf + offset, 13, "-9999,-9999,"); // NW_ERROR twice; string
                                                                   // literal used because the
                                                                   // buffer size (13) is tied to
                                                                   // the digit count of -9999.
