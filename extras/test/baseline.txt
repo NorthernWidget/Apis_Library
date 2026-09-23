@@ -56,7 +56,7 @@ string: -9998,-9998.00,-9998.00,-9998,
 [faults] note='AccelNotAnswering' (accel no ack)
 [notice] any=0 chip=1 kind=9 note='AccelCalibrationStored' (calibration stored: no status bit, data stand)
 [boot report] note='UnitRestarted' after begin(); after the first reading: 'UnitNone'
-[status] 259 bytes: Apis,4101-0007-002A-0000,0.1,3,,,,0x29,AccelCalibrationStored,0141706973000000 0001030000000000 41010007002A0000 00000000004E6241,0000000000000018 0000000000000000 0000000000000000 0000000000000000,0104030000000029 FA00780000000000 0000000000040015 0000000000
+[status] 259 bytes: Apis,4101-0007-002A-0000,0.1,5,,,,0x29,AccelCalibrationStored,0141706973000000 0001050000000000 41010007002A0000 00000000004E8A41,0000000000000018 0000000000000000 0000000000000000 0000000000000000,0104030000000029 FA00780000000000 0000000000040015 0000000000
 [faults] note='Chip2Kind17' (chip 2 kind 17)
 [request] updateMeasurements N=5 -> word=5
 [request] updateMeasurements N=1 -> word=0 (no write)
@@ -66,5 +66,14 @@ string: -9998,-9998.00,-9998.00,-9998,
 [wrong name] begin=0 failure=WrongName
 [schema 0x00] begin=0 fw=1 failure=NotSchema1
 [schema 0xFF unprovisioned] begin=0 failure=NotSchema1
-[fw patch 0 < min 3] begin=0 fw=0 failure=OldFirmware
-[versions] begin=1 hw=0.1 fw=3 failure=None
+[fw patch 0 < min 5] begin=0 fw=0 failure=OldFirmware
+[versions] begin=1 hw=0.1 fw=5 failure=None
+[zero generation] at begin=1 changed=0; after a reading: generation=1 changed=0; generation moved: generation=2 changed=1; next reading: changed=0
+[zero generation] begin at 3: generation=3 changed=0
+[dumpZeros] generation 5, 46 bytes:
+5,10,-5,1000,24
+4,12,-4,998,20
+3,9,-6,1001,18
+[dumpZeros] generation 1, 16 bytes:
+1,10,-5,1000,24
+[dumpZeros] generation 0, 0 bytes: ''

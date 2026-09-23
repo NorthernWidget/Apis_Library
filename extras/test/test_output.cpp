@@ -10,8 +10,10 @@ TwoWire Wire;
 
 // Build a Schema 1 register image: Page 0 as NW-Provision writes it (with the
 // firmware's patch at 0x0A), Page 2 with a complete reading, Page 1 offsets.
+// The zero generation (0x38–0x39, mirrored at 0x58–0x59) is 1 when offsets are
+// given and 0 (never zeroed) when they are all zero.
 static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int16_t az,
-                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 3, uint8_t schema = 0x01,
+                      int16_t ox, int16_t oy, int16_t oz, uint8_t fwPatch = 5, uint8_t schema = 0x01,
                       int8_t accelT = 21, int8_t zeroT = 24) {
     uint8_t* r = Wire.image;
     nwLoadPage0(r, "Apis", 0x41, 1, fwPatch, schema);                 // Page 0 and Block 0, HW 0.1
@@ -21,6 +23,26 @@ static void loadImage(int16_t range, uint8_t signal, int16_t ax, int16_t ay, int
                                   r[0x20 + 2*i] = o[i] & 0xFF; r[0x21 + 2*i] = (o[i] >> 8) & 0xFF; }
     r[0x56] = 0x00; r[0x57] = (uint8_t)accelT;                         // OUT_ADC3 word: the digit in the high byte
     r[0x26] = 0x00; r[0x27] = (uint8_t)zeroT;
+    uint8_t generation = (ox || oy || oz) ? 1 : 0;
+    r[0x38] = generation; r[0x39] = 0; r[0x58] = generation; r[0x59] = 0;
+}
+
+// Set the zero generation in the image, on Page 1 and in the reading's mirror.
+static void setGeneration(uint8_t* r, uint16_t generation) {
+    r[0x38] = generation & 0xFF; r[0x39] = generation >> 8;
+    r[0x58] = r[0x38]; r[0x59] = r[0x39];
+}
+
+// Fill the record of zeros on Page 1: Block k (0x20 + 8k) holds zero k of the
+// three given (current, previous, the one before), each X, Y, Z and the
+// temperature word with its digit in the high byte; then the generation.
+static void loadZeros(uint16_t generation, const int16_t zeros[3][3], const int8_t temps[3]) {
+    uint8_t* r = Wire.image;
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < 3; i++) { r[0x20 + 8*k + 2*i] = zeros[k][i] & 0xFF; r[0x21 + 8*k + 2*i] = (zeros[k][i] >> 8) & 0xFF; }
+        r[0x26 + 8*k] = 0x00; r[0x27 + 8*k] = (uint8_t)temps[k];
+    }
+    setGeneration(r, generation);
 }
 
 #pragma GCC diagnostic push
@@ -183,6 +205,36 @@ int main() {
     { Apis a; bool ok = a.begin(); printf("[fw patch 0 < min %d] begin=%d fw=%u failure=%s\n", APIS_FW_MIN_PATCH, ok, a.getFirmwareVersion(), a.beginFailure().c_str()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; bool ok = a.begin(); printf("[versions] begin=%d hw=%u.%u fw=%u failure=%s\n", ok, a.getHardwareMajor(), a.getHardwareMinor(), a.getFirmwareVersion(), a.beginFailure().c_str()); }
+
+    // 9. The record of zeros (firmware patch 5): the generation rides with the reading;
+    //    zeroChanged() flags the reading after the image's generation moves, once.
+    loadImage(1234, 77, 200, -150, 980, 10, -5, 1000);
+    {
+        Apis a; a.begin();
+        printf("[zero generation] at begin=%u changed=%d", a.getZeroGeneration(), a.zeroChanged());
+        a.updateOrientation(); printf("; after a reading: generation=%u changed=%d", a.getZeroGeneration(), a.zeroChanged());
+        setGeneration(Wire.image, 2);                                        // the unit stored a new zero
+        a.updateOrientation(); printf("; generation moved: generation=%u changed=%d", a.getZeroGeneration(), a.zeroChanged());
+        a.updateOrientation(); printf("; next reading: changed=%d\n", a.zeroChanged());
+    }
+    // 9b. A begin() against a unit already at generation 3 takes that as its reference.
+    loadImage(1234, 77, 200, -150, 980, 10, -5, 1000); setGeneration(Wire.image, 3);
+    {
+        Apis a; a.begin(); a.updateOrientation();
+        printf("[zero generation] begin at 3: generation=%u changed=%d\n", a.getZeroGeneration(), a.zeroChanged());
+    }
+    // 9c. dumpZeros(): a full ring, newest first; one zero; none.
+    loadImage(1234, 77, 200, -150, 980, 10, -5, 1000);
+    {
+        const int16_t zeros[3][3] = {{10, -5, 1000}, {12, -4, 998}, {9, -6, 1001}}; const int8_t temps[3] = {24, 20, 18};
+        loadZeros(5, zeros, temps);
+        Apis a; a.begin(); char zb[96]; BufferPrint zp(zb, sizeof zb); size_t k = a.dumpZeros(zp);
+        printf("[dumpZeros] generation 5, %zu bytes:\n%s", k, zb);
+        loadZeros(1, zeros, temps); BufferPrint zp1(zb, sizeof zb); k = a.dumpZeros(zp1);
+        printf("[dumpZeros] generation 1, %zu bytes:\n%s", k, zb);
+        loadZeros(0, zeros, temps); BufferPrint zp0(zb, sizeof zb); k = a.dumpZeros(zp0);
+        printf("[dumpZeros] generation 0, %zu bytes: '%s'\n", k, zb);
+    }
 
     fprintf(stderr, "bus transactions total: %u\n", Wire.transactions);   // metric, not output
     return 0;
