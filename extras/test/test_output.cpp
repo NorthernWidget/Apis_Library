@@ -121,17 +121,17 @@ int main() {
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); char pb[48];
       onReading = [](TwoWire& w) { w.image[0x20] = 0x83; w.image[0x27] = 0x02; };   // ready | LiDAR fault | pan; LiDAR: timeout
-      a.updateRange(); BufferPrint bp(pb, sizeof pb); a.printFault(bp);
+      a.updateRange(); BufferPrint bp(pb, sizeof pb); a.printReport(bp);
       printf("[faults] faulted(0)=%d faulted(1)=%d any=%d chip=%u kind=%u text='%s'\n",
-             a.faulted(0), a.faulted(1), a.anyFault(), a.faultChip(), a.faultKind(), pb);
+             a.faulted(0), a.faulted(1), a.anyFault(), a.reportChip(), a.reportKind(), pb);
       onReading = [](TwoWire& w) { w.image[0x20] = 0x01; w.image[0x27] = 0xE6; };   // clean reading; unit: reset since configured
-      a.updateRange(); BufferPrint bp2(pb, sizeof pb); a.printFault(bp2);
-      printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.faultChip(), a.faultKind(), pb);
-      printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.faultNote().c_str(), a.beginFailure().c_str());
+      a.updateRange(); BufferPrint bp2(pb, sizeof pb); a.printReport(bp2);
+      printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.reportChip(), a.reportKind(), pb);
+      printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.reportNote().c_str(), a.beginFailure().c_str());
       onReading = [](TwoWire& w) { w.image[0x20] = 0x85; w.image[0x27] = 0x21; };   // accelerometer: no acknowledge
-      a.updateRange(); printf("[faults] note='%s' (accel no ack)\n", a.faultNote().c_str());
+      a.updateRange(); printf("[faults] note='%s' (accel no ack)\n", a.reportNote().c_str());
       onReading = [](TwoWire& w) { w.image[0x20] = 0x81; w.image[0x27] = 0x51; };   // chip 2, kind 17 (device-specific)
-      a.updateRange(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.faultNote().c_str());
+      a.updateRange(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.reportNote().c_str());
       onReading = nullptr; }
 
     // 6. Batches: the readings-requested word reaches the device before the readings.
@@ -156,7 +156,7 @@ int main() {
     { Apis a; a.begin(); int k = 0;
       onReading = [&](TwoWire& w) { k++; w.image[0x20] = 0x83; w.image[0x27] = 0x01; w.image[0x28] = 0xF1; w.image[0x29] = 0xD8; }; // -9999
       a.setRangeReadings(10); bool ok = a.updateMeasurements(Apis::RANGE);
-      char fb[64]; BufferPrint fbp(fb, sizeof fb); a.printFault(fbp);
+      char fb[64]; BufferPrint fbp(fb, sizeof fb); a.printReport(fbp);
       printf("[dead LiDAR] N=10: ok=%d readings taken=%d range=%d fault='%s'\n", ok, k, a.getRange(), fb);
       onReading = nullptr; }
 

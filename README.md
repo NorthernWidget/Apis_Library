@@ -46,7 +46,7 @@ rangefinder.endReadings();
 Serial.println(rangefinder.getRangeMean());   // statistics of those 100, no further acquisition
 ```
 
-The count passed to `beginReadings()` is written to the device (registers 0x24-0x25), which then keeps the LiDAR powered and initialised for exactly that many readings instead of powering it up and down around each one; `updateMeasurements()` does the same for its N readings. A run that stops short is abandoned by the device after 2 s with a latched fault.
+The count passed to `beginReadings()` is written to the device (registers 0x24-0x25), which then keeps the LiDAR powered and initialised for exactly that many readings instead of powering it up and down around each one; `updateMeasurements()` does the same for its N readings. A run that stops short is abandoned by the device after 2 s with a report.
 
 Every acquisition, whether from `updateMeasurements()`, `logReading()`, or a single-chip update, appends to that measurement's array; `updateMeasurements()` and `beginReadings()` start a fresh set. The scalar getters return the latest reading and the statistics getters compute from the array on demand, so there is one record of the readings and no second acquisition to summarise them.
 
@@ -54,7 +54,7 @@ Every acquisition, whether from `updateMeasurements()`, `logReading()`, or a sin
 
 Every reading is requested from the device and waited for through its reading counter, so repeated readings are independent measurements. `setRangeReadings(n)` and `setOrientReadings(n)` set how many are taken per `updateMeasurements()` (clamped to `APIS_RANGE_CAPACITY`, default 64, and `APIS_ORIENT_CAPACITY`, default 8; override either before the include). Statistics over them: `getRangeMean()`, `getRangeStd()`, `getRangeSterr()`, `getRangeMedian()`, and the same for pitch and roll, plus `getRangeCount()`. With `setRangeStats(true)` the std and sterr columns join `getString()`.
 
-Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `faultChip()`, `faultKind()`, `printFault(Serial)`, `faultNote()` (one word, e.g. `LiDARTimeout`, for a logger's note column), `beginFailure()` (why `begin()` refused, one word); `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
+Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `reportChip()`, `reportKind()`, `printReport(Serial)`, `reportNote()` (one word, e.g. `LiDARTimeout`, for a logger's note column), `beginFailure()` (why `begin()` refused, one word); `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
 
 The v0.1.x names `beginRawReadings()`, `takeRawReading(buf, offset)`, `endRawReadings()` and the `NW_READING_*` selectors still work and are deprecated.
 

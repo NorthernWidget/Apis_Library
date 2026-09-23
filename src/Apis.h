@@ -19,7 +19,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <NW_Core.h>   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Fault
+#include <NW_Core.h>   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Report
 
 #ifndef M_PI
   #define M_PI 3.14159265358979323846
@@ -219,12 +219,12 @@ class Apis
          * Writes the control register: trigger bit plus the chip-select bits
          * for the component. The device clears ready, measures, and sets ready
          * again with the counter incremented. A write to control also clears
-         * the latched fault byte (acknowledgement).
+         * the report byte (acknowledgement).
          * @return true if the device acknowledged the write.
          */
         bool requestReading(uint8_t component = ALL);
 
-        // --- Faults (status byte, live; fault byte, latched) ---
+        // --- Faults (status byte, live; Report register, latched) ---
         /**
          * @brief True if the given chip (0 = LiDAR, 1 = accelerometer) was
          * faulted in the status byte of the last reading taken.
@@ -233,31 +233,31 @@ class Apis
         /** @brief True if any chip was faulted in the last reading (status pan-fault bit). */
         bool anyFault();
         /**
-         * @brief Chip index of the most recent latched fault (0 LiDAR,
-         * 1 accelerometer, 7 the unit itself), from the fault byte read with
-         * the last reading; meaningful only when faultKind() != 0.
+         * @brief Chip index of the most recent report (0 LiDAR,
+         * 1 accelerometer, 7 the unit itself), from the Report register read with
+         * the last reading; meaningful only when reportKind() != 0.
          */
-        uint8_t faultChip();
+        uint8_t reportChip();
         /**
-         * @brief Kind of the most recent latched fault, per the spec's table:
+         * @brief Kind of the most recent report, per the spec's table:
          * 0 none, 1 no-acknowledge, 2 timeout, 3 checksum, 4 out of range,
          * 5 not initialised, 6 reset since the controller last wrote control,
          * 7 configuration rejected, 8 supply fault, 16–31 device-specific.
          * The device clears it on the next control write (requestReading()).
          */
-        uint8_t faultKind();
+        uint8_t reportKind();
         /**
-         * @brief Print the latched fault as text, e.g. "LiDAR: timeout" or
+         * @brief Print the report as text, e.g. "LiDAR: timeout" or
          * "unit: reset since configured"; prints "none" when there is no fault.
          * @return Bytes written.
          */
-        size_t printFault(Print& out);
+        size_t printReport(Print& out);
         /**
-         * @brief The latched fault as one word for a data-table note column,
+         * @brief The report as one word for a data-table note column,
          * chip then kind: "LiDARTimeout", "AccelNoACK", "UnitReset";
          * "UnitNone" when there is no fault (check anyFault() first).
          */
-        String faultNote();
+        String reportNote();
         /**
          * @brief Why the last begin() refused, as one word: "NoACK",
          * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
@@ -414,7 +414,7 @@ class Apis
          * advance (readings-requested word, registers 0x24-0x25) and keeps the
          * LiDAR powered and initialised for exactly that many readings; with
          * 0 or 1 each reading powers the LiDAR up and down. A run that stops
-         * short is abandoned by the device after 2 s with a latched fault.
+         * short is abandoned by the device after 2 s with a report.
          */
         void beginReadings(uint8_t component = ALL, uint16_t n = 0);
 

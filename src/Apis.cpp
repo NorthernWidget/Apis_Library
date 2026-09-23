@@ -59,19 +59,19 @@ bool Apis::requestReading(uint8_t component)    { return _dev.requestReading(_ch
 
 bool    Apis::faulted(uint8_t chip) { return _dev.faulted(chip); }
 bool    Apis::anyFault()            { return _dev.anyFault(); }
-uint8_t Apis::faultChip()           { return _dev.faultChip(); }
-uint8_t Apis::faultKind()           { return _dev.faultKind(); }
+uint8_t Apis::reportChip()           { return _dev.reportChip(); }
+uint8_t Apis::reportKind()           { return _dev.reportKind(); }
 
-size_t Apis::printFault(Print& out) {
-    // The chip names are Apis's own (the spec's chip table); NW_Fault prints the rest.
+size_t Apis::printReport(Print& out) {
+    // The chip names are Apis's own (the spec's chip table); NW_Report prints the rest.
     static const char* const chips[] = {"LiDAR", "accelerometer"};
-    return _dev.fault().print(out, chips, 2);
+    return _dev.report().print(out, chips, 2);
 }
 
-String Apis::faultNote() {
+String Apis::reportNote() {
     // One word for a data-table note: the chip, then the kind ("LiDARTimeout").
     static const char* const chips[] = {"LiDAR", "Accel"};
-    return _dev.fault().note(chips, 2);
+    return _dev.report().note(chips, 2);
 }
 
 String Apis::beginFailure() { return _dev.beginFailure(); }
