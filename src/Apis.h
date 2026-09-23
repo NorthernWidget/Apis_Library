@@ -47,7 +47,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 /**
  * @brief Sensitivity mode for the LiDAR Lite acquisition pipeline.
- * @details Written to REG_CONFIG (0x0B) by begin(); applied on every
+ * @details Written to REG_CONFIG (0x46) by begin(); applied on every
  * loop() iteration when the firmware reinitialises the LiDAR Lite via
  * InitLiDAR(). Two LiDAR Lite registers drive the behaviour:
  *   - SIG_COUNT_VAL (0x02): maximum acquisition count per measurement.
@@ -149,7 +149,7 @@ class Apis
          * Page 0 Blocks 0–1 and requires: schema byte 0x01 (Schema 1); the
          * name "Apis"; a firmware patch of at least APIS_FW_MIN_PATCH. Stores
          * the hardware and firmware versions for the getters below, and writes
-         * the initial sensitivity mode to REG_CONFIG (0x26).
+         * the initial sensitivity mode to REG_CONFIG (0x46).
          * @param address I2C address (default DEFAULT_ADDRESS = 0x41).
          * @param sensitivity One of the SensitivityMode values
          * (default SENSITIVITY_BALANCED). See SensitivityMode.
@@ -186,7 +186,7 @@ class Apis
         [[deprecated("Use setOrientReadings()")]] void setNOrientReadings(uint16_t n);
         /**
          * @brief Change the rangefinder sensitivity mode after begin().
-         * @details Writes the new mode to REG_CONFIG (0x26); the firmware
+         * @details Writes the new mode to REG_CONFIG (0x46); the firmware
          * applies it on the next loop() iteration via InitLiDAR(). Must be
          * called after begin(); if called before, Wire is uninitialised and
          * the transmission fails silently.
@@ -203,7 +203,7 @@ class Apis
          */
         void setI2CAddress(uint8_t newAddress);
 
-        // --- Handshake (NW-Device-Specification Page 1 Block 0) ---
+        // --- Handshake (NW-Device-Specification Page 2 Block 0) ---
         /** @brief True when the status byte's ready bit is set: the data registers hold a complete reading. */
         bool ready();
 
@@ -260,7 +260,7 @@ class Apis
         String reportNote();
         /**
          * @brief Print one status line for a logger's status file: name, serial,
-         * versions, the last report (code and note), and Pages 0, 1 and 2 in hex,
+         * versions, the last report (code and note), and Pages 0, 1 and 2 (identity, calibration, data) in hex,
          * comma separated, no newline. The logger prints its timestamp first.
          * Three page reads, no write: the report is not acknowledged.
          */
@@ -332,7 +332,7 @@ class Apis
          * the first reading.
          */
         int16_t getAccelTemperature();
-        /** @brief The same digit at the moment the Hall-effect zero was taken (Page 2). */
+        /** @brief The same digit at the moment the Hall-effect zero was taken (Page 1). */
         int16_t getZeroTemperature();
 
         // --- Statistics getters ---
@@ -418,7 +418,7 @@ class Apis
          * @param component Apis::ALL, Apis::RANGE, or Apis::ORIENT.
          * @param n How many readings the run will take (the number of
          * logReading() calls to follow). With n > 1 the device is told in
-         * advance (readings-requested word, registers 0x24-0x25) and keeps the
+         * advance (readings-requested word, registers 0x44-0x45) and keeps the
          * LiDAR powered and initialised for exactly that many readings; with
          * 0 or 1 each reading powers the LiDAR up and down. A run that stops
          * short is abandoned by the device after 2 s with a report.

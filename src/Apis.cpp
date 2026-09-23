@@ -3,14 +3,16 @@
 // Register map: NW-Device-Specification Schema 1, Apis appendix. Three 32-byte
 // pages; a controller writes a start address and reads up to 32 bytes with
 // auto-increment. Registers not listed are reserved.
-// Page 0 (0x00–0x1F) — identity, EEPROM-backed
-// Page 1 (0x20–0x3F) — status and sensor data, SRAM
-#define REG_RANGE_L     0x28  // Range low byte  (little-endian int16, cm)
-#define REG_RANGE_H     0x29  // Range high byte
-#define REG_SIGNAL_STR  0x2A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
-#define REG_ACCEL_BASE  0x30  // Accel raw X low byte; X/Y/Z span 0x30–0x35, little-endian int16; 0x36–0x37 the temperature word
-// Page 2 (0x40–0x5F) — calibration, EEPROM-backed
-#define REG_OFFSET_BASE 0x40  // Accel offset X low byte; X/Y/Z span 0x40–0x45, little-endian int16; 0x46–0x47 the temperature word at the zero
+// Pages renumbered 2026-09-23 (spec 4c3b18d): calibration is Page 1 at 0x20,
+// data Page 2 at 0x40 (Block 0 at 0x40–0x47 is NW_Core's).
+// Page 0 (0x00–0x1F): identity, EEPROM-backed
+// Page 1 (0x20–0x3F): calibration, EEPROM-backed
+#define REG_OFFSET_BASE 0x20  // Accel offset X low byte; X/Y/Z span 0x20–0x25, little-endian int16; 0x26–0x27 the temperature word at the zero
+// Page 2 (0x40–0x5F): status and sensor data, SRAM
+#define REG_RANGE_L     0x48  // Range low byte  (little-endian int16, cm)
+#define REG_RANGE_H     0x49  // Range high byte
+#define REG_SIGNAL_STR  0x4A  // LiDAR Lite signal strength (uint8_t, from LiDAR Lite reg 0x0E)
+#define REG_ACCEL_BASE  0x50  // Accel raw X low byte; X/Y/Z span 0x50–0x55, little-endian int16; 0x56–0x57 the temperature word
 
 
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
@@ -94,7 +96,7 @@ bool Apis::updateRange() {
         _range = NW_ERROR;
         return false;
     }
-    // Range low/high and signal strength are consecutive (0x28–0x2A): one read.
+    // Range low/high and signal strength are consecutive (0x48–0x4A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
     _dev.readData(REG_RANGE_L, d, 3);
     _range = (int16_t)((d[1] << 8) | d[0]);
@@ -117,13 +119,13 @@ bool Apis::updateOrientation() {
     int16_t dataSet[6];
     uint8_t d[8];
 
-    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x30–0x35) and the temperature word (0x36–0x37): one read of eight bytes
+    // Accel raw X/Y/Z at REG_ACCEL_BASE (0x50–0x55) and the temperature word (0x56–0x57): one read of eight bytes
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
     _dev.readData(REG_ACCEL_BASE, d, 8);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
     _accelTemp = (int8_t)d[7];           // the LIS3DH digit is the word's high byte (1 per degree C, relative)
 
-    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x40–0x45, Page 2) and the temperature at the zero (0x46–0x47): one read of eight bytes
+    // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x20–0x25, Page 1) and the temperature at the zero (0x26–0x27): one read of eight bytes
     memset(d, 0xFF, sizeof d);
     _dev.readBytes(REG_OFFSET_BASE, d, 8);
     for (int i = 0; i < 3; i++) dataSet[3+i] = ((d[2*i + 1] << 8) | d[2*i]);
