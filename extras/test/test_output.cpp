@@ -130,6 +130,14 @@ int main() {
       printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.reportNote().c_str(), a.beginFailure().c_str());
       onReading = [](TwoWire& w) { w.image[0x20] = 0x85; w.image[0x27] = 0x21; };   // accelerometer: no acknowledge
       a.updateRange(); printf("[faults] note='%s' (accel no ack)\n", a.reportNote().c_str());
+      onReading = [](TwoWire& w) { w.image[0x20] = 0x01; w.image[0x27] = 0x29; };   // clean reading; accelerometer: calibration stored (a notice)
+      a.updateRange(); printf("[notice] any=%d chip=%u kind=%u note='%s' (calibration stored: no status bit, data stand)\n", a.anyFault(), a.reportChip(), a.reportKind(), a.reportNote().c_str());
+      onReading = nullptr; }
+    // 5e. The boot report: begin() reads Block 0 before its first write, so a unit reset latched at boot is seen.
+    loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x27] = 0xE6;
+    { Apis a; a.begin(); printf("[boot report] note='%s' after begin()", a.reportNote().c_str());
+      a.updateRange(); printf("; after the first reading: '%s'\n", a.reportNote().c_str()); }
+    { Apis a; a.begin();
       onReading = [](TwoWire& w) { w.image[0x20] = 0x81; w.image[0x27] = 0x51; };   // chip 2, kind 17 (device-specific)
       a.updateRange(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.reportNote().c_str());
       onReading = nullptr; }

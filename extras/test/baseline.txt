@@ -54,6 +54,8 @@ string: -9998,-9998.00,-9998.00,-9998,
 [faults] any=0 chip=7 kind=6 text='unit: reset since configured'
 [faults] note='UnitReset' (unit reset); beginFailure='None'
 [faults] note='AccelNoACK' (accel no ack)
+[notice] any=0 chip=1 kind=9 note='AccelCalibrated' (calibration stored: no status bit, data stand)
+[boot report] note='UnitReset' after begin(); after the first reading: 'UnitNone'
 [faults] note='Chip2Kind17' (chip 2 kind 17)
 [request] updateMeasurements N=5 -> word=5
 [request] updateMeasurements N=1 -> word=0 (no write)
