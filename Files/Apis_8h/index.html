@@ -407,17 +407,17 @@
 
 <h3 id="define-nw_reading_all">define NW_READING_ALL</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_ALL 0
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_ALL Apis::ALL
 </span></code></pre></div></div>
 
 <h3 id="define-nw_reading_primary">define NW_READING_PRIMARY</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_PRIMARY 1
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_PRIMARY Apis::RANGE
 </span></code></pre></div></div>
 
 <h3 id="define-nw_reading_secondary">define NW_READING_SECONDARY</h3>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_SECONDARY 2
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define NW_READING_SECONDARY Apis::ORIENT
 </span></code></pre></div></div>
 
 <h3 id="define-nw_reading_range">define NW_READING_RANGE</h3>
@@ -502,23 +502,16 @@ License: GNU GPL v3. You should find a copy in the repository.
 <span class="c1">// Deprecated component selectors. Use the class-scoped Apis::ALL, Apis::RANGE,</span>
 <span class="c1">// Apis::ORIENT instead (see Apis::Component). Kept so existing sketches compile;</span>
 <span class="c1">// values match the enum and will be removed in a future major version.</span>
-<span class="cp">#ifndef NW_READING_ALL
-</span>  <span class="cp">#define NW_READING_ALL       0
-</span>  <span class="cp">#define NW_READING_PRIMARY   1
-</span>  <span class="cp">#define NW_READING_SECONDARY 2
-#endif
-#define NW_READING_RANGE  NW_READING_PRIMARY
-#define NW_READING_ORIENT NW_READING_SECONDARY
-</span>
+
 <span class="k">class</span> <span class="nc">Apis</span>
 <span class="p">{</span>
     <span class="nl">public:</span>
         <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">DEFAULT_ADDRESS</span> <span class="o">=</span> <span class="mh">0x41</span><span class="p">;</span>
 
         <span class="k">enum</span> <span class="n">Component</span> <span class="o">:</span> <span class="kt">uint8_t</span> <span class="p">{</span>
-            <span class="n">ALL</span>    <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>   
-            <span class="n">RANGE</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>   
-            <span class="n">ORIENT</span> <span class="o">=</span> <span class="mi">2</span>    
+            <span class="n">RANGE</span>  <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span>  
+            <span class="n">ORIENT</span> <span class="o">=</span> <span class="mh">0x02</span><span class="p">,</span>  
+            <span class="n">ALL</span>    <span class="o">=</span> <span class="mh">0x03</span>   
         <span class="p">};</span>
 
         <span class="n">Apis</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="n">nRangeReadings</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">rangeStats</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span>
@@ -625,10 +618,8 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="n">NW_Device</span> <span class="n">_dev</span><span class="p">;</span>
         <span class="k">static</span> <span class="kt">uint8_t</span> <span class="nf">_chips</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">component</span><span class="p">);</span>
         <span class="c1">// Configuration</span>
-        <span class="kt">uint16_t</span> <span class="n">_nRangeReadings</span><span class="p">;</span>
-        <span class="kt">bool</span>     <span class="n">_rangeStats</span><span class="p">;</span>
-        <span class="kt">uint16_t</span> <span class="n">_nOrientReadings</span><span class="p">;</span>
-        <span class="kt">bool</span>     <span class="n">_orientStats</span><span class="p">;</span>
+        <span class="n">NW_ReadingsConfig</span> <span class="n">_rangeCfg</span><span class="p">;</span>    <span class="c1">// readings per updateMeasurements() and stats columns, LiDAR</span>
+        <span class="n">NW_ReadingsConfig</span> <span class="n">_orientCfg</span><span class="p">;</span>   <span class="c1">// accelerometer</span>
 
         <span class="c1">// Stored measurements and statistics.</span>
         <span class="c1">// All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.</span>
@@ -664,6 +655,16 @@ License: GNU GPL v3. You should find a copy in the repository.
         <span class="kt">uint8_t</span> <span class="n">_rawComponent</span> <span class="o">=</span> <span class="n">ALL</span><span class="p">;</span>
 <span class="p">};</span>
 
+<span class="c1">// Deprecated component selectors (v0.1.x): the class-scoped Apis::ALL,</span>
+<span class="c1">// Apis::RANGE, Apis::ORIENT replace them. Kept so existing sketches compile.</span>
+<span class="cp">#ifndef NW_READING_ALL
+</span>  <span class="cp">#define NW_READING_ALL       Apis::ALL
+</span>  <span class="cp">#define NW_READING_PRIMARY   Apis::RANGE
+</span>  <span class="cp">#define NW_READING_SECONDARY Apis::ORIENT
+#endif
+#define NW_READING_RANGE  NW_READING_PRIMARY
+#define NW_READING_ORIENT NW_READING_SECONDARY
+</span>
 <span class="cp">#define ADR_DEFAULT Apis::DEFAULT_ADDRESS
 </span>
 <span class="cp">#endif
@@ -671,7 +672,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 <hr />
 
-<p>Updated on 2026-09-23 at 04:50:39 +0000</p>
+<p>Updated on 2026-09-23 at 16:11:20 +0000</p>
 
         
       </section>
