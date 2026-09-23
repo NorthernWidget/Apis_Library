@@ -362,7 +362,7 @@
 
 <p>Sensitivity mode for the LiDAR Lite acquisition pipeline.</p>
 
-<p>Written to REG_CONFIG (0x0B) by begin(); applied on every loop() iteration when the firmware reinitialises the LiDAR Lite via InitLiDAR(). Two LiDAR Lite registers drive the behaviour:</p>
+<p>Written to REG_CONFIG (0x46) by begin(); applied on every loop() iteration when the firmware reinitialises the LiDAR Lite via InitLiDAR(). Two LiDAR Lite registers drive the behaviour:</p>
 
 <ul>
   <li>SIG_COUNT_VAL (0x02): maximum acquisition count per measurement. Higher values average more returns, extending usable range but slowing throughput.</li>
@@ -535,7 +535,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
         <span class="kt">void</span> <span class="nf">setI2CAddress</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">newAddress</span><span class="p">);</span>
 
-        <span class="c1">// --- Handshake (NW-Device-Specification Page 1 Block 0) ---</span>
+        <span class="c1">// --- Handshake (NW-Device-Specification Page 2 Block 0) ---</span>
         <span class="kt">bool</span> <span class="nf">ready</span><span class="p">();</span>
 
         <span class="kt">bool</span> <span class="nf">newReading</span><span class="p">();</span>
@@ -678,7 +678,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 <hr />
 
-<p>Updated on 2026-09-23 at 17:21:28 +0000</p>
+<p>Updated on 2026-09-23 at 20:12:21 +0000</p>
 
         
       </section>

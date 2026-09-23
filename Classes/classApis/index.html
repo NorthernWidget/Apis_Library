@@ -350,7 +350,7 @@
     </tr>
     <tr>
       <td>size_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printstatus">printStatus</a></strong>(Print &amp; out)<br />Print one status line for a logger’s status file: name, serial, versions, the last report (code and note), and Pages 0, 1 and 2 in hex, comma separated, no newline. The logger prints its timestamp first. Three page reads, no write: the report is not acknowledged.</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-printstatus">printStatus</a></strong>(Print &amp; out)<br />Print one status line for a logger’s status file: name, serial, versions, the last report (code and note), and Pages 0, 1 and 2 (identity, calibration, data) in hex, comma separated, no newline. The logger prints its timestamp first. Three page reads, no write: the report is not acknowledged.</td>
     </tr>
     <tr>
       <td>String</td>
@@ -398,7 +398,7 @@
     </tr>
     <tr>
       <td>int16_t</td>
-      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getzerotemperature">getZeroTemperature</a></strong>()<br />The same digit at the moment the Hall-effect zero was taken (Page 2).</td>
+      <td><strong><a href="/Apis_Library/Classes/classApis/#function-getzerotemperature">getZeroTemperature</a></strong>()<br />The same digit at the moment the Hall-effect zero was taken (Page 1).</td>
     </tr>
     <tr>
       <td>float</td>
@@ -586,7 +586,7 @@
 
 <p><strong>Return</strong>: true if the device acknowledges and passes all three checks; false otherwise. Call <a href="/Apis_Library/Classes/classApis/#function-getfirmwareversion">getFirmwareVersion()</a> after a refusal to see what the device reported (0 if unreadable).</p>
 
-<p>Checks that the device acknowledges on I2C, then reads Page 0 Blocks 0–1 and requires: schema byte 0x01 (Schema 1); the name “Apis”; a firmware patch of at least APIS_FW_MIN_PATCH. Stores the hardware and firmware versions for the getters below, and writes the initial sensitivity mode to REG_CONFIG (0x26).</p>
+<p>Checks that the device acknowledges on I2C, then reads Page 0 Blocks 0–1 and requires: schema byte 0x01 (Schema 1); the name “Apis”; a firmware patch of at least APIS_FW_MIN_PATCH. Stores the hardware and firmware versions for the getters below, and writes the initial sensitivity mode to REG_CONFIG (0x46).</p>
 
 <h3 id="function-gethardwaremajor">function getHardwareMajor</h3>
 
@@ -684,7 +684,7 @@
   <li><strong>mode</strong> One of the SensitivityMode values.</li>
 </ul>
 
-<p>Writes the new mode to REG_CONFIG (0x26); the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
+<p>Writes the new mode to REG_CONFIG (0x46); the firmware applies it on the next loop() iteration via InitLiDAR(). Must be called after <a href="/Apis_Library/Classes/classApis/#function-begin">begin()</a>; if called before, Wire is uninitialised and the transmission fails silently.</p>
 
 <h3 id="function-seti2caddress">function setI2CAddress</h3>
 
@@ -783,7 +783,7 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Print one status line for a logger’s status file: name, serial, versions, the last report (code and note), and Pages 0, 1 and 2 in hex, comma separated, no newline. The logger prints its timestamp first. Three page reads, no write: the report is not acknowledged.</p>
+<p>Print one status line for a logger’s status file: name, serial, versions, the last report (code and note), and Pages 0, 1 and 2 (identity, calibration, data) in hex, comma separated, no newline. The logger prints its timestamp first. Three page reads, no write: the report is not acknowledged.</p>
 
 <h3 id="function-beginfailure">function beginFailure</h3>
 
@@ -879,7 +879,7 @@
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int16_t</span> <span class="n">getZeroTemperature</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>The same digit at the moment the Hall-effect zero was taken (Page 2).</p>
+<p>The same digit at the moment the Hall-effect zero was taken (Page 1).</p>
 
 <h3 id="function-getrangemean">function getRangeMean</h3>
 
@@ -1028,7 +1028,7 @@
 
 <ul>
   <li><strong>component</strong> <a href="/Apis_Library/Classes/classApis/#enumvalue-all">Apis::ALL</a>, <a href="/Apis_Library/Classes/classApis/#enumvalue-range">Apis::RANGE</a>, or <a href="/Apis_Library/Classes/classApis/#enumvalue-orient">Apis::ORIENT</a>.</li>
-  <li><strong>n</strong> How many readings the run will take (the number of <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading()</a> calls to follow). With n &gt; 1 the device is told in advance (readings-requested word, registers 0x24-0x25) and keeps the LiDAR powered and initialised for exactly that many readings; with 0 or 1 each reading powers the LiDAR up and down. A run that stops short is abandoned by the device after 2 s with a report.</li>
+  <li><strong>n</strong> How many readings the run will take (the number of <a href="/Apis_Library/Classes/classApis/#function-logreading">logReading()</a> calls to follow). With n &gt; 1 the device is told in advance (readings-requested word, registers 0x44-0x45) and keeps the LiDAR powered and initialised for exactly that many readings; with 0 or 1 each reading powers the LiDAR up and down. A run that stops short is abandoned by the device after 2 s with a report.</li>
 </ul>
 
 <h3 id="function-endreadings">function endReadings</h3>
@@ -1083,7 +1083,7 @@
 
 <hr />
 
-<p>Updated on 2026-09-23 at 17:21:28 +0000</p>
+<p>Updated on 2026-09-23 at 20:12:21 +0000</p>
 
         
       </section>
