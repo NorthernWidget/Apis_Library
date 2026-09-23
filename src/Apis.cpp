@@ -71,28 +71,15 @@ uint8_t Apis::faultChip()           { return _dev.faultChip(); }
 uint8_t Apis::faultKind()           { return _dev.faultKind(); }
 
 size_t Apis::printFault(Print& out) {
-    // The chip names are Apis's own; the kind names are universal (NW_Fault).
+    // The chip names are Apis's own (the spec's chip table); NW_Fault prints the rest.
     static const char* const chips[] = {"LiDAR", "accelerometer"};
-    uint8_t chip = faultChip(), kind = faultKind();
-    if (kind == 0) return out.print("none");
-    size_t n = 0;
-    if (chip == 7) n += out.print("unit");
-    else if (chip < 2) n += out.print(chips[chip]);
-    else { n += out.print("chip "); n += out.print(chip); }
-    n += out.print(": ");
-    return n + _dev.fault().printKind(out);
+    return _dev.fault().print(out, chips, 2);
 }
 
 String Apis::faultNote() {
     // One word for a data-table note: the chip, then the kind ("LiDARTimeout").
     static const char* const chips[] = {"LiDAR", "Accel"};
-    uint8_t chip = faultChip();
-    String w;
-    if (chip == 7) w = F("Unit");
-    else if (chip < 2) w = chips[chip];
-    else { w = F("Chip"); w += String(chip); }
-    w += _dev.fault().kindWord();
-    return w;
+    return _dev.fault().note(chips, 2);
 }
 
 String Apis::beginFailure() { return _dev.beginFailure(); }
