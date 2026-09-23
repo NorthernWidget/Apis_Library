@@ -449,10 +449,8 @@ class Apis
         /** @brief Chip-select mask for a component: bit 0 LiDAR, bit 1 accelerometer. */
         static uint8_t _chips(uint8_t component);
         // Configuration
-        uint16_t _nRangeReadings;
-        bool     _rangeStats;
-        uint16_t _nOrientReadings;
-        bool     _orientStats;
+        NW_ReadingsConfig _rangeCfg;    // readings per updateMeasurements() and stats columns, LiDAR
+        NW_ReadingsConfig _orientCfg;   // accelerometer
 
         // Stored measurements and statistics.
         // All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.

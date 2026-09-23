@@ -15,10 +15,11 @@
 
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
            uint16_t nOrientReadings, bool orientStats)
-    : _rangeStats(rangeStats), _orientStats(orientStats)
 {
     setRangeReadings(nRangeReadings);
     setOrientReadings(nOrientReadings);
+    _rangeCfg.stats = rangeStats;
+    _orientCfg.stats = orientStats;
 }
 
 bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
@@ -41,16 +42,10 @@ uint8_t Apis::_chips(uint8_t component) {
     if (component == ALL || component == ORIENT) chips |= 0x02;   // chip 1: accelerometer
     return chips;
 }
-uint16_t Apis::setRangeReadings(uint16_t n) {
-    _nRangeReadings = (n > APIS_RANGE_CAPACITY) ? APIS_RANGE_CAPACITY : n;
-    return _nRangeReadings;
-}
-uint16_t Apis::setOrientReadings(uint16_t n) {
-    _nOrientReadings = (n > APIS_ORIENT_CAPACITY) ? APIS_ORIENT_CAPACITY : n;
-    return _nOrientReadings;
-}
-void Apis::setRangeStats(bool enable)      { _rangeStats = enable; }
-void Apis::setOrientStats(bool enable)     { _orientStats = enable; }
+uint16_t Apis::setRangeReadings(uint16_t n)  { return _rangeCfg.set(n, APIS_RANGE_CAPACITY); }
+uint16_t Apis::setOrientReadings(uint16_t n) { return _orientCfg.set(n, APIS_ORIENT_CAPACITY); }
+void Apis::setRangeStats(bool enable)      { _rangeCfg.stats = enable; }
+void Apis::setOrientStats(bool enable)     { _orientCfg.stats = enable; }
 void Apis::setNRangeReadings(uint16_t n)   { setRangeReadings(n); }
 void Apis::setNOrientReadings(uint16_t n)  { setOrientReadings(n); }
 
@@ -163,7 +158,7 @@ bool Apis::updateMeasurements(uint8_t component) {
     // the array (two-pass in float, exact enough for N up to the array
     // capacity; see the precision note in Apis.h).
     _rangeReadings.reset();
-    _dev.takeReadings(0x01, _nRangeReadings, [this] { return updateRange(); });
+    _dev.takeReadings(0x01, _rangeCfg.n, [this] { return updateRange(); });
     if (_rangeReadings.count() == 0) {
         _range = NW_ERROR;
     } else {
@@ -177,7 +172,7 @@ bool Apis::updateMeasurements(uint8_t component) {
     // Take N orientation readings; each successful one appends to the arrays.
     _pitchReadings.reset();
     _rollReadings.reset();
-    _dev.takeReadings(0x02, _nOrientReadings, [this] { return updateOrientation(); });
+    _dev.takeReadings(0x02, _orientCfg.n, [this] { return updateOrientation(); });
     if (_pitchReadings.count() == 0) {
         _pitch = _roll = NW_ERROR;
     } else {
@@ -218,11 +213,11 @@ String Apis::getString(bool takeNewReadings) {
         updateMeasurements();
     }
     String s = String(_range) + ",";
-    if (_rangeStats && _nRangeReadings > 1) {
+    if (_rangeCfg.columns()) {
         s += String(getRangeStd()) + "," + String(getRangeSterr()) + ",";
     }
     s += String(_pitch) + "," + String(_roll) + ",";
-    if (_orientStats && _nOrientReadings > 1) {
+    if (_orientCfg.columns()) {
         s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
            + String(getRollStd())    + "," + String(getRollSterr())  + ",";
     }
@@ -231,11 +226,11 @@ String Apis::getString(bool takeNewReadings) {
 
 String Apis::getHeader() {
     String h = "Range [cm],";
-    if (_rangeStats && _nRangeReadings > 1) {
+    if (_rangeCfg.columns()) {
         h += "Range std [cm],Range sterr [cm],";
     }
     h += "Pitch [deg],Roll [deg],";
-    if (_orientStats && _nOrientReadings > 1) {
+    if (_orientCfg.columns()) {
         h += "Pitch std [deg],Pitch sterr [deg],"
              "Roll std [deg],Roll sterr [deg],";
     }
