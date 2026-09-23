@@ -68,6 +68,11 @@ size_t Apis::printReport(Print& out) {
     return _dev.report().print(out, chips, 2);
 }
 
+size_t Apis::printStatus(Print& out) {
+    static const char* const chips[] = {"LiDAR", "Accel"};
+    return _dev.printSnapshot(out, chips, 2);
+}
+
 String Apis::reportNote() {
     // One word for a data-table note: the chip, then the kind ("LiDARTimeout").
     static const char* const chips[] = {"LiDAR", "Accel"};

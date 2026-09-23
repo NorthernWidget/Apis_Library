@@ -137,6 +137,10 @@ int main() {
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x27] = 0xE6;
     { Apis a; a.begin(); printf("[boot report] note='%s' after begin()", a.reportNote().c_str());
       a.updateRange(); printf("; after the first reading: '%s'\n", a.reportNote().c_str()); }
+    // 5f. The status line for a logger's status file, after a calibration-stored notice.
+    { Apis a; a.begin(); char sb[260];
+      onReading = [](TwoWire& w) { w.image[0x20] = 0x01; w.image[0x27] = 0x29; }; a.updateOrientation(); onReading = nullptr;
+      BufferPrint sp(sb, sizeof sb); size_t k = a.printStatus(sp); printf("[status] %zu bytes: %s\n", k, sb); }
     { Apis a; a.begin();
       onReading = [](TwoWire& w) { w.image[0x20] = 0x81; w.image[0x27] = 0x51; };   // chip 2, kind 17 (device-specific)
       a.updateRange(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.reportNote().c_str());

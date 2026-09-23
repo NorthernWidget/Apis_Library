@@ -259,6 +259,13 @@ class Apis
          */
         String reportNote();
         /**
+         * @brief Print one status line for a logger's status file: name, serial,
+         * versions, the last report (code and note), and Pages 0, 1 and 2 in hex,
+         * comma separated, no newline. The logger prints its timestamp first.
+         * Three page reads, no write: the report is not acknowledged.
+         */
+        size_t printStatus(Print& out);
+        /**
          * @brief Why the last begin() refused, as one word: "NoACK",
          * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
          * after a successful begin().
