@@ -264,6 +264,18 @@ class Apis
          * @return Bytes written.
          */
         size_t printFault(Print& out);
+        /**
+         * @brief The latched fault as one word for a data-table note column,
+         * chip then kind: "LiDARTimeout", "AccelNoACK", "UnitReset";
+         * "UnitNone" when there is no fault (check anyFault() first).
+         */
+        String faultNote();
+        /**
+         * @brief Why the last begin() refused, as one word: "NoACK",
+         * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
+         * after a successful begin().
+         */
+        String beginFailure();
 
         /**
          * @brief Take one range reading [cm]: request it, wait for the device's

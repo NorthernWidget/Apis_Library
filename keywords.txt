@@ -34,6 +34,8 @@ anyFault	KEYWORD2
 faultChip	KEYWORD2
 faultKind	KEYWORD2
 printFault	KEYWORD2
+faultNote	KEYWORD2
+beginFailure	KEYWORD2
 getHardwareMajor	KEYWORD2
 getHardwareMinor	KEYWORD2
 getFirmwareVersion	KEYWORD2

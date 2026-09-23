@@ -83,6 +83,20 @@ size_t Apis::printFault(Print& out) {
     return n + _dev.fault().printKind(out);
 }
 
+String Apis::faultNote() {
+    // One word for a data-table note: the chip, then the kind ("LiDARTimeout").
+    static const char* const chips[] = {"LiDAR", "Accel"};
+    uint8_t chip = faultChip();
+    String w;
+    if (chip == 7) w = F("Unit");
+    else if (chip < 2) w = chips[chip];
+    else { w = F("Chip"); w += String(chip); }
+    w += _dev.fault().kindWord();
+    return w;
+}
+
+String Apis::beginFailure() { return _dev.beginFailure(); }
+
 bool Apis::updateRange() {
     if (_dev.batchFaulted(0x01)) {        // rest of a batch whose LiDAR did not power up
         _range = APIS_ERROR;

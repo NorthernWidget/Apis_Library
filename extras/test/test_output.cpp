@@ -162,6 +162,11 @@ int main() {
       onReading = [](TwoWire& w) { w.image[0x20] = 0x01; w.image[0x27] = 0xE6; };   // clean reading; unit: reset since configured
       a.updateRange(); BufferPrint bp2(pb, sizeof pb); a.printFault(bp2);
       printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.faultChip(), a.faultKind(), pb);
+      printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.faultNote().c_str(), a.beginFailure().c_str());
+      onReading = [](TwoWire& w) { w.image[0x20] = 0x85; w.image[0x27] = 0x21; };   // accelerometer: no acknowledge
+      a.updateRange(); printf("[faults] note='%s' (accel no ack)\n", a.faultNote().c_str());
+      onReading = [](TwoWire& w) { w.image[0x20] = 0x81; w.image[0x27] = 0x51; };   // chip 2, kind 17 (device-specific)
+      a.updateRange(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.faultNote().c_str());
       onReading = nullptr; }
 
     // 6. Batches: the readings-requested word reaches the device before the readings.
@@ -192,15 +197,15 @@ int main() {
 
     // 8. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
-    { Apis a; printf("[wrong name] begin=%d\n", a.begin()); }
+    { Apis a; bool ok = a.begin(); printf("[wrong name] begin=%d failure=%s\n", ok, a.beginFailure().c_str()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0x00);
-    { Apis a; bool ok = a.begin(); printf("[schema 0x00] begin=%d fw=%u\n", ok, a.getFirmwareVersion()); }
+    { Apis a; bool ok = a.begin(); printf("[schema 0x00] begin=%d fw=%u failure=%s\n", ok, a.getFirmwareVersion(), a.beginFailure().c_str()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0xFF);
-    { Apis a; printf("[schema 0xFF unprovisioned] begin=%d\n", a.begin()); }
+    { Apis a; bool ok = a.begin(); printf("[schema 0xFF unprovisioned] begin=%d failure=%s\n", ok, a.beginFailure().c_str()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 0);
-    { Apis a; bool ok = a.begin(); printf("[fw patch 0 < min %d] begin=%d fw=%u\n", APIS_FW_MIN_PATCH, ok, a.getFirmwareVersion()); }
+    { Apis a; bool ok = a.begin(); printf("[fw patch 0 < min %d] begin=%d fw=%u failure=%s\n", APIS_FW_MIN_PATCH, ok, a.getFirmwareVersion(), a.beginFailure().c_str()); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
-    { Apis a; bool ok = a.begin(); printf("[versions] begin=%d hw=%u.%u fw=%u\n", ok, a.getHardwareMajor(), a.getHardwareMinor(), a.getFirmwareVersion()); }
+    { Apis a; bool ok = a.begin(); printf("[versions] begin=%d hw=%u.%u fw=%u failure=%s\n", ok, a.getHardwareMajor(), a.getHardwareMinor(), a.getFirmwareVersion(), a.beginFailure().c_str()); }
 
     fprintf(stderr, "bus transactions total: %u\n", Wire.transactions);   // metric, not output
     return 0;

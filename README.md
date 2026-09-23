@@ -54,7 +54,7 @@ Every acquisition, whether from `updateMeasurements()`, `logReading()`, or a sin
 
 Every reading is requested from the device and waited for through its reading counter, so repeated readings are independent measurements. `setRangeReadings(n)` and `setOrientReadings(n)` set how many are taken per `updateMeasurements()` (clamped to `APIS_RANGE_CAPACITY`, default 64, and `APIS_ORIENT_CAPACITY`, default 8; override either before the include). Statistics over them: `getRangeMean()`, `getRangeStd()`, `getRangeSterr()`, `getRangeMedian()`, and the same for pitch and roll, plus `getRangeCount()`. With `setRangeStats(true)` the std and sterr columns join `getString()`.
 
-Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `faultChip()`, `faultKind()`, `printFault(Serial)`; `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
+Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `faultChip()`, `faultKind()`, `printFault(Serial)`, `faultNote()` (one word, e.g. `LiDARTimeout`, for a logger's note column), `beginFailure()` (why `begin()` refused, one word); `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
 
 The v0.1.x names `beginRawReadings()`, `takeRawReading(buf, offset)`, `endRawReadings()` and the `NW_READING_*` selectors still work and are deprecated.
 
