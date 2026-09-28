@@ -58,8 +58,8 @@ static void report(const char* name, Apis& a) {
     a.beginRawReadings(NW_READING_RANGE); o = a.takeRawReading(buf, 0); a.endRawReadings();
     printf("raw RANGE (%u bytes): %s\n", o, buf);
     printf("getters: range=%d roll=%.4f pitch=%.4f signal=%u mean=%.4f std=%.4f sterr=%.4f\n",
-           a.getRange(), a.getRoll(), a.getPitch(), a.getSignalStrength(),
-           a.getRangeMean(), a.getRangeStd(), a.getRangeSterr());
+           a.getDistance(), a.getRoll(), a.getPitch(), a.getSignalStrength(),
+           a.getDistanceMean(), a.getDistanceStd(), a.getDistanceSterr());
     // Print-based interface: header, stored reading, and one logged reading.
     char pb[64]; BufferPrint bp(pb, sizeof pb);
     a.beginReadings(Apis::ALL); a.printHeader(bp); printf("printHeader ALL: %s\n", pb);
@@ -110,7 +110,7 @@ int main() {
       Wire.image[0x50] = 0x00; Wire.image[0x51] = 0x00;   // ax -> 0 (would change pitch if read)
       bool ok = a.updateMeasurements(Apis::RANGE);
       printf("[per-chip] RANGE ok=%d string(false): %s counts=%u/%u\n", ok, a.getString(false).c_str(),
-             a.getRangeCount(), a.getOrientCount());
+             a.getDistanceCount(), a.getOrientationCount());
       ok = a.updateMeasurements(Apis::ORIENT);
       printf("[per-chip] ORIENT ok=%d string(false): %s\n", ok, a.getString(false).c_str()); }
 
@@ -118,62 +118,62 @@ int main() {
     loadImage(300, 90, 100, 50, 1000, 0, 0, 0);
     { Apis a; a.begin(); int k = 0;
       onReading = [&](TwoWire& w) { int16_t r = 300 + 3 * (k++ % 7); w.image[0x48] = r & 0xFF; w.image[0x49] = (r >> 8) & 0xFF; };
-      printf("[median] setRangeReadings(7)=%u setRangeReadings(1000)=%u\n", a.setRangeReadings(7), a.setRangeReadings(1000));
-      a.setRangeReadings(7); a.setOrientReadings(3); a.updateMeasurements();
+      printf("[median] setDistanceReadings(7)=%u setDistanceReadings(1000)=%u\n", a.setDistanceReadings(7), a.setDistanceReadings(1000));
+      a.setDistanceReadings(7); a.setOrientationReadings(3); a.updateMeasurements();
       printf("[median] count=%u mean=%.4f median=%.4f std=%.4f pitchMedian=%.4f rollMedian=%.4f\n",
-             a.getRangeCount(), a.getRangeMean(), a.getRangeMedian(), a.getRangeStd(), a.getPitchMedian(), a.getRollMedian());
+             a.getDistanceCount(), a.getDistanceMean(), a.getDistanceMedian(), a.getDistanceStd(), a.getPitchMedian(), a.getRollMedian());
       onReading = nullptr; }
 
     // 5c. Handshake: ready/newReading/requestReading against the emulated firmware.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin();
       printf("[handshake] ready=%d newReading(before any)=%d", a.ready(), a.newReading());
-      a.updateRange();
+      a.updateDistance();
       printf(" counter after 1 reading=%u newReading=%d", Wire.image[0x42] | (Wire.image[0x43] << 8), a.newReading());
       Wire.image[0x47] = 0x02;                       // firmware latched a LiDAR timeout
       a.requestReading(Apis::RANGE);
       printf(" ctrl after request=0x%02X fault after ack=0x%02X\n", Wire.image[0x41], Wire.image[0x47]);
       // timeout path: firmware that never answers (no emulation)
       auto saved = Wire.onWrite; Wire.onWrite = nullptr;
-      bool ok = a.updateRange();
-      printf("[handshake] no firmware response: updateRange=%d range=%d\n", ok, a.getRange());
+      bool ok = a.updateDistance();
+      printf("[handshake] no firmware response: updateDistance=%d range=%d\n", ok, a.getDistance());
       Wire.onWrite = saved; }
 
     // 5d. Faults: the firmware reports a LiDAR fault in status and a latched code; then a unit reset code.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); char pb[48];
       onReading = [](TwoWire& w) { w.image[0x40] = 0x83; w.image[0x47] = 0x02; };   // ready | LiDAR fault | pan; LiDAR: timeout
-      a.updateRange(); BufferPrint bp(pb, sizeof pb); a.printReport(bp);
+      a.updateDistance(); BufferPrint bp(pb, sizeof pb); a.printReport(bp);
       printf("[faults] faulted(0)=%d faulted(1)=%d any=%d chip=%u kind=%u text='%s'\n",
              a.faulted(0), a.faulted(1), a.anyFault(), a.reportChip(), a.reportKind(), pb);
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0xE6; };   // clean reading; unit: restarted since configured
-      a.updateRange(); BufferPrint bp2(pb, sizeof pb); a.printReport(bp2);
+      a.updateDistance(); BufferPrint bp2(pb, sizeof pb); a.printReport(bp2);
       printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.reportChip(), a.reportKind(), pb);
       printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.reportNote().c_str(), a.beginFailure().c_str());
       onReading = [](TwoWire& w) { w.image[0x40] = 0x85; w.image[0x47] = 0x21; };   // accelerometer: not answering
-      a.updateRange(); printf("[faults] note='%s' (accel no ack)\n", a.reportNote().c_str());
+      a.updateDistance(); printf("[faults] note='%s' (accel no ack)\n", a.reportNote().c_str());
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0x29; };   // clean reading; accelerometer: calibration stored (a notice)
-      a.updateRange(); printf("[notice] any=%d chip=%u kind=%u note='%s' (calibration stored: no status bit, data stand)\n", a.anyFault(), a.reportChip(), a.reportKind(), a.reportNote().c_str());
+      a.updateDistance(); printf("[notice] any=%d chip=%u kind=%u note='%s' (calibration stored: no status bit, data stand)\n", a.anyFault(), a.reportChip(), a.reportKind(), a.reportNote().c_str());
       onReading = nullptr; }
     // 5e. The boot report: begin() reads Block 0 before its first write, so a unit reset latched at boot is seen.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x47] = 0xE6;
     { Apis a; a.begin(); printf("[boot report] note='%s' after begin()", a.reportNote().c_str());
-      a.updateRange(); printf("; after the first reading: '%s'\n", a.reportNote().c_str()); }
+      a.updateDistance(); printf("; after the first reading: '%s'\n", a.reportNote().c_str()); }
     // 5f. The status line for a logger's status file, after a calibration-stored notice.
     { Apis a; a.begin(); char sb[320];
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0x29; }; a.updateOrientation(); onReading = nullptr;
       BufferPrint sp(sb, sizeof sb); size_t k = a.printStatus(sp); printf("[status] %zu bytes: %s\n", k, sb); }
     { Apis a; a.begin();
       onReading = [](TwoWire& w) { w.image[0x40] = 0x81; w.image[0x47] = 0x51; };   // chip 2, kind 17 (device-specific)
-      a.updateRange(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.reportNote().c_str());
+      a.updateDistance(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.reportNote().c_str());
       onReading = nullptr; }
 
     // 6. Batches: the readings-requested word reaches the device before the readings.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); lastRequest = 0;
-      a.setRangeReadings(5); a.updateMeasurements(Apis::RANGE);
+      a.setDistanceReadings(5); a.updateMeasurements(Apis::RANGE);
       printf("[request] updateMeasurements N=5 -> word=%u\n", lastRequest);
-      lastRequest = 0; a.setRangeReadings(1); a.updateMeasurements(Apis::RANGE);
+      lastRequest = 0; a.setDistanceReadings(1); a.updateMeasurements(Apis::RANGE);
       printf("[request] updateMeasurements N=1 -> word=%u (no write)\n", lastRequest);
       lastRequest = 0; char pb[128]; BufferPrint bp(pb, sizeof pb);
       int k = 0; onReading = [&](TwoWire& w) { int16_t r = 240 + 10 * (k++); w.image[0x48] = r & 0xFF; w.image[0x49] = (r >> 8) & 0xFF; };
@@ -181,7 +181,7 @@ int main() {
       unsigned tx = Wire.transactions;
       printf("[request] beginReadings(RANGE, 4) -> word=%u rows=%s\n", lastRequest, pb);
       printf("[batch stats] count=%u mean=%.2f std=%.4f median=%.2f transactions during stats=%u\n",
-             a.getRangeCount(), a.getRangeMean(), a.getRangeStd(), a.getRangeMedian(), Wire.transactions - tx);
+             a.getDistanceCount(), a.getDistanceMean(), a.getDistanceStd(), a.getDistanceMedian(), Wire.transactions - tx);
       onReading = nullptr; }
 
     // 7. A LiDAR that will not power up: the firmware reports fault chip 0 kind 1 on the first
@@ -189,9 +189,9 @@ int main() {
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin(); int k = 0;
       onReading = [&](TwoWire& w) { k++; w.image[0x40] = 0x83; w.image[0x47] = 0x01; w.image[0x48] = 0xF1; w.image[0x49] = 0xD8; }; // -9999
-      a.setRangeReadings(10); bool ok = a.updateMeasurements(Apis::RANGE);
+      a.setDistanceReadings(10); bool ok = a.updateMeasurements(Apis::RANGE);
       char fb[64]; BufferPrint fbp(fb, sizeof fb); a.printReport(fbp);
-      printf("[dead LiDAR] N=10: ok=%d readings taken=%d range=%d fault='%s'\n", ok, k, a.getRange(), fb);
+      printf("[dead LiDAR] N=10: ok=%d readings taken=%d range=%d fault='%s'\n", ok, k, a.getDistance(), fb);
       onReading = nullptr; }
 
     // 8. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.

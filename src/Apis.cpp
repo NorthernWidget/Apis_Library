@@ -21,10 +21,10 @@
 Apis::Apis(uint16_t nRangeReadings, bool rangeStats,
            uint16_t nOrientReadings, bool orientStats)
 {
-    setRangeReadings(nRangeReadings);
-    setOrientReadings(nOrientReadings);
-    _rangeCfg.stats = rangeStats;
-    _orientCfg.stats = orientStats;
+    setDistanceReadings(nRangeReadings);
+    setOrientationReadings(nOrientReadings);
+    _distanceCfg.stats = rangeStats;
+    _orientationCfg.stats = orientStats;
 }
 
 bool Apis::begin(uint8_t address, SensitivityMode sensitivity)
@@ -49,12 +49,10 @@ uint8_t Apis::getFirmwareVersion() { return _dev.firmwareVersion(); }
 uint8_t Apis::_chips(uint8_t component) {
     return component & ALL;   // the selectors are the chip-select bits: RANGE chip 0, ORIENT chip 1
 }
-uint16_t Apis::setRangeReadings(uint16_t n)  { return _rangeCfg.set(n, APIS_RANGE_CAPACITY); }
-uint16_t Apis::setOrientReadings(uint16_t n) { return _orientCfg.set(n, APIS_ORIENT_CAPACITY); }
-void Apis::setRangeStats(bool enable)      { _rangeCfg.stats = enable; }
-void Apis::setOrientStats(bool enable)     { _orientCfg.stats = enable; }
-void Apis::setNRangeReadings(uint16_t n)   { setRangeReadings(n); }
-void Apis::setNOrientReadings(uint16_t n)  { setOrientReadings(n); }
+uint16_t Apis::setDistanceReadings(uint16_t n)  { return _distanceCfg.set(n, APIS_RANGE_CAPACITY); }
+uint16_t Apis::setOrientationReadings(uint16_t n) { return _orientationCfg.set(n, APIS_ORIENT_CAPACITY); }
+void Apis::setDistanceStats(bool enable)      { _distanceCfg.stats = enable; }
+void Apis::setOrientationStats(bool enable)     { _orientationCfg.stats = enable; }
 
 void Apis::setRangefinderSensitivity(SensitivityMode mode) {
     _sensitivity = mode;
@@ -95,37 +93,37 @@ String Apis::reportNote() {
 
 String Apis::beginFailure() { return _dev.beginFailure(); }
 
-bool Apis::updateRange() {
+bool Apis::updateDistance() {
     if (_dev.batchFaulted(0x01)) {        // rest of a batch whose LiDAR did not power up
-        _range = NW_ERROR;
+        _distance = NW_ERROR;
         return false;
     }
     if (!_dev.takeReading(_chips(RANGE))) {
-        _range = NW_ERROR;
+        _distance = NW_ERROR;
         return false;
     }
     if (_dev.batchFaulted(0x01)) {        // not answering / self-test failed: the chip is not coming
-        _range = NW_ERROR;
+        _distance = NW_ERROR;
         return false;
     }
     // Range low/high and signal strength are consecutive (0x48–0x4A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
     _dev.readData(REG_RANGE_L, d, 3);
-    _range = (int16_t)((d[1] << 8) | d[0]);
+    _distance = (int16_t)((d[1] << 8) | d[0]);
     _signalStrength = d[2];
 
-    if (_range < 0) {
-        _range = NW_ERROR;
+    if (_distance < 0) {
+        _distance = NW_ERROR;
         return false;
     }
-    _rangeReadings.append(_range);
+    _distanceReadings.append(_distance);
     return true;
 }
 
 bool Apis::updateOrientation() {
     if (!_dev.takeReading(_chips(ORIENT))) {
         _pitch = _roll = NW_ERROR;
-        _accelTemp = NW_ERROR;
+        _accelerometerTemp = NW_ERROR;
         return false;
     }
     int16_t dataSet[6];
@@ -135,7 +133,7 @@ bool Apis::updateOrientation() {
     memset(d, 0xFF, sizeof d);           // 0xFF mirrors what Wire.read() yields on a failed request
     _dev.readData(REG_ACCEL_BASE, d, 10);
     for (int i = 0; i < 3; i++) dataSet[i] = ((d[2*i + 1] << 8) | d[2*i]);
-    _accelTemp = (int8_t)d[7];           // the LIS3DH digit is the word's high byte (1 per degree C, relative)
+    _accelerometerTemp = (int8_t)d[7];           // the LIS3DH digit is the word's high byte (1 per degree C, relative)
     uint16_t generation = d[8] | (d[9] << 8);
 
     // Accel offsets X/Y/Z at REG_OFFSET_BASE (0x20–0x25, Page 1) and the temperature at the zero (0x26–0x27): one read of eight bytes
@@ -153,7 +151,7 @@ bool Apis::updateOrientation() {
     // failure signature, not a physical accelerometer reading.
     if (gx == gy && gx == gz && gx == -1) {
         _pitch = _roll = NW_ERROR;
-        _accelTemp = NW_ERROR;
+        _accelerometerTemp = NW_ERROR;
         return false;
     }
     _zeroChanged = (generation != _zeroGen);   // a reading that reached us: its generation against the last one seen
@@ -175,28 +173,28 @@ bool Apis::updateMeasurements(uint8_t component) {
     bool rangeOK  = true;
     bool orientOK = true;
     if (component & RANGE) {
-    // Take N range readings; each successful one appends to _rangeReadings[].
+    // Take N range readings; each successful one appends to _distanceReadings[].
     // The device is told how many follow so it holds the LiDAR powered for the
     // batch (0/1 means power down after each), and a LiDAR that will not power
     // up stops the batch (NW_Device::takeReadings). Statistics are read from
     // the array (two-pass in float, exact enough for N up to the array
     // capacity; see the precision note in Apis.h).
-    _rangeReadings.reset();
-    _dev.takeReadings(0x01, _rangeCfg.n, [this] { return updateRange(); });
-    if (_rangeReadings.count() == 0) {
-        _range = NW_ERROR;
+    _distanceReadings.reset();
+    _dev.takeReadings(0x01, _distanceCfg.n, [this] { return updateDistance(); });
+    if (_distanceReadings.count() == 0) {
+        _distance = NW_ERROR;
     } else {
-        _range = (int16_t)getRangeMean();
+        _distance = (int16_t)getDistanceMean();
     }
     // Float comparisons with NW_ERROR are safe: the value is assigned directly,
     // never computed, so the float representation is exact and consistent.
-    rangeOK = (_range != NW_ERROR);
+    rangeOK = (_distance != NW_ERROR);
     }
     if (component & ORIENT) {
     // Take N orientation readings; each successful one appends to the arrays.
     _pitchReadings.reset();
     _rollReadings.reset();
-    _dev.takeReadings(0x02, _orientCfg.n, [this] { return updateOrientation(); });
+    _dev.takeReadings(0x02, _orientationCfg.n, [this] { return updateOrientation(); });
     if (_pitchReadings.count() == 0) {
         _pitch = _roll = NW_ERROR;
     } else {
@@ -210,23 +208,23 @@ bool Apis::updateMeasurements(uint8_t component) {
 
 
 
-float Apis::getRangeMedian() { return _rangeReadings.median(); }
+float Apis::getDistanceMedian() { return _distanceReadings.median(); }
 float Apis::getPitchMedian() { return _pitchReadings.median(); }
 float Apis::getRollMedian()  { return _rollReadings.median(); }
 
-uint16_t Apis::getRangeCount()  { return _rangeReadings.count(); }
-uint16_t Apis::getOrientCount() { return _pitchReadings.count(); }
+uint16_t Apis::getDistanceCount()  { return _distanceReadings.count(); }
+uint16_t Apis::getOrientationCount() { return _pitchReadings.count(); }
 
-int16_t Apis::getRange()          { return _range; }
+int16_t Apis::getDistance()          { return _distance; }
 float   Apis::getRoll()           { return _roll; }
 float   Apis::getPitch()          { return _pitch; }
 uint8_t Apis::getSignalStrength() { return _signalStrength; }
 
 // Statistics are computed from the arrays each call (NW_Readings), so a burst
 // logged through logReading() has its statistics without re-acquiring.
-float Apis::getRangeMean()  { return _rangeReadings.mean(); }
-float Apis::getRangeStd()   { return _rangeReadings.std(); }
-float Apis::getRangeSterr() { return _rangeReadings.sterr(); }
+float Apis::getDistanceMean()  { return _distanceReadings.mean(); }
+float Apis::getDistanceStd()   { return _distanceReadings.std(); }
+float Apis::getDistanceSterr() { return _distanceReadings.sterr(); }
 float Apis::getPitchStd()   { return _pitchReadings.std(); }
 float Apis::getPitchSterr() { return _pitchReadings.sterr(); }
 float Apis::getRollStd()    { return _rollReadings.std(); }
@@ -236,21 +234,21 @@ String Apis::getString(bool takeNewReadings) {
     if (takeNewReadings) {
         updateMeasurements();
     }
-    String s = String(_range) + ",";
-    if (_rangeCfg.columns()) {
-        s += String(getRangeStd()) + "," + String(getRangeSterr()) + ",";
+    String s = String(_distance) + ",";
+    if (_distanceCfg.columns()) {
+        s += String(getDistanceStd()) + "," + String(getDistanceSterr()) + ",";
     }
     s += String(_pitch) + "," + String(_roll) + ",";
-    if (_orientCfg.columns()) {
+    if (_orientationCfg.columns()) {
         s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
            + String(getRollStd())    + "," + String(getRollSterr())  + ",";
     }
-    s += String(_accelTemp) + ",";
+    s += String(_accelerometerTemp) + ",";
     return s;
 }
 
-int16_t Apis::getAccelTemperature() {
-    return _accelTemp;
+int16_t Apis::getAccelerometerTemperature() {
+    return _accelerometerTemp;
 }
 
 int16_t Apis::getZeroTemperature() {
@@ -288,12 +286,12 @@ size_t Apis::dumpZeros(Print& out) {
 }
 
 String Apis::getHeader() {
-    String h = "Range [cm],";
-    if (_rangeCfg.columns()) {
-        h += "Range std [cm],Range sterr [cm],";
+    String h = "Distance [cm],";
+    if (_distanceCfg.columns()) {
+        h += "Distance std [cm],Distance sterr [cm],";
     }
     h += "Pitch [deg],Roll [deg],";
-    if (_orientCfg.columns()) {
+    if (_orientationCfg.columns()) {
         h += "Pitch std [deg],Pitch sterr [deg],"
              "Roll std [deg],Roll sterr [deg],";
     }
@@ -303,7 +301,7 @@ String Apis::getHeader() {
 
 void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
-    if (component & RANGE)  _rangeReadings.reset();
+    if (component & RANGE)  _distanceReadings.reset();
     if (component & ORIENT) { _pitchReadings.reset(); _rollReadings.reset(); }
     _dev.resetBatch();
     if (n > 1 && (component & RANGE)) _dev.writeBatch(n);
@@ -327,18 +325,18 @@ size_t Apis::printHeader(Print& out) {
 size_t Apis::printReading(Print& out) {
     size_t n = 0;
     if (_rawComponent & RANGE) {
-        n += out.print(_range);  n += out.print(',');
+        n += out.print(_distance);  n += out.print(',');
     }
     if (_rawComponent & ORIENT) {
         n += out.print(_pitch);  n += out.print(',');
         n += out.print(_roll);   n += out.print(',');
-        n += out.print(_accelTemp); n += out.print(',');
+        n += out.print(_accelerometerTemp); n += out.print(',');
     }
     return n;
 }
 
 size_t Apis::logReading(Print& out) {
-    if (_rawComponent & RANGE)  updateRange();
+    if (_rawComponent & RANGE)  updateDistance();
     if (_rawComponent & ORIENT) updateOrientation();
     return printReading(out);
 }
@@ -352,8 +350,8 @@ void Apis::beginRawReadings(uint8_t component) {
 
 uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
     if (_rawComponent & RANGE) {
-        updateRange();
-        offset += snprintf(buf + offset, 8, "%d,", (int)_range);
+        updateDistance();
+        offset += snprintf(buf + offset, 8, "%d,", (int)_distance);
     }
     if (_rawComponent & ORIENT) {
         char tmp[10];

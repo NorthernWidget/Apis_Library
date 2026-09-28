@@ -1,5 +1,5 @@
 [N=1, no stats, level]
-header: Range [cm],Pitch [deg],Roll [deg],AccelT [C],
+header: Distance [cm],Pitch [deg],Roll [deg],AccelT [C],
 string: 250,0.00,0.00,21,
 raw ALL (15 bytes): 250,-0.00,0.00,
 raw RANGE (4 bytes): 250,
@@ -10,7 +10,7 @@ logReading ALL (17 bytes): 250,0.00,0.00,21,
 printHeader RANGE: Range [cm],
 logReading RANGE: 250,
 [N=1, tilted with offsets]
-header: Range [cm],Pitch [deg],Roll [deg],AccelT [C],
+header: Distance [cm],Pitch [deg],Roll [deg],AccelT [C],
 string: 1234,-10.96,-8.24,21,
 raw ALL (18 bytes): 1234,-10.96,-8.24,
 raw RANGE (5 bytes): 1234,
@@ -21,7 +21,7 @@ logReading ALL (21 bytes): 1234,-10.96,-8.24,21,
 printHeader RANGE: Range [cm],
 logReading RANGE: 1234,
 [N=5 range stats, N=3 orient stats, varying]
-header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],AccelT [C],
+header: Distance [cm],Distance std [cm],Distance sterr [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],AccelT [C],
 string: 306,4.74,2.12,-6.11,2.85,0.40,0.23,0.00,0.00,21,
 raw ALL (15 bytes): 312,-6.11,2.85,
 raw RANGE (4 bytes): 303,
@@ -32,7 +32,7 @@ logReading ALL (18 bytes): 306,-6.11,2.85,21,
 printHeader RANGE: Range [cm],
 logReading RANGE: 312,
 [errors: range<0, accel 0xFFFF]
-header: Range [cm],Range std [cm],Range sterr [cm],Pitch [deg],Roll [deg],AccelT [C],
+header: Distance [cm],Distance std [cm],Distance sterr [cm],Pitch [deg],Roll [deg],AccelT [C],
 string: -9999,-9999.00,-9999.00,-9999.00,-9999.00,-9999,
 raw ALL (18 bytes): -9999,-9999,-9999,
 raw RANGE (6 bytes): -9999,
@@ -46,10 +46,10 @@ logReading RANGE: -9999,
 string: -9998,-9998.00,-9998.00,-9998,
 [per-chip] RANGE ok=1 string(false): 300,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00,21, counts=4/2
 [per-chip] ORIENT ok=1 string(false): 300,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,21,
-[median] setRangeReadings(7)=7 setRangeReadings(1000)=64
+[median] setDistanceReadings(7)=7 setDistanceReadings(1000)=64
 [median] count=7 mean=309.0000 median=309.0000 std=6.4807 pitchMedian=-5.7106 rollMedian=2.8482
 [handshake] ready=1 newReading(before any)=1 counter after 1 reading=2 newReading=0 ctrl after request=0x02 fault after ack=0x00
-[handshake] no firmware response: updateRange=0 range=-9999
+[handshake] no firmware response: updateDistance=0 range=-9999
 [faults] faulted(0)=1 faulted(1)=0 any=1 chip=0 kind=2 text='LiDAR: timed out'
 [faults] any=0 chip=7 kind=6 text='unit: restarted since configured'
 [faults] note='UnitRestarted' (unit reset); beginFailure='None'
