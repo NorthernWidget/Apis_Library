@@ -136,7 +136,7 @@ int main() {
       // timeout path: firmware that never answers (no emulation)
       auto saved = Wire.onWrite; Wire.onWrite = nullptr;
       bool ok = a.updateDistance();
-      printf("[handshake] no firmware response: updateDistance=%d range=%d\n", ok, a.getDistance());
+      printf("[handshake] no firmware response: updateDistance=%d range=%.2f\n", ok, a.getDistance());
       Wire.onWrite = saved; }
 
     // 5d. Faults: the firmware reports a LiDAR fault in status and a latched code; then a unit reset code.
@@ -191,7 +191,7 @@ int main() {
       onReading = [&](TwoWire& w) { k++; w.image[0x40] = 0x83; w.image[0x47] = 0x01; w.image[0x48] = 0xF1; w.image[0x49] = 0xD8; }; // -9999
       a.setDistanceReadings(10); bool ok = a.updateMeasurements(Apis::RANGE);
       char fb[64]; BufferPrint fbp(fb, sizeof fb); a.printReport(fbp);
-      printf("[dead LiDAR] N=10: ok=%d readings taken=%d range=%d fault='%s'\n", ok, k, a.getDistance(), fb);
+      printf("[dead LiDAR] N=10: ok=%d readings taken=%d range=%.2f fault='%s'\n", ok, k, a.getDistance(), fb);
       onReading = nullptr; }
 
     // 8. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.

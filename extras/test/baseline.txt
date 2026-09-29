@@ -49,7 +49,7 @@ string: -9998.00,-9998.00,-9998.00,-9998,
 [median] setDistanceReadings(7)=7 setDistanceReadings(1000)=64
 [median] count=7 mean=309.0000 median=309.0000 std=6.4807 pitchMedian=-5.7106 rollMedian=2.8482
 [handshake] ready=1 newReading(before any)=1 counter after 1 reading=2 newReading=0 ctrl after request=0x02 fault after ack=0x00
-[handshake] no firmware response: updateDistance=0 range=0
+[handshake] no firmware response: updateDistance=0 range=-9999.00
 [faults] faulted(0)=1 faulted(1)=0 any=1 chip=0 kind=2 text='LiDAR: timed out'
 [faults] any=0 chip=7 kind=6 text='unit: restarted since configured'
 [faults] note='UnitRestarted' (unit reset); beginFailure='None'
@@ -62,7 +62,7 @@ string: -9998.00,-9998.00,-9998.00,-9998,
 [request] updateMeasurements N=1 -> word=0 (no write)
 [request] beginReadings(RANGE, 4) -> word=4 rows=240.00,250.00,260.00,270.00,
 [batch stats] count=4 mean=255.00 std=12.9099 median=255.00 transactions during stats=0
-[dead LiDAR] N=10: ok=0 readings taken=1 range=-460956448 fault='(null)'
+[dead LiDAR] N=10: ok=0 readings taken=1 range=-9999.00 fault='LiDAR: not answering'
 [wrong name] begin=0 failure=WrongName
 [schema 0x00] begin=0 fw=1 failure=NotSchema1
 [schema 0xFF unprovisioned] begin=0 failure=NotSchema1
