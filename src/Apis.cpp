@@ -261,6 +261,9 @@ float Apis::getTilt()       { return _tilt; }
 float Apis::getAccelerationMagnitudeStd()   { return _magnitudeReadings.std(); }
 float Apis::getAccelerationMagnitudeSterr() { return _magnitudeReadings.sterr(); }
 float Apis::getTiltStd()    { return _tiltReadings.std(); }
+void  Apis::setAccelerationColumns(bool enable) { _accelerationColumns = enable; }
+void  Apis::setMagnitudeColumns(bool enable)    { _magnitudeColumns = enable; }
+void  Apis::setTiltColumns(bool enable)         { _tiltColumns = enable; }
 float Apis::getTiltSterr()  { return _tiltReadings.sterr(); }
 float Apis::getPitchStd()   { return _pitchReadings.std(); }
 float Apis::getPitchSterr() { return _pitchReadings.sterr(); }
@@ -280,15 +283,38 @@ String Apis::getString(bool takeNewReadings) {
         s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
            + String(getRollStd())    + "," + String(getRollSterr())  + ",";
     }
-    s += String(_accelerometerTemp) + ",";
+    if (_accelerationColumns) {
+        s += String(_accelX) + "," + String(_accelY) + "," + String(_accelZ) + ",";
+    }
+    if (_magnitudeColumns) {
+        s += String(_magnitude) + ",";
+        if (_orientationCfg.columns()) {
+            s += String(getAccelerationMagnitudeStd()) + "," + String(getAccelerationMagnitudeSterr()) + ",";
+        }
+    }
+    if (_tiltColumns) {
+        s += String(_tilt) + ",";
+        if (_orientationCfg.columns()) {
+            s += String(getTiltStd()) + "," + String(getTiltSterr()) + ",";
+        }
+    }
+    s += String(getAccelerometerTemperatureChange()) + ",";
     return s;
 }
 
-int16_t Apis::getAccelerometerTemperature() {
+int16_t Apis::getAccelerometerTemperatureADC() {
     return _accelerometerTemp;
 }
 
-int16_t Apis::getZeroTemperature() {
+float Apis::getAccelerometerTemperatureChange() {
+    if (_accelerometerTemp == APIS_NOT_MEASURED || _accelerometerTemp == NW_ERROR) {
+        return (float)_accelerometerTemp;
+    }
+    if (_zeroGen == 0) return (float)APIS_NOT_MEASURED;   // no zero stored: nothing to be a change from
+    return (float)(_accelerometerTemp - _zeroTemp);       // the LIS3DH digit is 1 per degree C
+}
+
+int16_t Apis::getZeroTemperatureADC() {
     return _zeroTemp;
 }
 
@@ -332,7 +358,18 @@ String Apis::getHeader() {
         h += "Pitch std [deg],Pitch sterr [deg],"
              "Roll std [deg],Roll sterr [deg],";
     }
-    h += "AccelT [C],";
+    if (_accelerationColumns) {
+        h += "Accel X [m/s2],Accel Y [m/s2],Accel Z [m/s2],";
+    }
+    if (_magnitudeColumns) {
+        h += "Accel mag [m/s2],";
+        if (_orientationCfg.columns()) h += "Accel mag std [m/s2],Accel mag sterr [m/s2],";
+    }
+    if (_tiltColumns) {
+        h += "Tilt [deg],";
+        if (_orientationCfg.columns()) h += "Tilt std [deg],Tilt sterr [deg],";
+    }
+    h += "AccelT change [C],";
     return h;
 }
 
@@ -354,10 +391,14 @@ void Apis::endReadings() {
 size_t Apis::printHeader(Print& out) {
     size_t n = 0;
     if (_rawComponent & RANGE) {
-        n += out.print("Range [cm],");
+        n += out.print("Distance [cm],");
     }
     if (_rawComponent & ORIENT) {
-        n += out.print("Pitch [deg],Roll [deg],AccelT [C],");
+        n += out.print("Pitch [deg],Roll [deg],");
+        if (_accelerationColumns) n += out.print("Accel X [m/s2],Accel Y [m/s2],Accel Z [m/s2],");
+        if (_magnitudeColumns)    n += out.print("Accel mag [m/s2],");
+        if (_tiltColumns)         n += out.print("Tilt [deg],");
+        n += out.print("AccelT change [C],");
     }
     return n;
 }
@@ -370,7 +411,14 @@ size_t Apis::printReading(Print& out) {
     if (_rawComponent & ORIENT) {
         n += out.print(_pitch);  n += out.print(',');
         n += out.print(_roll);   n += out.print(',');
-        n += out.print(_accelerometerTemp); n += out.print(',');
+        if (_accelerationColumns) {
+            n += out.print(_accelX); n += out.print(',');
+            n += out.print(_accelY); n += out.print(',');
+            n += out.print(_accelZ); n += out.print(',');
+        }
+        if (_magnitudeColumns) { n += out.print(_magnitude); n += out.print(','); }
+        if (_tiltColumns)      { n += out.print(_tilt);      n += out.print(','); }
+        n += out.print(getAccelerometerTemperatureChange()); n += out.print(',');
     }
     return n;
 }

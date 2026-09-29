@@ -194,6 +194,12 @@ class Apis : public NW_Sensor
         void setDistanceStats(bool enable);
         /** @brief Set the number of orientation readings per updateMeasurements(). Clamped to APIS_ORIENT_CAPACITY. */
         uint16_t setOrientationReadings(uint16_t n);
+        /** @brief Include the g vector's X, Y and Z columns in getString() and getHeader(). Off by default. */
+        void setAccelerationColumns(bool enable);
+        /** @brief Include the acceleration magnitude column, and its statistics when orientation statistics are on. Off by default. */
+        void setMagnitudeColumns(bool enable);
+        /** @brief Include the tilt column, and its statistics when orientation statistics are on. Off by default. */
+        void setTiltColumns(bool enable);
         /** @brief Enable or disable orientation std and sterr in getString(). */
         void setOrientationStats(bool enable);
         /**
@@ -380,9 +386,20 @@ class Apis : public NW_Sensor
          * per-unit drift correction can be fitted later; APIS_NOT_MEASURED before
          * the first reading.
          */
-        int16_t getAccelerometerTemperature();
+        int16_t getAccelerometerTemperatureADC();
+        /**
+         * @brief Accelerometer temperature change [C] since the zero was stored.
+         * @details The LIS3DH measures change, not temperature: its Table 5
+         * specifies only the output change versus temperature, 1 digit per
+         * degree C and not guaranteed, with no offset and no reference point.
+         * So this is a departure from the temperature at which the Hall-effect
+         * zero was taken, which is what the drift correction wants, and it is
+         * APIS_NOT_MEASURED when no zero has ever been stored, because there is
+         * then nothing to be a change from.
+         */
+        float getAccelerometerTemperatureChange();
         /** @brief The same digit at the moment the Hall-effect zero was taken (Page 1). */
-        int16_t getZeroTemperature();
+        int16_t getZeroTemperatureADC();
         /**
          * @brief How many zeros the unit has stored since manufacture (0 =
          * never), from the copy the reading carries (0x58–0x59, firmware
@@ -544,6 +561,9 @@ class Apis : public NW_Sensor
         // Configuration
         NW_ReadingsConfig _distanceCfg;    // readings per updateMeasurements() and stats columns, LiDAR
         NW_ReadingsConfig _orientationCfg;   // accelerometer
+        bool _accelerationColumns = false;   // the g vector's components: off unless asked for
+        bool _magnitudeColumns    = false;
+        bool _tiltColumns         = false;
 
         // Stored measurements and statistics.
         // All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.
