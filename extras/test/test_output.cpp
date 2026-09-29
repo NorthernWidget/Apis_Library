@@ -60,6 +60,10 @@ static void report(const char* name, Apis& a) {
     printf("getters: range=%.4f roll=%.4f pitch=%.4f signal=%u mean=%.4f std=%.4f sterr=%.4f\n",
            a.getDistance(), a.getRoll(), a.getPitch(), a.getSignalStrength(),
            a.getDistanceMean(), a.getDistanceStd(), a.getDistanceSterr());
+    printf("accel:   x=%.4f y=%.4f z=%.4f |g|=%.4f tilt=%.4f  (mag std=%.4f sterr=%.4f, tilt median=%.4f)\n",
+           a.getAccelerationX(), a.getAccelerationY(), a.getAccelerationZ(),
+           a.getAccelerationMagnitude(), a.getTilt(),
+           a.getAccelerationMagnitudeStd(), a.getAccelerationMagnitudeSterr(), a.getTiltMedian());
     // Print-based interface: header, stored reading, and one logged reading.
     char pb[64]; BufferPrint bp(pb, sizeof pb);
     a.beginReadings(Apis::ALL); a.printHeader(bp); printf("printHeader ALL: %s\n", pb);
