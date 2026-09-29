@@ -57,7 +57,7 @@ static void report(const char* name, Apis& a) {
     memset(buf, 0, sizeof buf);
     a.beginRawReadings(NW_READING_RANGE); o = a.takeRawReading(buf, 0); a.endRawReadings();
     printf("raw RANGE (%u bytes): %s\n", o, buf);
-    printf("getters: range=%d roll=%.4f pitch=%.4f signal=%u mean=%.4f std=%.4f sterr=%.4f\n",
+    printf("getters: range=%.4f roll=%.4f pitch=%.4f signal=%u mean=%.4f std=%.4f sterr=%.4f\n",
            a.getDistance(), a.getRoll(), a.getPitch(), a.getSignalStrength(),
            a.getDistanceMean(), a.getDistanceStd(), a.getDistanceSterr());
     // Print-based interface: header, stored reading, and one logged reading.

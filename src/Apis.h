@@ -322,11 +322,11 @@ class Apis : public NW_Sensor
         uint16_t getOrientationCount();
 
         // --- Single-value getters ---
-        /** @brief Distance [cm] as logged: the mean over the burst, rounded to a
-         *  whole centimetre. The same number as getDistanceMean() when a burst ran,
-         *  and the single reading otherwise. Use getDistanceMean() for the
-         *  unrounded value. */
-        int16_t getDistance();
+        /** @brief Distance [cm] as logged: the mean over the burst, or the single
+         *  reading when no burst ran. A float like every other measurement getter,
+         *  so the burst mean keeps its fraction; the device itself resolves whole
+         *  centimetres. The same number as getDistanceMean() when a burst ran. */
+        float getDistance();
         /** @brief Return roll mean [deg]. */
         float getRoll();
         /** @brief Return pitch mean [deg]. */
@@ -499,7 +499,7 @@ class Apis : public NW_Sensor
 
         // Stored measurements and statistics.
         // All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.
-        int16_t _distance = APIS_NOT_MEASURED;
+        float _distance = APIS_NOT_MEASURED;
         float   _pitch = APIS_NOT_MEASURED;
         float   _roll  = APIS_NOT_MEASURED;
 

@@ -109,7 +109,7 @@ bool Apis::updateDistance() {
     // Range low/high and signal strength are consecutive (0x48–0x4A): one read.
     uint8_t d[3] = {0xFF, 0xFF, 0xFF};   // 0xFF mirrors what Wire.read() yields on a failed request
     _dev.readData(REG_RANGE_L, d, 3);
-    _distance = (int16_t)((d[1] << 8) | d[0]);
+    _distance = (float)(int16_t)((d[1] << 8) | d[0]);
     _signalStrength = d[2];
 
     if (_distance < 0) {
@@ -184,7 +184,7 @@ bool Apis::updateMeasurements(uint8_t component) {
     if (_distanceReadings.count() == 0) {
         _distance = NW_ERROR;
     } else {
-        _distance = (int16_t)getDistanceMean();
+        _distance = getDistanceMean();
     }
     // Float comparisons with NW_ERROR are safe: the value is assigned directly,
     // never computed, so the float representation is exact and consistent.
@@ -215,7 +215,7 @@ float Apis::getRollMedian()  { return _rollReadings.median(); }
 uint16_t Apis::getDistanceCount()  { return _distanceReadings.count(); }
 uint16_t Apis::getOrientationCount() { return _pitchReadings.count(); }
 
-int16_t Apis::getDistance()          { return _distance; }
+float   Apis::getDistance()       { return _distance; }
 float   Apis::getRoll()           { return _roll; }
 float   Apis::getPitch()          { return _pitch; }
 uint8_t Apis::getSignalStrength() { return _signalStrength; }
