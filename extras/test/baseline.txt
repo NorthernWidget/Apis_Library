@@ -1,57 +1,69 @@
 [N=1, no stats, level]
-header: Distance [cm],Pitch [deg],Roll [deg],AccelT [C],
-string: 250.00,0.00,0.00,21,
+header: Distance [cm],Pitch [deg],Roll [deg],AccelT change [C],
+string: 250.00,0.00,0.00,-9998.00,
 raw ALL (15 bytes): 250,-0.00,0.00,
 raw RANGE (4 bytes): 250,
 getters: range=250.0000 roll=0.0000 pitch=-0.0000 signal=120 mean=250.0000 std=0.0000 sterr=0.0000
 accel:   x=0.0000 y=0.0000 z=10.0420 |g|=10.0420 tilt=0.0000  (mag std=0.0000 sterr=0.0000, tilt median=0.0000)
-printHeader ALL: Range [cm],Pitch [deg],Roll [deg],AccelT [C],
-printReading ALL (stored): 250.00,0.00,0.00,21,
-logReading ALL (20 bytes): 250.00,0.00,0.00,21,
-printHeader RANGE: Range [cm],
+printHeader ALL: Distance [cm],Pitch [deg],Roll [deg],AccelT change [C],
+printReading ALL (stored): 250.00,0.00,0.00,-9998.00,
+logReading ALL (26 bytes): 250.00,0.00,0.00,-9998.00,
+printHeader RANGE: Distance [cm],
 logReading RANGE: 250.00,
 [N=1, tilted with offsets]
-header: Distance [cm],Pitch [deg],Roll [deg],AccelT [C],
-string: 1234.00,-10.96,-8.24,21,
+header: Distance [cm],Pitch [deg],Roll [deg],AccelT change [C],
+string: 1234.00,-10.96,-8.24,-3.00,
 raw ALL (18 bytes): 1234,-10.96,-8.24,
 raw RANGE (5 bytes): 1234,
 getters: range=1234.0000 roll=-8.2426 pitch=-10.9617 signal=77 mean=1234.0000 std=0.0000 sterr=0.0000
 accel:   x=1.9613 y=-1.4710 z=9.6105 |g|=9.9183 tilt=13.6813  (mag std=0.0000 sterr=0.0000, tilt median=13.6813)
-printHeader ALL: Range [cm],Pitch [deg],Roll [deg],AccelT [C],
-printReading ALL (stored): 1234.00,-10.96,-8.24,21,
-logReading ALL (24 bytes): 1234.00,-10.96,-8.24,21,
-printHeader RANGE: Range [cm],
+printHeader ALL: Distance [cm],Pitch [deg],Roll [deg],AccelT change [C],
+printReading ALL (stored): 1234.00,-10.96,-8.24,-3.00,
+logReading ALL (27 bytes): 1234.00,-10.96,-8.24,-3.00,
+printHeader RANGE: Distance [cm],
 logReading RANGE: 1234.00,
 [N=5 range stats, N=3 orient stats, varying]
-header: Distance [cm],Distance std [cm],Distance sterr [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],AccelT [C],
-string: 306.00,4.74,2.12,-6.11,2.85,0.40,0.23,0.00,0.00,21,
+header: Distance [cm],Distance std [cm],Distance sterr [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],AccelT change [C],
+string: 306.00,4.74,2.12,-6.11,2.85,0.40,0.23,0.00,0.00,-9998.00,
 raw ALL (15 bytes): 312,-6.11,2.85,
 raw RANGE (4 bytes): 303,
 getters: range=303.0000 roll=2.8462 pitch=-6.1074 signal=90 mean=306.4286 std=4.7208 sterr=1.7843
 accel:   x=1.0493 y=0.4903 z=9.8067 |g|=9.8750 tilt=6.7370  (mag std=0.0060 sterr=0.0030, tilt median=6.7357)
-printHeader ALL: Range [cm],Pitch [deg],Roll [deg],AccelT [C],
-printReading ALL (stored): 303.00,-6.11,2.85,21,
-logReading ALL (21 bytes): 306.00,-6.11,2.85,21,
-printHeader RANGE: Range [cm],
+printHeader ALL: Distance [cm],Pitch [deg],Roll [deg],AccelT change [C],
+printReading ALL (stored): 303.00,-6.11,2.85,-9998.00,
+logReading ALL (27 bytes): 306.00,-6.11,2.85,-9998.00,
+printHeader RANGE: Distance [cm],
 logReading RANGE: 312.00,
 [errors: range<0, accel 0xFFFF]
-header: Distance [cm],Distance std [cm],Distance sterr [cm],Pitch [deg],Roll [deg],AccelT [C],
-string: -9999.00,-9999.00,-9999.00,-9999.00,-9999.00,-9999,
+header: Distance [cm],Distance std [cm],Distance sterr [cm],Pitch [deg],Roll [deg],AccelT change [C],
+string: -9999.00,-9999.00,-9999.00,-9999.00,-9999.00,-9999.00,
 raw ALL (18 bytes): -9999,-9999,-9999,
 raw RANGE (6 bytes): -9999,
 getters: range=-9999.0000 roll=-9999.0000 pitch=-9999.0000 signal=0 mean=-9999.0000 std=-9999.0000 sterr=-9999.0000
 accel:   x=-9999.0000 y=-9999.0000 z=-9999.0000 |g|=-9999.0000 tilt=-9999.0000  (mag std=-9999.0000 sterr=-9999.0000, tilt median=-9999.0000)
-printHeader ALL: Range [cm],Pitch [deg],Roll [deg],AccelT [C],
-printReading ALL (stored): -9999.00,-9999.00,-9999.00,-9999,
-logReading ALL (33 bytes): -9999.00,-9999.00,-9999.00,-9999,
-printHeader RANGE: Range [cm],
+printHeader ALL: Distance [cm],Pitch [deg],Roll [deg],AccelT change [C],
+printReading ALL (stored): -9999.00,-9999.00,-9999.00,-9999.00,
+logReading ALL (36 bytes): -9999.00,-9999.00,-9999.00,-9999.00,
+printHeader RANGE: Distance [cm],
 logReading RANGE: -9999.00,
 [not measured]
-string: -9998.00,-9998.00,-9998.00,-9998,
-[per-chip] RANGE ok=1 string(false): 300.00,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00,21, counts=4/2
-[per-chip] ORIENT ok=1 string(false): 300.00,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,21,
+string: -9998.00,-9998.00,-9998.00,-9998.00,
+[per-chip] RANGE ok=1 string(false): 300.00,0.00,0.00,-5.71,2.85,0.00,0.00,0.00,0.00,-9998.00, counts=4/2
+[per-chip] ORIENT ok=1 string(false): 300.00,0.00,0.00,0.00,2.86,0.00,0.00,0.00,0.00,-9998.00,
 [median] setDistanceReadings(7)=7 setDistanceReadings(1000)=64
 [median] count=7 mean=309.0000 median=309.0000 std=6.4807 pitchMedian=-5.7106 rollMedian=2.8482
+[groups] default header: Distance [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],AccelT change [C],
+[groups] all on header:  Distance [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],Accel X [m/s2],Accel Y [m/s2],Accel Z [m/s2],Accel mag [m/s2],Accel mag std [m/s2],Accel mag sterr [m/s2],Tilt [deg],Tilt std [deg],Tilt sterr [deg],AccelT change [C],
+[groups] all on string:  1234.00,-10.96,-8.24,0.00,0.00,0.00,0.00,1.96,-1.47,9.61,9.92,0.00,0.00,13.68,0.00,0.00,-3.00,
+[groups] accel off:      Distance [cm],Pitch [deg],Roll [deg],Pitch std [deg],Pitch sterr [deg],Roll std [deg],Roll sterr [deg],Accel mag [m/s2],Accel mag std [m/s2],Accel mag sterr [m/s2],Tilt [deg],Tilt std [deg],Tilt sterr [deg],AccelT change [C],
+[groups] mask 0: 8 labels, 8 values
+[groups] mask 1: 11 labels, 11 values
+[groups] mask 2: 11 labels, 11 values
+[groups] mask 3: 14 labels, 14 values
+[groups] mask 4: 11 labels, 11 values
+[groups] mask 5: 14 labels, 14 values
+[groups] mask 6: 14 labels, 14 values
+[groups] mask 7: 17 labels, 17 values
 [handshake] ready=1 newReading(before any)=1 counter after 1 reading=2 newReading=0 ctrl after request=0x02 fault after ack=0x00
 [handshake] no firmware response: updateDistance=0 range=-9999.00
 [faults] faulted(0)=1 faulted(1)=0 any=1 chip=0 kind=2 text='LiDAR: timed out'

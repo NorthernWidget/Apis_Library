@@ -128,6 +128,32 @@ int main() {
              a.getDistanceCount(), a.getDistanceMean(), a.getDistanceMedian(), a.getDistanceStd(), a.getPitchMedian(), a.getRollMedian());
       onReading = nullptr; }
 
+    // 5b3. The optional column groups: off by default, and each one appears only
+    //      when asked for. Statistics on the new columns follow the orientation
+    //      statistics flag, as pitch and roll do.
+    loadImage(1234, 77, 200, -150, 980, 10, -5, 1000);
+    {
+        Apis a(1, false, 3, true); a.begin();
+        printf("[groups] default header: %s\n", a.getHeader().c_str());
+        a.setAccelerationColumns(true); a.setMagnitudeColumns(true); a.setTiltColumns(true);
+        a.updateMeasurements();
+        printf("[groups] all on header:  %s\n", a.getHeader().c_str());
+        printf("[groups] all on string:  %s\n", a.getString(false).c_str());
+        a.setAccelerationColumns(false);
+        printf("[groups] accel off:      %s\n", a.getHeader().c_str());
+        // The invariant that matters: a header cell for every value, in every
+        // combination of the groups. A file whose columns and labels disagree
+        // is worse than one with fewer columns.
+        for (int mask = 0; mask < 8; mask++) {
+            a.setAccelerationColumns(mask & 1); a.setMagnitudeColumns(mask & 2); a.setTiltColumns(mask & 4);
+            String head = a.getHeader(), line = a.getString(false);   // held: c_str() on a temporary dangles
+            int hc = 0, sc = 0;
+            for (const char* q = head.c_str(); *q; q++) if (*q == ',') hc++;
+            for (const char* q = line.c_str(); *q; q++) if (*q == ',') sc++;
+            printf("[groups] mask %d: %d labels, %d values%s\n", mask, hc, sc, hc == sc ? "" : "  MISMATCH");
+        }
+    }
+
     // 5c. Handshake: ready/newReading/requestReading against the emulated firmware.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
     { Apis a; a.begin();
