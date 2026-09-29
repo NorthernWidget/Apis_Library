@@ -50,6 +50,13 @@ License: GNU GPL v3. You should find a copy in the repository.
 #ifndef APIS_RANGE_CAPACITY
   #define APIS_RANGE_CAPACITY 64
 #endif
+// Digits to m/s^2 for the accelerometer. The firmware sets CTRL_REG4 = 0x88,
+// which is full scale +/-2 g with high resolution, and LIS3DH Table 4 gives
+// that configuration a sensitivity of 1 mg per digit; the firmware right-
+// shifts the 12-bit word into place before serving it, so a served digit is
+// one milli-g. Standard gravity is 9.80665 m/s^2.
+#define APIS_ACCEL_M_PER_S2_PER_DIGIT (9.80665e-3f)
+
 #ifndef APIS_ORIENT_CAPACITY
   #define APIS_ORIENT_CAPACITY 8
 #endif
@@ -332,6 +339,35 @@ class Apis : public NW_Sensor
         /** @brief Return pitch mean [deg]. */
         float getPitch();
         /**
+         * @brief Acceleration along the accelerometer X axis [m/s^2].
+         * @details The last reading rather than a burst mean, as
+         * getSignalStrength() is: the three components carry no statistics
+         * columns. getAccelerationMagnitude() is a burst mean, so it does not
+         * equal the magnitude of these three when more than one reading was
+         * taken. APIS_NOT_MEASURED before the first reading, APIS_ERROR when it
+         * failed.
+         */
+        float getAccelerationX();
+        /** @brief Acceleration along the accelerometer Y axis [m/s^2]; see getAccelerationX(). */
+        float getAccelerationY();
+        /** @brief Acceleration along the accelerometer Z axis [m/s^2]; see getAccelerationX(). */
+        float getAccelerationZ();
+        /**
+         * @brief Magnitude of the acceleration vector [m/s^2], mean over the burst.
+         * @details Reads 9.81 whenever the unit is static, so a departure means
+         * the Apis moved or the accelerometer is faulted. Pitch and roll cannot
+         * report that: a wrong g vector still yields plausible angles.
+         */
+        float getAccelerationMagnitude();
+        /**
+         * @brief Angle between the housing and its reference [deg], mean over the burst.
+         * @details Measured from the stored zero when one has been taken, and
+         * from vertical when none has, which is the same branch getPitch() and
+         * getRoll() take. One number for a levelling correction; pitch and roll
+         * stay, because recovering the direction of tilt needs both.
+         */
+        float getTilt();
+        /**
          * @brief Return the most recently cached LiDAR Lite signal strength.
          * @details Updated by every call to updateDistance() or updateMeasurements().
          * Returns 0 before the first measurement.
@@ -379,6 +415,10 @@ class Apis : public NW_Sensor
         float getDistanceMean();
         /** @brief Return the median range [cm] of the stored readings (nearest cm for odd N; mean of the middle pair otherwise). */
         float getDistanceMedian();
+        /** @brief Acceleration magnitude median [m/s^2]. */
+        float getAccelerationMagnitudeMedian();
+        /** @brief Tilt median [deg]. */
+        float getTiltMedian();
         /** @brief Return the median pitch [deg] of the stored readings. */
         float getPitchMedian();
         /** @brief Return the median roll [deg] of the stored readings. */
@@ -387,6 +427,14 @@ class Apis : public NW_Sensor
         float getDistanceStd();
         /** @brief Return range standard error [cm]. */
         float getDistanceSterr();
+        /** @brief Acceleration magnitude standard deviation [m/s^2]. */
+        float getAccelerationMagnitudeStd();
+        /** @brief Acceleration magnitude standard error [m/s^2]. */
+        float getAccelerationMagnitudeSterr();
+        /** @brief Tilt standard deviation [deg]. */
+        float getTiltStd();
+        /** @brief Tilt standard error [deg]. */
+        float getTiltSterr();
         /** @brief Return pitch standard deviation [deg]. */
         float getPitchStd();
         /** @brief Return pitch standard error [deg]. */
@@ -502,6 +550,11 @@ class Apis : public NW_Sensor
         float _distance = APIS_NOT_MEASURED;
         float   _pitch = APIS_NOT_MEASURED;
         float   _roll  = APIS_NOT_MEASURED;
+        float   _accelX = APIS_NOT_MEASURED;   // last reading, m/s^2
+        float   _accelY = APIS_NOT_MEASURED;
+        float   _accelZ = APIS_NOT_MEASURED;
+        float   _magnitude = APIS_NOT_MEASURED;  // burst mean, m/s^2
+        float   _tilt      = APIS_NOT_MEASURED;  // burst mean, deg
 
         // Range statistics
 
@@ -517,6 +570,8 @@ class Apis : public NW_Sensor
         NW_Readings<int16_t, APIS_RANGE_CAPACITY> _distanceReadings;
         NW_Readings<float, APIS_ORIENT_CAPACITY>  _pitchReadings;
         NW_Readings<float, APIS_ORIENT_CAPACITY>  _rollReadings;
+        NW_Readings<float, APIS_ORIENT_CAPACITY>  _magnitudeReadings;
+        NW_Readings<float, APIS_ORIENT_CAPACITY>  _tiltReadings;
 
 
         // LiDAR Lite signal strength; updated by updateDistance()

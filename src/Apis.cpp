@@ -123,6 +123,7 @@ bool Apis::updateDistance() {
 bool Apis::updateOrientation() {
     if (!_dev.takeReading(_chips(ORIENT))) {
         _pitch = _roll = NW_ERROR;
+        _accelX = _accelY = _accelZ = NW_ERROR;
         _accelerometerTemp = NW_ERROR;
         return false;
     }
@@ -151,6 +152,7 @@ bool Apis::updateOrientation() {
     // failure signature, not a physical accelerometer reading.
     if (gx == gy && gx == gz && gx == -1) {
         _pitch = _roll = NW_ERROR;
+        _accelX = _accelY = _accelZ = NW_ERROR;
         _accelerometerTemp = NW_ERROR;
         return false;
     }
@@ -166,6 +168,25 @@ bool Apis::updateOrientation() {
     }
     _pitchReadings.append(_pitch);
     _rollReadings.append(_roll);
+
+    // The g vector in physical units, and the two quantities derived from it.
+    _accelX = gx * APIS_ACCEL_M_PER_S2_PER_DIGIT;
+    _accelY = gy * APIS_ACCEL_M_PER_S2_PER_DIGIT;
+    _accelZ = gz * APIS_ACCEL_M_PER_S2_PER_DIGIT;
+    float magnitude = sqrt(gx*gx + gy*gy + gz*gz);          // digits
+    if (magnitude > 0) {
+        _magnitudeReadings.append(magnitude * APIS_ACCEL_M_PER_S2_PER_DIGIT);
+        // Tilt from the stored zero when one has been taken and from vertical
+        // when none has, which is the branch pitch and roll take above.
+        float cosine;
+        if (offsetX == offsetY && offsetX == offsetZ && offsetX == 0) {
+            cosine = gz / magnitude;
+        } else {
+            float reference = sqrt(offsetX*offsetX + offsetY*offsetY + offsetZ*offsetZ);
+            cosine = (reference > 0) ? (gx*offsetX + gy*offsetY + gz*offsetZ) / (magnitude * reference) : 2;
+        }
+        if (cosine >= -1 && cosine <= 1) _tiltReadings.append(acos(cosine) * 180. / M_PI);
+    }
     return true;
 }
 
@@ -194,12 +215,17 @@ bool Apis::updateMeasurements(uint8_t component) {
     // Take N orientation readings; each successful one appends to the arrays.
     _pitchReadings.reset();
     _rollReadings.reset();
+    _magnitudeReadings.reset();
+    _tiltReadings.reset();
     _dev.takeReadings(0x02, _orientationCfg.n, [this] { return updateOrientation(); });
     if (_pitchReadings.count() == 0) {
         _pitch = _roll = NW_ERROR;
+        _magnitude = _tilt = NW_ERROR;
     } else {
         _pitch = _pitchReadings.mean();
         _roll  = _rollReadings.mean();
+        _magnitude = (_magnitudeReadings.count() > 0) ? _magnitudeReadings.mean() : NW_ERROR;
+        _tilt      = (_tiltReadings.count() > 0)      ? _tiltReadings.mean()      : NW_ERROR;
     }
     orientOK = (_pitch != NW_ERROR) && (_roll != NW_ERROR);
     }
@@ -209,6 +235,8 @@ bool Apis::updateMeasurements(uint8_t component) {
 
 
 float Apis::getDistanceMedian() { return _distanceReadings.median(); }
+float Apis::getAccelerationMagnitudeMedian() { return _magnitudeReadings.median(); }
+float Apis::getTiltMedian()  { return _tiltReadings.median(); }
 float Apis::getPitchMedian() { return _pitchReadings.median(); }
 float Apis::getRollMedian()  { return _rollReadings.median(); }
 
@@ -225,6 +253,15 @@ uint8_t Apis::getSignalStrength() { return _signalStrength; }
 float Apis::getDistanceMean()  { return _distanceReadings.mean(); }
 float Apis::getDistanceStd()   { return _distanceReadings.std(); }
 float Apis::getDistanceSterr() { return _distanceReadings.sterr(); }
+float Apis::getAccelerationX() { return _accelX; }
+float Apis::getAccelerationY() { return _accelY; }
+float Apis::getAccelerationZ() { return _accelZ; }
+float Apis::getAccelerationMagnitude() { return _magnitude; }
+float Apis::getTilt()       { return _tilt; }
+float Apis::getAccelerationMagnitudeStd()   { return _magnitudeReadings.std(); }
+float Apis::getAccelerationMagnitudeSterr() { return _magnitudeReadings.sterr(); }
+float Apis::getTiltStd()    { return _tiltReadings.std(); }
+float Apis::getTiltSterr()  { return _tiltReadings.sterr(); }
 float Apis::getPitchStd()   { return _pitchReadings.std(); }
 float Apis::getPitchSterr() { return _pitchReadings.sterr(); }
 float Apis::getRollStd()    { return _rollReadings.std(); }
@@ -302,7 +339,10 @@ String Apis::getHeader() {
 void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
     if (component & RANGE)  _distanceReadings.reset();
-    if (component & ORIENT) { _pitchReadings.reset(); _rollReadings.reset(); }
+    if (component & ORIENT) {
+        _pitchReadings.reset(); _rollReadings.reset();
+        _magnitudeReadings.reset(); _tiltReadings.reset();
+    }
     _dev.resetBatch();
     if (n > 1 && (component & RANGE)) _dev.writeBatch(n);
 }
