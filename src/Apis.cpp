@@ -1,5 +1,40 @@
 #include "Apis.h"
 
+// The column names, from NW_Core's generated table. Aliased here only to keep
+// the lines below readable: the strings themselves are never typed, and which
+// register each one names is recorded in the Apis appendix of
+// NW-Device-Specification, beside the register map.
+//
+// A summary row carries a mean and a per-reading row carries one reading, and
+// the vocabulary says which with its prefix operator. Both forms come from the
+// same CSV row, so the pair cannot drift apart.
+#define HDR_DISTANCE        NW_HDR_RANGEFINDER_APIS__DISTANCE
+#define HDR_DISTANCE_MEAN   NW_HDR_MEAN_OF_RANGEFINDER_APIS__DISTANCE
+#define HDR_DISTANCE_STD    NW_HDR_STD_OF_RANGEFINDER_APIS__DISTANCE
+#define HDR_DISTANCE_STERR  NW_HDR_STERR_OF_RANGEFINDER_APIS__DISTANCE
+#define HDR_SIGNAL          NW_HDR_RANGEFINDER_APIS__SIGNAL_STRENGTH
+#define HDR_PITCH           NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__PITCH_ANGLE
+#define HDR_PITCH_MEAN      NW_HDR_MEAN_OF_RANGEFINDER_APIS_ACCELEROMETER__PITCH_ANGLE
+#define HDR_PITCH_STD       NW_HDR_STD_OF_RANGEFINDER_APIS_ACCELEROMETER__PITCH_ANGLE
+#define HDR_PITCH_STERR     NW_HDR_STERR_OF_RANGEFINDER_APIS_ACCELEROMETER__PITCH_ANGLE
+#define HDR_ROLL            NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__ROLL_ANGLE
+#define HDR_ROLL_MEAN       NW_HDR_MEAN_OF_RANGEFINDER_APIS_ACCELEROMETER__ROLL_ANGLE
+#define HDR_ROLL_STD        NW_HDR_STD_OF_RANGEFINDER_APIS_ACCELEROMETER__ROLL_ANGLE
+#define HDR_ROLL_STERR      NW_HDR_STERR_OF_RANGEFINDER_APIS_ACCELEROMETER__ROLL_ANGLE
+#define HDR_ACCEL_X         NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__X_COMPONENT_OF_ACCELERATION
+#define HDR_ACCEL_Y         NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__Y_COMPONENT_OF_ACCELERATION
+#define HDR_ACCEL_Z         NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__Z_COMPONENT_OF_ACCELERATION
+#define HDR_MAGNITUDE       NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__MAGNITUDE_OF_ACCELERATION
+#define HDR_MAGNITUDE_MEAN  NW_HDR_MEAN_OF_RANGEFINDER_APIS_ACCELEROMETER__MAGNITUDE_OF_ACCELERATION
+#define HDR_MAGNITUDE_STD   NW_HDR_STD_OF_RANGEFINDER_APIS_ACCELEROMETER__MAGNITUDE_OF_ACCELERATION
+#define HDR_MAGNITUDE_STERR NW_HDR_STERR_OF_RANGEFINDER_APIS_ACCELEROMETER__MAGNITUDE_OF_ACCELERATION
+#define HDR_TILT            NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__TILT_ANGLE
+#define HDR_TILT_MEAN       NW_HDR_MEAN_OF_RANGEFINDER_APIS_ACCELEROMETER__TILT_ANGLE
+#define HDR_TILT_STD        NW_HDR_STD_OF_RANGEFINDER_APIS_ACCELEROMETER__TILT_ANGLE
+#define HDR_TILT_STERR      NW_HDR_STERR_OF_RANGEFINDER_APIS_ACCELEROMETER__TILT_ANGLE
+#define HDR_ACCEL_T         NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__ANOMALY_OF_TEMPERATURE
+#define HDR_ZERO_GEN        NW_HDR_RANGEFINDER_APIS_ACCELEROMETER__ZERO_GENERATION
+
 // Register map: NW-Device-Specification Schema 1, Apis appendix. Three 32-byte
 // pages; a controller writes a start address and reads up to 32 bytes with
 // auto-increment. Registers not listed are reserved.
@@ -351,29 +386,46 @@ size_t Apis::dumpZeros(Print& out) {
 }
 
 String Apis::getHeader() {
-    String h = "Distance [cm],";
+    // The summary row: the distance and the angles are means over the readings
+    // taken, which is why those carry the mean_of_ operator. The signal
+    // strength, the temperature anomaly and the zero generation are each one
+    // value from the last reading and carry their bare names.
+    String h;
+    h += F(HDR_DISTANCE_MEAN);  h += ",";
     if (_distanceCfg.columns()) {
-        h += "Distance std [cm],Distance sterr [cm],";
+        h += F(HDR_DISTANCE_STD);    h += ",";
+        h += F(HDR_DISTANCE_STERR);  h += ",";
     }
-    h += "Signal [1],";
-    h += "Pitch [deg],Roll [deg],";
+    h += F(HDR_SIGNAL);      h += ",";
+    h += F(HDR_PITCH_MEAN);  h += ",";
+    h += F(HDR_ROLL_MEAN);   h += ",";
     if (_orientationCfg.columns()) {
-        h += "Pitch std [deg],Pitch sterr [deg],"
-             "Roll std [deg],Roll sterr [deg],";
+        h += F(HDR_PITCH_STD);    h += ",";
+        h += F(HDR_PITCH_STERR);  h += ",";
+        h += F(HDR_ROLL_STD);     h += ",";
+        h += F(HDR_ROLL_STERR);   h += ",";
     }
     if (_accelerationColumns) {
-        h += "Accel X [m/s2],Accel Y [m/s2],Accel Z [m/s2],";
+        h += F(HDR_ACCEL_X);  h += ",";
+        h += F(HDR_ACCEL_Y);  h += ",";
+        h += F(HDR_ACCEL_Z);  h += ",";
     }
     if (_magnitudeColumns) {
-        h += "Accel mag [m/s2],";
-        if (_orientationCfg.columns()) h += "Accel mag std [m/s2],Accel mag sterr [m/s2],";
+        h += F(HDR_MAGNITUDE_MEAN);  h += ",";
+        if (_orientationCfg.columns()) {
+            h += F(HDR_MAGNITUDE_STD);    h += ",";
+            h += F(HDR_MAGNITUDE_STERR);  h += ",";
+        }
     }
     if (_tiltColumns) {
-        h += "Tilt [deg],";
-        if (_orientationCfg.columns()) h += "Tilt std [deg],Tilt sterr [deg],";
+        h += F(HDR_TILT_MEAN);  h += ",";
+        if (_orientationCfg.columns()) {
+            h += F(HDR_TILT_STD);    h += ",";
+            h += F(HDR_TILT_STERR);  h += ",";
+        }
     }
-    h += "AccelT change [C],";
-    h += "Zero gen [1],";
+    h += F(HDR_ACCEL_T);   h += ",";
+    h += F(HDR_ZERO_GEN);  h += ",";
     return h;
 }
 
@@ -394,17 +446,25 @@ void Apis::endReadings() {
 
 size_t Apis::printHeader(Print& out) {
     size_t n = 0;
+    // These carry the bare standard names rather than getHeader()'s mean_of_
+    // forms, because each value here is one reading. The two sets differ for
+    // that reason and no other: both come from the same rows of the CSV.
     if (_rawComponent & RANGE) {
-        n += out.print("Distance [cm],");
-        n += out.print("Signal [1],");
+        n += out.print(F(HDR_DISTANCE));  n += out.print(',');
+        n += out.print(F(HDR_SIGNAL));    n += out.print(',');
     }
     if (_rawComponent & ORIENT) {
-        n += out.print("Pitch [deg],Roll [deg],");
-        if (_accelerationColumns) n += out.print("Accel X [m/s2],Accel Y [m/s2],Accel Z [m/s2],");
-        if (_magnitudeColumns)    n += out.print("Accel mag [m/s2],");
-        if (_tiltColumns)         n += out.print("Tilt [deg],");
-        n += out.print("AccelT change [C],");
-        n += out.print("Zero gen [1],");
+        n += out.print(F(HDR_PITCH));  n += out.print(',');
+        n += out.print(F(HDR_ROLL));   n += out.print(',');
+        if (_accelerationColumns) {
+            n += out.print(F(HDR_ACCEL_X));  n += out.print(',');
+            n += out.print(F(HDR_ACCEL_Y));  n += out.print(',');
+            n += out.print(F(HDR_ACCEL_Z));  n += out.print(',');
+        }
+        if (_magnitudeColumns) { n += out.print(F(HDR_MAGNITUDE)); n += out.print(','); }
+        if (_tiltColumns)      { n += out.print(F(HDR_TILT));      n += out.print(','); }
+        n += out.print(F(HDR_ACCEL_T));   n += out.print(',');
+        n += out.print(F(HDR_ZERO_GEN));  n += out.print(',');
     }
     return n;
 }
