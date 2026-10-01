@@ -65,13 +65,16 @@ static void report(const char* name, Apis& a) {
            a.getAccelerationMagnitude(), a.getTilt(),
            a.getAccelerationMagnitudeStd(), a.getAccelerationMagnitudeSterr(), a.getTiltMedian());
     // Print-based interface: header, stored reading, and one logged reading.
-    char pb[64]; BufferPrint bp(pb, sizeof pb);
-    a.beginReadings(Apis::ALL); a.printHeader(bp); printf("printHeader ALL: %s\n", pb);
-    BufferPrint bp2(pb, sizeof pb); a.printReading(bp2); printf("printReading ALL (stored): %s\n", pb);
+    // The buffer must hold a whole header. char[64] silently cut printHeader ALL
+    // at "AccelT change [" and the baseline recorded the cut line as if it were
+    // the output, so trunc= is printed beside everything streamed from here on.
+    char pb[512]; BufferPrint bp(pb, sizeof pb);
+    a.beginReadings(Apis::ALL); a.printHeader(bp); printf("printHeader ALL: %s trunc=%d\n", pb, bp.truncated());
+    BufferPrint bp2(pb, sizeof pb); a.printReading(bp2); printf("printReading ALL (stored): %s trunc=%d\n", pb, bp2.truncated());
     BufferPrint bp3(pb, sizeof pb); size_t nb = a.logReading(bp3); a.endReadings();
-    printf("logReading ALL (%zu bytes): %s\n", nb, pb);
-    a.beginReadings(Apis::RANGE); BufferPrint bp4(pb, sizeof pb); a.printHeader(bp4); printf("printHeader RANGE: %s\n", pb);
-    BufferPrint bp5(pb, sizeof pb); a.logReading(bp5); a.endReadings(); printf("logReading RANGE: %s\n", pb);
+    printf("logReading ALL (%zu bytes): %s trunc=%d\n", nb, pb, bp3.truncated());
+    a.beginReadings(Apis::RANGE); BufferPrint bp4(pb, sizeof pb); a.printHeader(bp4); printf("printHeader RANGE: %s trunc=%d\n", pb, bp4.truncated());
+    BufferPrint bp5(pb, sizeof pb); a.logReading(bp5); a.endReadings(); printf("logReading RANGE: %s trunc=%d\n", pb, bp5.truncated());
 }
 #pragma GCC diagnostic pop
 
@@ -205,7 +208,7 @@ int main() {
       printf("[request] updateMeasurements N=5 -> word=%u\n", lastRequest);
       lastRequest = 0; a.setDistanceReadings(1); a.updateMeasurements(Apis::RANGE);
       printf("[request] updateMeasurements N=1 -> word=%u (no write)\n", lastRequest);
-      lastRequest = 0; char pb[128]; BufferPrint bp(pb, sizeof pb);
+      lastRequest = 0; char pb[512]; BufferPrint bp(pb, sizeof pb);
       int k = 0; onReading = [&](TwoWire& w) { int16_t r = 240 + 10 * (k++); w.image[0x48] = r & 0xFF; w.image[0x49] = (r >> 8) & 0xFF; };
       a.beginReadings(Apis::RANGE, 4); for (int i = 0; i < 4; i++) a.logReading(bp); a.endReadings();
       unsigned tx = Wire.transactions;
