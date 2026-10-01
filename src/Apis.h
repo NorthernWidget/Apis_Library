@@ -411,6 +411,15 @@ class Apis : public NW_Sensor
          * never), from the copy the reading carries (0x58–0x59, firmware
          * patch 5). Read with the axes, so it belongs to the last orientation
          * reading; the value seen at begin() before then.
+         *
+         * It is a column of its own (Andy, 2026-10-01), last in the row beside
+         * the accelerometer temperature change, which is the other zero-relative
+         * fact. Pitch, roll and tilt are all measured against a stored zero, and
+         * a re-zero mid-deployment silently changes what every later angle means.
+         * The generation in each row is what lets an analyst segment the record:
+         * equal generation means comparable angles. The firmware anticipates
+         * this by mirroring the Page 1 value into Page 2 at 0x58 and serving it
+         * with every reading.
          */
         uint16_t getZeroGeneration();
         /**

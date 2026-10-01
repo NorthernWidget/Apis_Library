@@ -300,6 +300,7 @@ String Apis::getString(bool takeNewReadings) {
         }
     }
     s += String(getAccelerometerTemperatureChange()) + ",";
+    s += String(getZeroGeneration()) + ",";
     return s;
 }
 
@@ -372,6 +373,7 @@ String Apis::getHeader() {
         if (_orientationCfg.columns()) h += "Tilt std [deg],Tilt sterr [deg],";
     }
     h += "AccelT change [C],";
+    h += "Zero gen [1],";
     return h;
 }
 
@@ -402,6 +404,7 @@ size_t Apis::printHeader(Print& out) {
         if (_magnitudeColumns)    n += out.print("Accel mag [m/s2],");
         if (_tiltColumns)         n += out.print("Tilt [deg],");
         n += out.print("AccelT change [C],");
+        n += out.print("Zero gen [1],");
     }
     return n;
 }
@@ -423,6 +426,7 @@ size_t Apis::printReading(Print& out) {
         if (_magnitudeColumns) { n += out.print(_magnitude); n += out.print(','); }
         if (_tiltColumns)      { n += out.print(_tilt);      n += out.print(','); }
         n += out.print(getAccelerometerTemperatureChange()); n += out.print(',');
+        n += out.print(getZeroGeneration()); n += out.print(',');
     }
     return n;
 }
