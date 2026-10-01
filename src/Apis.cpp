@@ -278,6 +278,7 @@ String Apis::getString(bool takeNewReadings) {
     if (_distanceCfg.columns()) {
         s += String(getDistanceStd()) + "," + String(getDistanceSterr()) + ",";
     }
+    s += String(getSignalStrength()) + ",";
     s += String(_pitch) + "," + String(_roll) + ",";
     if (_orientationCfg.columns()) {
         s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
@@ -353,6 +354,7 @@ String Apis::getHeader() {
     if (_distanceCfg.columns()) {
         h += "Distance std [cm],Distance sterr [cm],";
     }
+    h += "Signal [1],";
     h += "Pitch [deg],Roll [deg],";
     if (_orientationCfg.columns()) {
         h += "Pitch std [deg],Pitch sterr [deg],"
@@ -392,6 +394,7 @@ size_t Apis::printHeader(Print& out) {
     size_t n = 0;
     if (_rawComponent & RANGE) {
         n += out.print("Distance [cm],");
+        n += out.print("Signal [1],");
     }
     if (_rawComponent & ORIENT) {
         n += out.print("Pitch [deg],Roll [deg],");
@@ -407,6 +410,7 @@ size_t Apis::printReading(Print& out) {
     size_t n = 0;
     if (_rawComponent & RANGE) {
         n += out.print(_distance);  n += out.print(',');
+        n += out.print(getSignalStrength()); n += out.print(',');
     }
     if (_rawComponent & ORIENT) {
         n += out.print(_pitch);  n += out.print(',');

@@ -376,7 +376,13 @@ class Apis : public NW_Sensor
         /**
          * @brief Return the most recently cached LiDAR Lite signal strength.
          * @details Updated by every call to updateDistance() or updateMeasurements().
-         * Returns 0 before the first measurement.
+         * Returns 0 before the first measurement. It is a column of its own
+         * (Andy, 2026-10-01), beside the distance it qualifies: a weak return
+         * explains a bad range, and a reader with only the range cannot tell a
+         * poor target from a moved one. One byte, not averaged, so it carries
+         * the bare standard name rather than a mean_of_ form. A failed reading
+         * leaves 0, which is also what the firmware writes when the LiDAR will
+         * not power up; a uint8_t cannot carry the -9999 sentinel.
          */
         uint8_t getSignalStrength();
         /**
