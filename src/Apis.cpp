@@ -543,7 +543,7 @@ size_t Apis::printHeader(Print& out) {
             n += out.print(F(HDR_MAGNITUDE));
             n += out.print(',');
         }
-        if (_tiltColumns)      {
+        if (_tiltColumns) {
             n += out.print(F(HDR_TILT));
             n += out.print(',');
         }
