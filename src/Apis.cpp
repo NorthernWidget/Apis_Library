@@ -521,21 +521,36 @@ size_t Apis::printHeader(Print& out) {
     // forms, because each value here is one reading. The two sets differ for
     // that reason and no other: both come from the same rows of the CSV.
     if (_rawComponent & RANGE) {
-        n += out.print(F(HDR_DISTANCE));  n += out.print(',');
-        n += out.print(F(HDR_SIGNAL));    n += out.print(',');
+        n += out.print(F(HDR_DISTANCE));
+        n += out.print(',');
+        n += out.print(F(HDR_SIGNAL));
+        n += out.print(',');
     }
     if (_rawComponent & ORIENT) {
-        n += out.print(F(HDR_PITCH));  n += out.print(',');
-        n += out.print(F(HDR_ROLL));   n += out.print(',');
+        n += out.print(F(HDR_PITCH));
+        n += out.print(',');
+        n += out.print(F(HDR_ROLL));
+        n += out.print(',');
         if (_accelerationColumns) {
-            n += out.print(F(HDR_ACCEL_X));  n += out.print(',');
-            n += out.print(F(HDR_ACCEL_Y));  n += out.print(',');
-            n += out.print(F(HDR_ACCEL_Z));  n += out.print(',');
+            n += out.print(F(HDR_ACCEL_X));
+            n += out.print(',');
+            n += out.print(F(HDR_ACCEL_Y));
+            n += out.print(',');
+            n += out.print(F(HDR_ACCEL_Z));
+            n += out.print(',');
         }
-        if (_magnitudeColumns) { n += out.print(F(HDR_MAGNITUDE)); n += out.print(','); }
-        if (_tiltColumns)      { n += out.print(F(HDR_TILT));      n += out.print(','); }
-        n += out.print(F(HDR_ACCEL_T));   n += out.print(',');
-        n += out.print(F(HDR_ZERO_GEN));  n += out.print(',');
+        if (_magnitudeColumns) {
+            n += out.print(F(HDR_MAGNITUDE));
+            n += out.print(',');
+        }
+        if (_tiltColumns)      {
+            n += out.print(F(HDR_TILT));
+            n += out.print(',');
+        }
+        n += out.print(F(HDR_ACCEL_T));
+        n += out.print(',');
+        n += out.print(F(HDR_ZERO_GEN));
+        n += out.print(',');
     }
     return n;
 }
@@ -544,7 +559,8 @@ size_t Apis::printReading(Print& out) {
     size_t n = 0;
     if (_rawComponent & RANGE) {
         n += out.print(_distance);  n += out.print(',');
-        n += out.print(getSignalStrength()); n += out.print(',');
+        n += out.print(getSignalStrength());
+        n += out.print(',');
     }
     if (_rawComponent & ORIENT) {
         n += out.print(_pitch);  n += out.print(',');
@@ -557,7 +573,8 @@ size_t Apis::printReading(Print& out) {
         if (_magnitudeColumns) { n += out.print(_magnitude); n += out.print(','); }
         if (_tiltColumns)      { n += out.print(_tilt);      n += out.print(','); }
         n += out.print(getAccelerometerTemperatureChange()); n += out.print(',');
-        n += out.print(getZeroGeneration()); n += out.print(',');
+        n += out.print(getZeroGeneration());
+        n += out.print(',');
     }
     return n;
 }
