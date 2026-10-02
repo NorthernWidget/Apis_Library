@@ -309,33 +309,9 @@ String Apis::getString(bool takeNewReadings) {
     if (takeNewReadings) {
         updateMeasurements();
     }
-    String s = String(_distance) + ",";
-    if (_distanceCfg.columns()) {
-        s += String(getDistanceStd()) + "," + String(getDistanceSterr()) + ",";
-    }
-    s += String(getSignalStrength()) + ",";
-    s += String(_pitch) + "," + String(_roll) + ",";
-    if (_orientationCfg.columns()) {
-        s += String(getPitchStd())   + "," + String(getPitchSterr()) + ","
-           + String(getRollStd())    + "," + String(getRollSterr())  + ",";
-    }
-    if (_accelerationColumns) {
-        s += String(_accelX) + "," + String(_accelY) + "," + String(_accelZ) + ",";
-    }
-    if (_magnitudeColumns) {
-        s += String(_magnitude) + ",";
-        if (_orientationCfg.columns()) {
-            s += String(getAccelerationMagnitudeStd()) + "," + String(getAccelerationMagnitudeSterr()) + ",";
-        }
-    }
-    if (_tiltColumns) {
-        s += String(_tilt) + ",";
-        if (_orientationCfg.columns()) {
-            s += String(getTiltStd()) + "," + String(getTiltSterr()) + ",";
-        }
-    }
-    s += String(getAccelerometerTemperatureChange()) + ",";
-    s += String(getZeroGeneration()) + ",";
+    String s;
+    NW_StringPrint p(s);
+    printDataRow(p);
     return s;
 }
 
@@ -385,47 +361,142 @@ size_t Apis::dumpZeros(Print& out) {
     return n;
 }
 
-String Apis::getHeader() {
+// The summary interface: the columns a logger writes, streamed. getHeader() and
+// getString() are the same column set collected into a String, which keeps one
+// definition of it. See LIBRARY-DESIGN.md section 14.
+size_t Apis::printDataHeader(Print& out) {
     // The summary row: the distance and the angles are means over the readings
     // taken, which is why those carry the mean_of_ operator. The signal
     // strength, the temperature anomaly and the zero generation are each one
     // value from the last reading and carry their bare names.
-    String h;
-    h += F(HDR_DISTANCE_MEAN);  h += ",";
+    size_t n = 0;
+    n += out.print(F(HDR_DISTANCE_MEAN));
+    n += out.print(',');
     if (_distanceCfg.columns()) {
-        h += F(HDR_DISTANCE_STD);    h += ",";
-        h += F(HDR_DISTANCE_STERR);  h += ",";
+        n += out.print(F(HDR_DISTANCE_STD));
+        n += out.print(',');
+        n += out.print(F(HDR_DISTANCE_STERR));
+        n += out.print(',');
     }
-    h += F(HDR_SIGNAL);      h += ",";
-    h += F(HDR_PITCH_MEAN);  h += ",";
-    h += F(HDR_ROLL_MEAN);   h += ",";
+    n += out.print(F(HDR_SIGNAL));
+    n += out.print(',');
+    n += out.print(F(HDR_PITCH_MEAN));
+    n += out.print(',');
+    n += out.print(F(HDR_ROLL_MEAN));
+    n += out.print(',');
     if (_orientationCfg.columns()) {
-        h += F(HDR_PITCH_STD);    h += ",";
-        h += F(HDR_PITCH_STERR);  h += ",";
-        h += F(HDR_ROLL_STD);     h += ",";
-        h += F(HDR_ROLL_STERR);   h += ",";
+        n += out.print(F(HDR_PITCH_STD));
+        n += out.print(',');
+        n += out.print(F(HDR_PITCH_STERR));
+        n += out.print(',');
+        n += out.print(F(HDR_ROLL_STD));
+        n += out.print(',');
+        n += out.print(F(HDR_ROLL_STERR));
+        n += out.print(',');
     }
     if (_accelerationColumns) {
-        h += F(HDR_ACCEL_X);  h += ",";
-        h += F(HDR_ACCEL_Y);  h += ",";
-        h += F(HDR_ACCEL_Z);  h += ",";
+        n += out.print(F(HDR_ACCEL_X));
+        n += out.print(',');
+        n += out.print(F(HDR_ACCEL_Y));
+        n += out.print(',');
+        n += out.print(F(HDR_ACCEL_Z));
+        n += out.print(',');
     }
     if (_magnitudeColumns) {
-        h += F(HDR_MAGNITUDE_MEAN);  h += ",";
+        n += out.print(F(HDR_MAGNITUDE_MEAN));
+        n += out.print(',');
         if (_orientationCfg.columns()) {
-            h += F(HDR_MAGNITUDE_STD);    h += ",";
-            h += F(HDR_MAGNITUDE_STERR);  h += ",";
+            n += out.print(F(HDR_MAGNITUDE_STD));
+            n += out.print(',');
+            n += out.print(F(HDR_MAGNITUDE_STERR));
+            n += out.print(',');
         }
     }
     if (_tiltColumns) {
-        h += F(HDR_TILT_MEAN);  h += ",";
+        n += out.print(F(HDR_TILT_MEAN));
+        n += out.print(',');
         if (_orientationCfg.columns()) {
-            h += F(HDR_TILT_STD);    h += ",";
-            h += F(HDR_TILT_STERR);  h += ",";
+            n += out.print(F(HDR_TILT_STD));
+            n += out.print(',');
+            n += out.print(F(HDR_TILT_STERR));
+            n += out.print(',');
         }
     }
-    h += F(HDR_ACCEL_T);   h += ",";
-    h += F(HDR_ZERO_GEN);  h += ",";
+    n += out.print(F(HDR_ACCEL_T));
+    n += out.print(',');
+    n += out.print(F(HDR_ZERO_GEN));
+    n += out.print(',');
+    return n;
+}
+
+size_t Apis::printDataRow(Print& out) {
+    // The values the last updateMeasurements() left, in printDataHeader()'s
+    // order. This takes no reading: the caller has already acquired, and a row
+    // written to two sinks must not acquire twice.
+    size_t n = 0;
+    n += out.print(_distance);
+    n += out.print(',');
+    if (_distanceCfg.columns()) {
+        n += out.print(getDistanceStd());
+        n += out.print(',');
+        n += out.print(getDistanceSterr());
+        n += out.print(',');
+    }
+    n += out.print(getSignalStrength());
+    n += out.print(',');
+    n += out.print(_pitch);
+    n += out.print(',');
+    n += out.print(_roll);
+    n += out.print(',');
+    if (_orientationCfg.columns()) {
+        n += out.print(getPitchStd());
+        n += out.print(',');
+        n += out.print(getPitchSterr());
+        n += out.print(',');
+        n += out.print(getRollStd());
+        n += out.print(',');
+        n += out.print(getRollSterr());
+        n += out.print(',');
+    }
+    if (_accelerationColumns) {
+        n += out.print(_accelX);
+        n += out.print(',');
+        n += out.print(_accelY);
+        n += out.print(',');
+        n += out.print(_accelZ);
+        n += out.print(',');
+    }
+    if (_magnitudeColumns) {
+        n += out.print(_magnitude);
+        n += out.print(',');
+        if (_orientationCfg.columns()) {
+            n += out.print(getAccelerationMagnitudeStd());
+            n += out.print(',');
+            n += out.print(getAccelerationMagnitudeSterr());
+            n += out.print(',');
+        }
+    }
+    if (_tiltColumns) {
+        n += out.print(_tilt);
+        n += out.print(',');
+        if (_orientationCfg.columns()) {
+            n += out.print(getTiltStd());
+            n += out.print(',');
+            n += out.print(getTiltSterr());
+            n += out.print(',');
+        }
+    }
+    n += out.print(getAccelerometerTemperatureChange());
+    n += out.print(',');
+    n += out.print(getZeroGeneration());
+    n += out.print(',');
+    return n;
+}
+
+String Apis::getHeader() {
+    String h;
+    NW_StringPrint p(h);
+    printDataHeader(p);
     return h;
 }
 
