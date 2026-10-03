@@ -20,11 +20,14 @@ void setup() {
         Serial.println(rangefinder.getFirmwareVersion());
         while (1);
     }
-    Serial.println(rangefinder.getHeader());
+    rangefinder.printDataHeader(Serial);   // straight to the port: no row is built in RAM
+    Serial.println();
 }
 
 void loop() {
-    Serial.println(rangefinder.getString());
+    rangefinder.updateMeasurements();      // take the readings
+    rangefinder.printDataRow(Serial);      // print what they left
+    Serial.println();
     delay(1000);
 }
 ```
@@ -33,7 +36,7 @@ See [examples/](examples/) for a complete demo, a many-readings logger, and Marg
 
 ## Readings
 
-`getString()` takes a reading (or several, with statistics, when configured) and returns one CSV row. For writing many individual readings to a file or the serial monitor without building `String`s, use the reading interface, which prints to any Arduino `Print` (an SdFat `File`, `Serial`, ...):
+`updateMeasurements()` takes a reading, or several with statistics when configured, and `printDataRow(out)` prints the row those readings left. Both the header and the row go straight into any Arduino `Print` – an SdFat `File`, `Serial` – so no row is ever composed in RAM. For writing many individual readings rather than one summary row, use the reading interface, which prints the same way:
 
 ```cpp
 rangefinder.beginReadings(Apis::RANGE, 100);  // Apis::ALL, Apis::RANGE, or Apis::ORIENT; 100 readings follow
@@ -52,14 +55,14 @@ Every acquisition, whether from `updateMeasurements()`, `logReading()`, or a sin
 
 `printReading(out)` prints the stored reading without acquiring; `updateMeasurements(component)` reads one chip alone (`Apis::RANGE` or `Apis::ORIENT`) or both; `getRangeCount()` and `getOrientCount()` report how many valid readings are behind the current statistics.
 
-Every reading is requested from the device and waited for through its reading counter, so repeated readings are independent measurements. `setRangeReadings(n)` and `setOrientReadings(n)` set how many are taken per `updateMeasurements()` (clamped to `APIS_RANGE_CAPACITY`, default 64, and `APIS_ORIENT_CAPACITY`, default 8; override either before the include). Statistics over them: `getRangeMean()`, `getRangeStd()`, `getRangeSterr()`, `getRangeMedian()`, and the same for pitch and roll, plus `getRangeCount()`. With `setRangeStats(true)` the std and sterr columns join `getString()`.
+Every reading is requested from the device and waited for through its reading counter, so repeated readings are independent measurements. `setRangeReadings(n)` and `setOrientReadings(n)` set how many are taken per `updateMeasurements()` (clamped to `APIS_RANGE_CAPACITY`, default 64, and `APIS_ORIENT_CAPACITY`, default 8; override either before the include). Statistics over them: `getRangeMean()`, `getRangeStd()`, `getRangeSterr()`, `getRangeMedian()`, and the same for pitch and roll, plus `getRangeCount()`. With `setRangeStats(true)` the std and sterr columns join `printDataHeader()` and `printDataRow()`.
 
-Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `reportChip()`, `reportKind()`, `printReport(Serial)`, `reportNote()` (one word, e.g. `LiDARTimeout`, for a logger's note column), `beginFailure()` (why `begin()` refused, one word); `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
+Handshake and faults, for sketches that want them: `requestReading()`, `ready()`, `newReading()`; `faulted(chip)`, `anyFault()`, `reportChip()`, `reportKind()`, `printReport(Serial)`, `printNote(out)` (one word, e.g. `LiDARTimeout`, for a logger's note column), `printNote(out, true)` (why `begin()` refused, one word); `getHardwareMajor()`, `getHardwareMinor()`, `getFirmwareVersion()`.
 
 The v0.1.x names `beginRawReadings()`, `takeRawReading(buf, offset)`, `endRawReadings()` and the `NW_READING_*` selectors still work and are deprecated.
 
 ## Testing
 
-`extras/test/run.sh` compiles the library on a desktop against stub `Arduino.h` and `Wire.h` and checks that `getHeader()`, `getString()` and the reading interface produce byte-identical output to `extras/test/baseline.txt` for fixed register images. Run it after any change; `--record` rewrites the baseline when an output change is intended.
+`extras/test/run.sh` compiles the library on a desktop against stub `Arduino.h` and `Wire.h` and checks that `printDataHeader()`, `printDataRow()` and the reading interface produce byte-identical output to `extras/test/baseline.txt` for fixed register images. Run it after any change; `--record` rewrites the baseline when an output change is intended.
 
 **Full API reference:** https://docs.northernwidget.com/Apis_Library/
