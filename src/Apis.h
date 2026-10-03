@@ -19,10 +19,10 @@ License: GNU GPL v3. You should find a copy in the repository.
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <NW_Core.h>   // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Report
+#include <NW_Core.h>  // NW_Core: NW_Device (Schema 1 protocol), NW_Readings (statistics), NW_Report
 
 #ifndef M_PI
-  #define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846
 #endif
 
 // Minimum firmware patch (Page 0 byte 0x0A) this library accepts. Patch 1 is
@@ -48,7 +48,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 //   #define APIS_RANGE_CAPACITY 200
 // No heap is ever used; a request above capacity is clamped to it.
 #ifndef APIS_RANGE_CAPACITY
-  #define APIS_RANGE_CAPACITY 64
+#define APIS_RANGE_CAPACITY 64
 #endif
 // Digits to m/s^2 for the accelerometer. The firmware sets CTRL_REG4 = 0x88,
 // which is full scale +/-2 g with high resolution, and LIS3DH Table 4 gives
@@ -58,7 +58,7 @@ License: GNU GPL v3. You should find a copy in the repository.
 #define APIS_ACCEL_M_PER_S2_PER_DIGIT (9.80665e-3f)
 
 #ifndef APIS_ORIENT_CAPACITY
-  #define APIS_ORIENT_CAPACITY 8
+#define APIS_ORIENT_CAPACITY 8
 #endif
 
 /**
@@ -74,15 +74,15 @@ License: GNU GPL v3. You should find a copy in the repository.
  *     higher values suppress weak returns (fewer false positives, less range).
  */
 enum SensitivityMode : uint8_t {
-    SENSITIVITY_BALANCED  = 0, ///< Default. SIG_COUNT_VAL=0x80, THRESHOLD_BYPASS=0x00.
-                               ///<   Balanced range and noise performance.
-    SENSITIVITY_HIGH      = 1, ///< THRESHOLD_BYPASS=0x80. Lower detection threshold;
-                               ///<   detects weaker returns at the cost of more
-                               ///<   false positives.
-    SENSITIVITY_LOW       = 2, ///< THRESHOLD_BYPASS=0xB0. Higher detection threshold;
-                               ///<   fewer false positives at the cost of reduced range.
-    SENSITIVITY_MAX_RANGE = 3  ///< SIG_COUNT_VAL=0xFF. More acquisitions per measurement;
-                               ///<   longer maximum range, slower throughput.
+  SENSITIVITY_BALANCED = 0,  ///< Default. SIG_COUNT_VAL=0x80, THRESHOLD_BYPASS=0x00.
+                             ///<   Balanced range and noise performance.
+  SENSITIVITY_HIGH = 1,      ///< THRESHOLD_BYPASS=0x80. Lower detection threshold;
+                             ///<   detects weaker returns at the cost of more
+                             ///<   false positives.
+  SENSITIVITY_LOW = 2,       ///< THRESHOLD_BYPASS=0xB0. Higher detection threshold;
+                             ///<   fewer false positives at the cost of reduced range.
+  SENSITIVITY_MAX_RANGE = 3  ///< SIG_COUNT_VAL=0xFF. More acquisitions per measurement;
+                             ///<   longer maximum range, slower throughput.
 };
 
 /// Sentinel returned by all getters and printed by printDataRow() when a
@@ -90,7 +90,7 @@ enum SensitivityMode : uint8_t {
 /// reading. Applies to all measurement types: range, pitch, roll, and all
 /// derived statistics (mean, std, sterr). The same value as NW_ERROR, which
 /// every NW library uses; APIS_ERROR is the Apis spelling of it.
-#define APIS_ERROR        NW_ERROR
+#define APIS_ERROR NW_ERROR
 
 /// Sentinel returned by all getters and printed by printDataRow() when begin()
 /// has been called but no successful updateMeasurements() (or
@@ -120,26 +120,25 @@ enum SensitivityMode : uint8_t {
  * within the Apis is essential, and the Apis therefore acts as a
  * buffer to protect the data logger from raw sensor failures.
  */
-class Apis : public NW_Sensor
-{
-    public:
-        /** @brief Default I2C address: NW-Device-Specification Schema 1 'A' (0x41). Firmware v0.1.x used 0x50. */
-        static constexpr uint8_t DEFAULT_ADDRESS = 0x41;
+class Apis : public NW_Sensor {
+public:
+  /** @brief Default I2C address: NW-Device-Specification Schema 1 'A' (0x41). Firmware v0.1.x used 0x50. */
+  static constexpr uint8_t DEFAULT_ADDRESS = 0x41;
 
-        /**
+  /**
          * @brief Measurement group: which on-board chip a reading covers.
          * @details One group per chip, in the order the NW-Device-Specification
          * Apis appendix numbers them: 0 = LiDAR Lite (range, signal strength),
          * 1 = LIS3DH accelerometer (pitch, roll). ALL selects every chip.
          * Written as Apis::RANGE etc. at the call site.
          */
-        enum Component : uint8_t {
-            RANGE  = 0x01,  ///< LiDAR Lite only (chip 0: the control chip-select bit).
-            ORIENT = 0x02,  ///< Accelerometer only (chip 1).
-            ALL    = 0x03   ///< Every chip: range, then pitch and roll.
-        };
+  enum Component : uint8_t {
+    RANGE = 0x01,   ///< LiDAR Lite only (chip 0: the control chip-select bit).
+    ORIENT = 0x02,  ///< Accelerometer only (chip 1).
+    ALL = 0x03      ///< Every chip: range, then pitch and roll.
+  };
 
-        /**
+  /**
          * @brief Instantiate Apis object.
          * @param nRangeReadings Number of range readings to average (default 1).
          * Paul et al. (2020, WRR, doi:10.1029/2019WR026810) found ~1000
@@ -156,10 +155,10 @@ class Apis : public NW_Sensor
          * @param orientStats If true, printDataRow() includes orientation std and
          * sterr. Only meaningful when nOrientReadings > 1.
          */
-        Apis(uint16_t nRangeReadings = 1, bool rangeStats = false,
-             uint16_t nOrientReadings = 1, bool orientStats = false);
+  Apis(uint16_t nRangeReadings = 1, bool rangeStats = false,
+       uint16_t nOrientReadings = 1, bool orientStats = false);
 
-        /**
+  /**
          * @brief Begin communications with the Apis using a prescribed address.
          * @details Checks that the device acknowledges on I2C, then reads
          * Page 0 Blocks 0–1 and requires: schema byte 0x01 (Schema 1); the
@@ -173,36 +172,36 @@ class Apis : public NW_Sensor
          *         false otherwise. Call getFirmwareVersion() after a refusal
          *         to see what the device reported (0 if unreadable).
          */
-        bool begin(uint8_t address = DEFAULT_ADDRESS,
-                   SensitivityMode sensitivity = SENSITIVITY_BALANCED);
+  bool begin(uint8_t address = DEFAULT_ADDRESS,
+             SensitivityMode sensitivity = SENSITIVITY_BALANCED);
 
-        /** @brief Hardware version major, from Page 0 (valid after begin()). */
-        uint8_t getHardwareMajor();
-        /** @brief Hardware version minor, from Page 0 (valid after begin()). */
-        uint8_t getHardwareMinor();
-        /** @brief Firmware patch version, from Page 0 (valid after begin(), even when it refused). */
-        uint8_t getFirmwareVersion();
+  /** @brief Hardware version major, from Page 0 (valid after begin()). */
+  uint8_t getHardwareMajor();
+  /** @brief Hardware version minor, from Page 0 (valid after begin()). */
+  uint8_t getHardwareMinor();
+  /** @brief Firmware patch version, from Page 0 (valid after begin(), even when it refused). */
+  uint8_t getFirmwareVersion();
 
-        // --- Configuration setters ---
-        /**
+  // --- Configuration setters ---
+  /**
          * @brief Set the number of range readings taken per updateMeasurements()
          * (statistics are computed over them). Clamped to APIS_RANGE_CAPACITY.
          * @return The number actually set.
          */
-        uint16_t setDistanceReadings(uint16_t n);
-        /** @brief Enable or disable range std and sterr in printDataRow(). */
-        void setDistanceStats(bool enable);
-        /** @brief Set the number of orientation readings per updateMeasurements(). Clamped to APIS_ORIENT_CAPACITY. */
-        uint16_t setOrientationReadings(uint16_t n);
-        /** @brief Include the g vector's X, Y and Z columns in printDataRow() and printDataHeader(). Off by default. */
-        void setAccelerationColumns(bool enable);
-        /** @brief Include the acceleration magnitude column, and its statistics when orientation statistics are on. Off by default. */
-        void setMagnitudeColumns(bool enable);
-        /** @brief Include the tilt column, and its statistics when orientation statistics are on. Off by default. */
-        void setTiltColumns(bool enable);
-        /** @brief Enable or disable orientation std and sterr in printDataRow(). */
-        void setOrientationStats(bool enable);
-        /**
+  uint16_t setDistanceReadings(uint16_t n);
+  /** @brief Enable or disable range std and sterr in printDataRow(). */
+  void setDistanceStats(bool enable);
+  /** @brief Set the number of orientation readings per updateMeasurements(). Clamped to APIS_ORIENT_CAPACITY. */
+  uint16_t setOrientationReadings(uint16_t n);
+  /** @brief Include the g vector's X, Y and Z columns in printDataRow() and printDataHeader(). Off by default. */
+  void setAccelerationColumns(bool enable);
+  /** @brief Include the acceleration magnitude column, and its statistics when orientation statistics are on. Off by default. */
+  void setMagnitudeColumns(bool enable);
+  /** @brief Include the tilt column, and its statistics when orientation statistics are on. Off by default. */
+  void setTiltColumns(bool enable);
+  /** @brief Enable or disable orientation std and sterr in printDataRow(). */
+  void setOrientationStats(bool enable);
+  /**
          * @brief Change the rangefinder sensitivity mode after begin().
          * @details Writes the new mode to REG_CONFIG (0x46); the firmware
          * applies it on the next loop() iteration via InitLiDAR(). Must be
@@ -210,29 +209,29 @@ class Apis : public NW_Sensor
          * the transmission fails silently.
          * @param mode One of the SensitivityMode values.
          */
-        void setRangefinderSensitivity(SensitivityMode mode);
+  void setRangefinderSensitivity(SensitivityMode mode);
 
-        /**
+  /**
          * @brief Write a new I2C address to the device.
          * @details The firmware persists it in Page 0 byte 0x1F and uses it on
          * the next boot; the current session continues on the old address.
          * Falls back to 0x41 if that byte is 0xFF (unprogrammed).
          * @param newAddress The 7-bit I2C address to persist.
          */
-        void setI2CAddress(uint8_t newAddress);
+  void setI2CAddress(uint8_t newAddress);
 
-        // --- Handshake (NW-Device-Specification Page 2 Block 0) ---
-        /** @brief True when the status byte's ready bit is set: the data registers hold a complete reading. */
-        bool ready();
+  // --- Handshake (NW-Device-Specification Page 2 Block 0) ---
+  /** @brief True when the status byte's ready bit is set: the data registers hold a complete reading. */
+  bool ready();
 
-        /**
+  /**
          * @brief True when the device's reading counter has advanced since
          * this library last stored a reading, i.e. a reading is available that
          * has not been read yet. Does not acquire.
          */
-        bool newReading();
+  bool newReading();
 
-        /**
+  /**
          * @brief Ask the device for a reading now, of the selected chips.
          * Writes the control register: trigger bit plus the chip-select bits
          * for the component. The device clears ready, measures, and sets ready
@@ -240,69 +239,71 @@ class Apis : public NW_Sensor
          * the report byte (acknowledgement).
          * @return true if the device acknowledged the write.
          */
-        bool requestReading(uint8_t component = ALL);
+  bool requestReading(uint8_t component = ALL);
 
-        // --- Faults (status byte, live; Report register, latched) ---
-        /**
+  // --- Faults (status byte, live; Report register, latched) ---
+  /**
          * @brief True if the given chip (0 = LiDAR, 1 = accelerometer) was
          * faulted in the status byte of the last reading taken.
          */
-        bool faulted(uint8_t chip);
-        /** @brief True if any chip was faulted in the last reading (status pan-fault bit). */
-        bool anyFault();
-        /**
+  bool faulted(uint8_t chip);
+  /** @brief True if any chip was faulted in the last reading (status pan-fault bit). */
+  bool anyFault();
+  /**
          * @brief Chip index of the most recent report (0 LiDAR,
          * 1 accelerometer, 7 the unit itself), from the Report register read with
          * the last reading; meaningful only when reportKind() != 0.
          */
-        uint8_t reportChip();
-        /**
+  uint8_t reportChip();
+  /**
          * @brief Kind of the most recent report, per the spec's table:
          * 0 none, 1 no-acknowledge, 2 timeout, 3 checksum, 4 out of range,
          * 5 not initialised, 6 reset since the controller last wrote control,
          * 7 configuration rejected, 8 supply fault, 16–31 device-specific.
          * The device clears it on the next control write (requestReading()).
          */
-        uint8_t reportKind();
-        /**
+  uint8_t reportKind();
+  /**
          * @brief Print the report as text, e.g. "LiDAR: timeout" or
          * "unit: restarted since configured"; prints "none" when there is no fault.
          * @return Bytes written.
          */
-        size_t printReport(Print& out);
-        /**
+  size_t printReport(Print& out);
+  /**
          * @brief The report as one word for a data-table note column,
          * chip then kind: "LiDARTimeout", "AccelNotAnswering", "UnitRestarted";
          * "UnitNone" when there is no fault (check anyFault() first).
          */
-        /**
+  /**
          * @brief Print one status line for a logger's status file: name, serial,
          * versions, the last report (code and note), and Pages 0, 1 and 2 (identity, calibration, data) in hex,
          * comma separated, no newline. The logger prints its timestamp first.
          * Three page reads, no write: the report is not acknowledged.
          */
-        size_t printStatus(Print& out, bool boot = false) override;
-        // --- NW_Sensor: the logger's view (Margay::watch) ---
-        const char* name() const override { return "Apis"; }
-        bool reportIsFault() override;
-        uint8_t bootReportKind() override;
-        void clearBootReport() override;
-        /**
+  size_t printStatus(Print& out, bool boot = false) override;
+  // --- NW_Sensor: the logger's view (Margay::watch) ---
+  const char* name() const override {
+    return "Apis";
+  }
+  bool reportIsFault() override;
+  uint8_t bootReportKind() override;
+  void clearBootReport() override;
+  /**
          * @brief Why the last begin() refused, as one word: "NotAnswering",
          * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
          * after a successful begin().
          */
 
-        /**
+  /**
          * @brief Take one range reading [cm]: request it, wait for the device's
          * reading counter to advance (up to the timeout), then read range and
          * signal strength. Each call is a distinct acquisition, so repeated
          * calls give independent readings for statistics.
          * Returns false on timeout, bus error, or a negative (error) range.
          */
-        bool updateDistance();
+  bool updateDistance();
 
-        /**
+  /**
          * @brief Take one orientation reading: request it, wait for the
          * counter to advance, then read the accelerometer and offsets and
          * compute pitch [deg] and roll [deg]. Each call is a distinct
@@ -310,9 +311,9 @@ class Apis : public NW_Sensor
          * Returns false on timeout, bus error, or the accelerometer failure
          * signature.
          */
-        bool updateOrientation();
+  bool updateOrientation();
 
-        /**
+  /**
          * @brief Take a reading: measure range [cm], roll [deg] and pitch [deg],
          * or one chip's measurements alone.
          * Uses Welford's online algorithm to compute mean, std, and sterr
@@ -322,27 +323,27 @@ class Apis : public NW_Sensor
          * they were.
          * @return false if any selected chip returned only error values.
          */
-        bool updateMeasurements(uint8_t component = ALL);
+  bool updateMeasurements(uint8_t component = ALL);
 
-        /**
+  /**
          * @brief Number of valid range readings in the last updateMeasurements()
          * call (0 to nRangeReadings). The statistics are computed over these.
          */
-        uint16_t getDistanceCount();
-        /** @brief Number of valid orientation readings in the last updateMeasurements(). */
-        uint16_t getOrientationCount();
+  uint16_t getDistanceCount();
+  /** @brief Number of valid orientation readings in the last updateMeasurements(). */
+  uint16_t getOrientationCount();
 
-        // --- Single-value getters ---
-        /** @brief Distance [cm] as logged: the mean over the burst, or the single
+  // --- Single-value getters ---
+  /** @brief Distance [cm] as logged: the mean over the burst, or the single
          *  reading when no burst ran. A float like every other measurement getter,
          *  so the burst mean keeps its fraction; the device itself resolves whole
          *  centimetres. The same number as getDistanceMean() when a burst ran. */
-        float getDistance();
-        /** @brief Return roll mean [deg]. */
-        float getRoll();
-        /** @brief Return pitch mean [deg]. */
-        float getPitch();
-        /**
+  float getDistance();
+  /** @brief Return roll mean [deg]. */
+  float getRoll();
+  /** @brief Return pitch mean [deg]. */
+  float getPitch();
+  /**
          * @brief Acceleration along the accelerometer X axis [m/s^2].
          * @details The last reading rather than a burst mean, as
          * getSignalStrength() is: the three components carry no statistics
@@ -351,27 +352,27 @@ class Apis : public NW_Sensor
          * taken. APIS_NOT_MEASURED before the first reading, APIS_ERROR when it
          * failed.
          */
-        float getAccelerationX();
-        /** @brief Acceleration along the accelerometer Y axis [m/s^2]; see getAccelerationX(). */
-        float getAccelerationY();
-        /** @brief Acceleration along the accelerometer Z axis [m/s^2]; see getAccelerationX(). */
-        float getAccelerationZ();
-        /**
+  float getAccelerationX();
+  /** @brief Acceleration along the accelerometer Y axis [m/s^2]; see getAccelerationX(). */
+  float getAccelerationY();
+  /** @brief Acceleration along the accelerometer Z axis [m/s^2]; see getAccelerationX(). */
+  float getAccelerationZ();
+  /**
          * @brief Magnitude of the acceleration vector [m/s^2], mean over the burst.
          * @details Reads 9.81 whenever the unit is static, so a departure means
          * the Apis moved or the accelerometer is faulted. Pitch and roll cannot
          * report that: a wrong g vector still yields plausible angles.
          */
-        float getAccelerationMagnitude();
-        /**
+  float getAccelerationMagnitude();
+  /**
          * @brief Angle between the housing and its reference [deg], mean over the burst.
          * @details Measured from the stored zero when one has been taken, and
          * from vertical when none has, which is the same branch getPitch() and
          * getRoll() take. One number for a levelling correction; pitch and roll
          * stay, because recovering the direction of tilt needs both.
          */
-        float getTilt();
-        /**
+  float getTilt();
+  /**
          * @brief Return the most recently cached LiDAR Lite signal strength.
          * @details Updated by every call to updateDistance() or updateMeasurements().
          * Returns 0 before the first measurement. It is a column of its own
@@ -382,16 +383,16 @@ class Apis : public NW_Sensor
          * leaves 0, which is also what the firmware writes when the LiDAR will
          * not power up; a uint8_t cannot carry the -9999 sentinel.
          */
-        uint8_t getSignalStrength();
-        /**
+  uint8_t getSignalStrength();
+  /**
          * @brief The accelerometer's own temperature at the last orientation
          * reading, in the LIS3DH's relative digits (1 per degree C, no absolute
          * reference; firmware patch 3). Logged beside pitch and roll so that a
          * per-unit drift correction can be fitted later; APIS_NOT_MEASURED before
          * the first reading.
          */
-        int16_t getAccelerometerTemperatureADC();
-        /**
+  int16_t getAccelerometerTemperatureADC();
+  /**
          * @brief Accelerometer temperature change [C] since the zero was stored.
          * @details The LIS3DH measures change, not temperature: its Table 5
          * specifies only the output change versus temperature, 1 digit per
@@ -401,10 +402,10 @@ class Apis : public NW_Sensor
          * APIS_NOT_MEASURED when no zero has ever been stored, because there is
          * then nothing to be a change from.
          */
-        float getAccelerometerTemperatureChange();
-        /** @brief The same digit at the moment the Hall-effect zero was taken (Page 1). */
-        int16_t getZeroTemperatureADC();
-        /**
+  float getAccelerometerTemperatureChange();
+  /** @brief The same digit at the moment the Hall-effect zero was taken (Page 1). */
+  int16_t getZeroTemperatureADC();
+  /**
          * @brief How many zeros the unit has stored since manufacture (0 =
          * never), from the copy the reading carries (0x58–0x59, firmware
          * patch 5). Read with the axes, so it belongs to the last orientation
@@ -419,14 +420,14 @@ class Apis : public NW_Sensor
          * this by mirroring the Page 1 value into Page 2 at 0x58 and serving it
          * with every reading.
          */
-        uint16_t getZeroGeneration();
-        /**
+  uint16_t getZeroGeneration();
+  /**
          * @brief True when the last orientation reading's generation differs
          * from the one seen at the reading before it, or at begin(), which
          * reads Page 1's generation once: the unit has stored a new zero.
          */
-        bool zeroChanged();
-        /**
+  bool zeroChanged();
+  /**
          * @brief Print the record of zeros from Page 1: the current zero and
          * the two before it, newest first, one line each as
          * generation,X,Y,Z,T (offsets in counts; T the temperature digit at
@@ -434,47 +435,47 @@ class Apis : public NW_Sensor
          * prints one line. Reads calibration, not a reading: no acquisition.
          * @return Bytes written.
          */
-        size_t dumpZeros(Print& out);
+  size_t dumpZeros(Print& out);
 
-        // --- Statistics getters ---
-        // Computed two-pass in 32-bit float over the readings stored by the last
-        // updateMeasurements(). Adequate for N up to the array capacities
-        // (tens to a few hundred); at N in the thousands the sum of squared
-        // deviations would want double precision, which the AVR lacks.
-        /** @brief Return range mean [cm] as float. */
-        float getDistanceMean();
-        /** @brief Return the median range [cm] of the stored readings (nearest cm for odd N; mean of the middle pair otherwise). */
-        float getDistanceMedian();
-        /** @brief Acceleration magnitude median [m/s^2]. */
-        float getAccelerationMagnitudeMedian();
-        /** @brief Tilt median [deg]. */
-        float getTiltMedian();
-        /** @brief Return the median pitch [deg] of the stored readings. */
-        float getPitchMedian();
-        /** @brief Return the median roll [deg] of the stored readings. */
-        float getRollMedian();
-        /** @brief Return range standard deviation [cm]. */
-        float getDistanceStd();
-        /** @brief Return range standard error [cm]. */
-        float getDistanceSterr();
-        /** @brief Acceleration magnitude standard deviation [m/s^2]. */
-        float getAccelerationMagnitudeStd();
-        /** @brief Acceleration magnitude standard error [m/s^2]. */
-        float getAccelerationMagnitudeSterr();
-        /** @brief Tilt standard deviation [deg]. */
-        float getTiltStd();
-        /** @brief Tilt standard error [deg]. */
-        float getTiltSterr();
-        /** @brief Return pitch standard deviation [deg]. */
-        float getPitchStd();
-        /** @brief Return pitch standard error [deg]. */
-        float getPitchSterr();
-        /** @brief Return roll standard deviation [deg]. */
-        float getRollStd();
-        /** @brief Return roll standard error [deg]. */
-        float getRollSterr();
+  // --- Statistics getters ---
+  // Computed two-pass in 32-bit float over the readings stored by the last
+  // updateMeasurements(). Adequate for N up to the array capacities
+  // (tens to a few hundred); at N in the thousands the sum of squared
+  // deviations would want double precision, which the AVR lacks.
+  /** @brief Return range mean [cm] as float. */
+  float getDistanceMean();
+  /** @brief Return the median range [cm] of the stored readings (nearest cm for odd N; mean of the middle pair otherwise). */
+  float getDistanceMedian();
+  /** @brief Acceleration magnitude median [m/s^2]. */
+  float getAccelerationMagnitudeMedian();
+  /** @brief Tilt median [deg]. */
+  float getTiltMedian();
+  /** @brief Return the median pitch [deg] of the stored readings. */
+  float getPitchMedian();
+  /** @brief Return the median roll [deg] of the stored readings. */
+  float getRollMedian();
+  /** @brief Return range standard deviation [cm]. */
+  float getDistanceStd();
+  /** @brief Return range standard error [cm]. */
+  float getDistanceSterr();
+  /** @brief Acceleration magnitude standard deviation [m/s^2]. */
+  float getAccelerationMagnitudeStd();
+  /** @brief Acceleration magnitude standard error [m/s^2]. */
+  float getAccelerationMagnitudeSterr();
+  /** @brief Tilt standard deviation [deg]. */
+  float getTiltStd();
+  /** @brief Tilt standard error [deg]. */
+  float getTiltSterr();
+  /** @brief Return pitch standard deviation [deg]. */
+  float getPitchStd();
+  /** @brief Return pitch standard error [deg]. */
+  float getPitchSterr();
+  /** @brief Return roll standard deviation [deg]. */
+  float getRollStd();
+  /** @brief Return roll standard error [deg]. */
+  float getRollSterr();
 
-        /**
+  /**
          * @brief Print the summary columns a logger writes: the means, with the
          * statistics columns each chip group has enabled.
          * @details The streaming form of printDataHeader(), and its definition: that
@@ -484,9 +485,9 @@ class Apis : public NW_Sensor
          * @param out Where to print.
          * @return Bytes printed.
          */
-        size_t printDataHeader(Print& out) override;
+  size_t printDataHeader(Print& out) override;
 
-        /**
+  /**
          * @brief Print one summary row, in printDataHeader()'s column order.
          * @details Takes no reading: it prints what the last updateMeasurements()
          * left, which is what lets a caller write the same row to two sinks
@@ -494,45 +495,45 @@ class Apis : public NW_Sensor
          * @param out Where to print.
          * @return Bytes printed.
          */
-        size_t printDataRow(Print& out) override;
+  size_t printDataRow(Print& out) override;
 
-        /**
+  /**
          * @brief Come back on the bus after the logger cut the sensor rail to sleep.
          * @details One of the three calls a logger makes on a watched sensor
          * (LIBRARY-DESIGN.md section 14 step 4). It re-runs begin() at the address
          * this sensor was begun with.
          * @return True when the sensor answered and passed begin()'s gates.
          */
-        /// @brief The address this sensor answers at unless the logger says otherwise.
-        uint8_t defaultAddress() const override;
+  /// @brief The address this sensor answers at unless the logger says otherwise.
+  uint8_t defaultAddress() const override;
 
-        bool wake(uint8_t address) override;
+  bool wake(uint8_t address) override;
 
-        /**
+  /**
          * @brief Take this row's readings and store them, for printDataRow() to print.
          * @return True when a reading was taken.
          */
-        bool acquire() override;
+  bool acquire() override;
 
-        /**
+  /**
          * @brief Print one word for the logger's Note column, with no comma.
          * @param beginFailed print why begin() refused, rather than what the last
          *        reading reported.
          * @return Bytes printed.
          */
-        size_t printNote(Print& out, bool beginFailed = false) override;
+  size_t printNote(Print& out, bool beginFailed = false) override;
 
-        // --- Reading interface (NW standard) ---
-        /**
+  // --- Reading interface (NW standard) ---
+  /**
          * @brief Print the header matching printReading(): column names with
          * units, each followed by a comma, for the chips selected by
          * beginReadings(). No statistics columns: one reading has none.
          * @param out Any Print destination (SdFat File, Serial, ...).
          * @return Bytes written.
          */
-        size_t printHeader(Print& out);
+  size_t printHeader(Print& out);
 
-        /**
+  /**
          * @brief Print the stored reading of the selected chips, each value
          * followed by a comma. Does not acquire: call updateDistance(),
          * updateOrientation(), or updateMeasurements() first, or use
@@ -540,18 +541,18 @@ class Apis : public NW_Sensor
          * for ORIENT; range, pitch, roll for ALL.
          * @return Bytes written.
          */
-        size_t printReading(Print& out);
+  size_t printReading(Print& out);
 
-        /**
+  /**
          * @brief Take ONE reading of the selected chips and print it: the
          * one-reading primitive for collecting many readings to a file. Uses
          * updateDistance()/updateOrientation(), not updateMeasurements(), so each
          * call is a single acquisition regardless of nRangeReadings.
          * @return Bytes written.
          */
-        size_t logReading(Print& out);
+  size_t logReading(Print& out);
 
-        /**
+  /**
          * @brief Begin a run of readings, selecting which chips they cover.
          * @param component Apis::ALL, Apis::RANGE, or Apis::ORIENT.
          * @param n How many readings the run will take (the number of
@@ -561,96 +562,93 @@ class Apis : public NW_Sensor
          * 0 or 1 each reading powers the LiDAR up and down. A run that stops
          * short is abandoned by the device after 2 s with a report.
          */
-        void beginReadings(uint8_t component = ALL, uint16_t n = 0);
+  void beginReadings(uint8_t component = ALL, uint16_t n = 0);
 
-        /** @brief End a run of readings. */
-        void endReadings();
+  /** @brief End a run of readings. */
+  void endReadings();
 
-        // --- Deprecated raw-reading interface (v0.1.x names) ---
-        /** @deprecated Use beginReadings(). */
-        [[deprecated("Use beginReadings()")]]
-        void beginRawReadings(uint8_t component = ALL);
+  // --- Deprecated raw-reading interface (v0.1.x names) ---
+  /** @deprecated Use beginReadings(). */
+  [[deprecated("Use beginReadings()")]] void beginRawReadings(uint8_t component = ALL);
 
-        /**
+  /**
          * @deprecated Use logReading(Print&) with an SdFat File, Serial, or a
          * buffer-backed Print. Kept for v0.1.x sketches: takes one raw reading
          * and writes CSV into buf at offset (range for RANGE; pitch, roll for
          * ORIENT; all three for ALL). Max bytes: 7 (RANGE), 18 (ORIENT), 25 (ALL).
          * @return New offset after writing.
          */
-        [[deprecated("Use logReading(Print&)")]]
-        uint16_t takeRawReading(char* buf, uint16_t offset);
+  [[deprecated("Use logReading(Print&)")]] uint16_t takeRawReading(char* buf, uint16_t offset);
 
-        /** @deprecated Use endReadings(). */
-        [[deprecated("Use endReadings()")]]
-        void endRawReadings();
+  /** @deprecated Use endReadings(). */
+  [[deprecated("Use endReadings()")]] void endRawReadings();
 
-    private:
+private:
 
-        // The Schema 1 device protocol (identity gates, handshake, batches, faults): NW_Core.
-        NW_Device _dev;
-        /** @brief Chip-select mask for a component: bit 0 LiDAR, bit 1 accelerometer. */
-        static uint8_t _chips(uint8_t component);
-        // Configuration
-        NW_ReadingsConfig _distanceCfg;    // readings per updateMeasurements() and stats columns, LiDAR
-        NW_ReadingsConfig _orientationCfg;   // accelerometer
-        bool _accelerationColumns = false;   // the g vector's components: off unless asked for
-        bool _magnitudeColumns    = false;
-        bool _tiltColumns         = false;
+  // The Schema 1 device protocol (identity gates, handshake, batches, faults): NW_Core.
+  NW_Device _dev;
+  /** @brief Chip-select mask for a component: bit 0 LiDAR, bit 1 accelerometer. */
+  static uint8_t _chips(uint8_t component);
+  // Configuration
+  NW_ReadingsConfig _distanceCfg;     // readings per updateMeasurements() and stats columns, LiDAR
+  NW_ReadingsConfig _orientationCfg;  // accelerometer
+  bool _accelerationColumns = false;  // the g vector's components: off unless asked for
+  bool _magnitudeColumns = false;
+  bool _tiltColumns = false;
 
-        // Stored measurements and statistics.
-        // All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.
-        float _distance = APIS_NOT_MEASURED;
-        float   _pitch = APIS_NOT_MEASURED;
-        float   _roll  = APIS_NOT_MEASURED;
-        float   _accelX = APIS_NOT_MEASURED;   // last reading, m/s^2
-        float   _accelY = APIS_NOT_MEASURED;
-        float   _accelZ = APIS_NOT_MEASURED;
-        float   _magnitude = APIS_NOT_MEASURED;  // burst mean, m/s^2
-        float   _tilt      = APIS_NOT_MEASURED;  // burst mean, deg
+  // Stored measurements and statistics.
+  // All initialised to APIS_NOT_MEASURED; set to APIS_ERROR on error.
+  float _distance = APIS_NOT_MEASURED;
+  float _pitch = APIS_NOT_MEASURED;
+  float _roll = APIS_NOT_MEASURED;
+  float _accelX = APIS_NOT_MEASURED;  // last reading, m/s^2
+  float _accelY = APIS_NOT_MEASURED;
+  float _accelZ = APIS_NOT_MEASURED;
+  float _magnitude = APIS_NOT_MEASURED;  // burst mean, m/s^2
+  float _tilt = APIS_NOT_MEASURED;       // burst mean, deg
 
-        // Range statistics
+  // Range statistics
 
-        // Orientation statistics
+  // Orientation statistics
 
-        // Readings behind the current statistics (set by updateMeasurements):
-        // one array per measurement, native type, oldest first, and the count
-        // of valid entries.
-        // One storage path: every acquisition appends here (updateDistance(),
-        // updateOrientation(), whether from updateMeasurements() or logReading());
-        // the statistics getters read the arrays; updateMeasurements() and
-        // beginReadings() start a fresh set. (NW_Core)
-        NW_Readings<int16_t, APIS_RANGE_CAPACITY> _distanceReadings;
-        NW_Readings<float, APIS_ORIENT_CAPACITY>  _pitchReadings;
-        NW_Readings<float, APIS_ORIENT_CAPACITY>  _rollReadings;
-        NW_Readings<float, APIS_ORIENT_CAPACITY>  _magnitudeReadings;
-        NW_Readings<float, APIS_ORIENT_CAPACITY>  _tiltReadings;
+  // Readings behind the current statistics (set by updateMeasurements):
+  // one array per measurement, native type, oldest first, and the count
+  // of valid entries.
+  // One storage path: every acquisition appends here (updateDistance(),
+  // updateOrientation(), whether from updateMeasurements() or logReading());
+  // the statistics getters read the arrays; updateMeasurements() and
+  // beginReadings() start a fresh set. (NW_Core)
+  NW_Readings<int16_t, APIS_RANGE_CAPACITY> _distanceReadings;
+  NW_Readings<float, APIS_ORIENT_CAPACITY> _pitchReadings;
+  NW_Readings<float, APIS_ORIENT_CAPACITY> _rollReadings;
+  NW_Readings<float, APIS_ORIENT_CAPACITY> _magnitudeReadings;
+  NW_Readings<float, APIS_ORIENT_CAPACITY> _tiltReadings;
 
-        // LiDAR Lite signal strength; updated by updateDistance()
-        uint8_t _signalStrength = 0;
-        // Accelerometer temperature digits (relative); updated by updateOrientation()
-        int16_t _accelerometerTemp = APIS_NOT_MEASURED;
-        int16_t _zeroTemp  = APIS_NOT_MEASURED;
-        // Zero generation carried by the last orientation reading (begin() seeds it
-        // from Page 1), and whether it moved between the last two readings
-        uint16_t _zeroGen = 0;
-        bool _zeroChanged = false;
+  // LiDAR Lite signal strength; updated by updateDistance()
+  uint8_t _signalStrength = 0;
+  // Accelerometer temperature digits (relative); updated by updateOrientation()
+  int16_t _accelerometerTemp = APIS_NOT_MEASURED;
+  int16_t _zeroTemp = APIS_NOT_MEASURED;
+  // Zero generation carried by the last orientation reading (begin() seeds it
+  // from Page 1), and whether it moved between the last two readings
+  uint16_t _zeroGen = 0;
+  bool _zeroChanged = false;
 
-        // Sensor sensitivity; set initially to default "balanced" mode
-        SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
+  // Sensor sensitivity; set initially to default "balanced" mode
+  SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
 
-        // Chips covered by the current run of readings (beginReadings)
-        uint8_t _rawComponent = ALL;
+  // Chips covered by the current run of readings (beginReadings)
+  uint8_t _rawComponent = ALL;
 };
 
 // Deprecated component selectors (v0.1.x): the class-scoped Apis::ALL,
 // Apis::RANGE, Apis::ORIENT replace them. Kept so existing sketches compile.
 #ifndef NW_READING_ALL
-  #define NW_READING_ALL       Apis::ALL
-  #define NW_READING_PRIMARY   Apis::RANGE
-  #define NW_READING_SECONDARY Apis::ORIENT
+#define NW_READING_ALL Apis::ALL
+#define NW_READING_PRIMARY Apis::RANGE
+#define NW_READING_SECONDARY Apis::ORIENT
 #endif
-#define NW_READING_RANGE  NW_READING_PRIMARY
+#define NW_READING_RANGE NW_READING_PRIMARY
 #define NW_READING_ORIENT NW_READING_SECONDARY
 
 /** @deprecated Use Apis::DEFAULT_ADDRESS. Every NW library defined this same macro
