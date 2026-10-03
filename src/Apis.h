@@ -85,14 +85,14 @@ enum SensitivityMode : uint8_t {
                                ///<   longer maximum range, slower throughput.
 };
 
-/// Sentinel returned by all getters and printed by getString() when a
+/// Sentinel returned by all getters and printed by printDataRow() when a
 /// measurement fails due to hardware fault, I2C failure, or out-of-range
 /// reading. Applies to all measurement types: range, pitch, roll, and all
 /// derived statistics (mean, std, sterr). The same value as NW_ERROR, which
 /// every NW library uses; APIS_ERROR is the Apis spelling of it.
 #define APIS_ERROR        NW_ERROR
 
-/// Sentinel returned by all getters and printed by getString() when begin()
+/// Sentinel returned by all getters and printed by printDataRow() when begin()
 /// has been called but no successful updateMeasurements() (or
 /// updateDistance()/updateOrientation()) has yet completed. Distinct from
 /// APIS_ERROR so callers can tell the difference between "the sensor failed"
@@ -147,13 +147,13 @@ class Apis : public NW_Sensor
          * Uses Welford's online algorithm: O(1) memory regardless of count.
          * FIX: Independent readings require firmware support for on-demand
          * triggering; current firmware caches the value each loop (~200 ms).
-         * @param rangeStats If true, getString() includes range std and sterr.
+         * @param rangeStats If true, printDataRow() includes range std and sterr.
          * Only meaningful when nRangeReadings > 1.
          * @param nOrientReadings Number of orientation readings to average
          * (default 1).
          * FIX: Independent readings require firmware support; current firmware
          * caches accelerometer values each loop (~200 ms).
-         * @param orientStats If true, getString() includes orientation std and
+         * @param orientStats If true, printDataRow() includes orientation std and
          * sterr. Only meaningful when nOrientReadings > 1.
          */
         Apis(uint16_t nRangeReadings = 1, bool rangeStats = false,
@@ -190,17 +190,17 @@ class Apis : public NW_Sensor
          * @return The number actually set.
          */
         uint16_t setDistanceReadings(uint16_t n);
-        /** @brief Enable or disable range std and sterr in getString(). */
+        /** @brief Enable or disable range std and sterr in printDataRow(). */
         void setDistanceStats(bool enable);
         /** @brief Set the number of orientation readings per updateMeasurements(). Clamped to APIS_ORIENT_CAPACITY. */
         uint16_t setOrientationReadings(uint16_t n);
-        /** @brief Include the g vector's X, Y and Z columns in getString() and getHeader(). Off by default. */
+        /** @brief Include the g vector's X, Y and Z columns in printDataRow() and printDataHeader(). Off by default. */
         void setAccelerationColumns(bool enable);
         /** @brief Include the acceleration magnitude column, and its statistics when orientation statistics are on. Off by default. */
         void setMagnitudeColumns(bool enable);
         /** @brief Include the tilt column, and its statistics when orientation statistics are on. Off by default. */
         void setTiltColumns(bool enable);
-        /** @brief Enable or disable orientation std and sterr in getString(). */
+        /** @brief Enable or disable orientation std and sterr in printDataRow(). */
         void setOrientationStats(bool enable);
         /**
          * @brief Change the rangefinder sensitivity mode after begin().
@@ -275,7 +275,6 @@ class Apis : public NW_Sensor
          * chip then kind: "LiDARTimeout", "AccelNotAnswering", "UnitRestarted";
          * "UnitNone" when there is no fault (check anyFault() first).
          */
-        String reportNote();
         /**
          * @brief Print one status line for a logger's status file: name, serial,
          * versions, the last report (code and note), and Pages 0, 1 and 2 (identity, calibration, data) in hex,
@@ -293,7 +292,6 @@ class Apis : public NW_Sensor
          * "NotSchema1", "WrongName", "OldFirmware", "ReadFailed"; "None"
          * after a successful begin().
          */
-        String beginFailure();
 
         /**
          * @brief Take one range reading [cm]: request it, wait for the device's
@@ -477,14 +475,9 @@ class Apis : public NW_Sensor
         float getRollSterr();
 
         /**
-         * @brief Return a comma-separated header matching getString() output.
-         * Includes statistics columns when rangeStats or orientStats are
-         * enabled and nReadings > 1.
-         */
-        /**
          * @brief Print the summary columns a logger writes: the means, with the
          * statistics columns each chip group has enabled.
-         * @details The streaming form of getHeader(), and its definition: that
+         * @details The streaming form of printDataHeader(), and its definition: that
          * function prints through this one into a String. Pass a `File` to write
          * the card, `Serial` to write the monitor. Distinct from printHeader(),
          * which is the burst interface and carries no statistics.
@@ -528,25 +521,6 @@ class Apis : public NW_Sensor
          * @return Bytes printed.
          */
         size_t printNote(Print& out, bool beginFailed = false) override;
-
-
-        String getHeader();
-
-        /**
-         * @brief Return comma-separated data values.
-         * @details This is the most likely function (alongside getHeader) for
-         * an end user to use.
-         * Always includes: Range [cm], Pitch [deg], Roll [deg], AccelT [C].
-         * Appends range std and sterr when rangeStats is true and
-         * nRangeReadings > 1.
-         * Appends orientation std and sterr when orientStats is true and
-         * nOrientReadings > 1.
-         * Error values are APIS_ERROR (-9999) for sensor errors and
-         * APIS_NOT_MEASURED (-9998) when no measurement has yet been taken.
-         * @param takeNewReadings if true, run updateMeasurements() before
-         * returning values. Otherwise, return stored values.
-         */
-        String getString(bool takeNewReadings = true);
 
         // --- Reading interface (NW standard) ---
         /**
@@ -613,11 +587,6 @@ class Apis : public NW_Sensor
 
     private:
 
-
-
-
-
-
         // The Schema 1 device protocol (identity gates, handshake, batches, faults): NW_Core.
         NW_Device _dev;
         /** @brief Chip-select mask for a component: bit 0 LiDAR, bit 1 accelerometer. */
@@ -657,7 +626,6 @@ class Apis : public NW_Sensor
         NW_Readings<float, APIS_ORIENT_CAPACITY>  _magnitudeReadings;
         NW_Readings<float, APIS_ORIENT_CAPACITY>  _tiltReadings;
 
-
         // LiDAR Lite signal strength; updated by updateDistance()
         uint8_t _signalStrength = 0;
         // Accelerometer temperature digits (relative); updated by updateOrientation()
@@ -670,8 +638,6 @@ class Apis : public NW_Sensor
 
         // Sensor sensitivity; set initially to default "balanced" mode
         SensitivityMode _sensitivity = SENSITIVITY_BALANCED;
-
-
 
         // Chips covered by the current run of readings (beginReadings)
         uint8_t _rawComponent = ALL;

@@ -48,8 +48,8 @@ printHeader RANGE: rangefinder~apis__distance [cm],rangefinder~apis__signal_stre
 logReading RANGE: -9999.00,0, trunc=0
 [not measured]
 string: -9998.00,0,-9998.00,-9998.00,-9998.00,0,
-[per-chip] RANGE ok=1 string(false): 300.00,0.00,0.00,50,-5.71,2.85,0.00,0.00,0.00,0.00,-9998.00,0, counts=4/2
-[per-chip] ORIENT ok=1 string(false): 300.00,0.00,0.00,50,0.00,2.86,0.00,0.00,0.00,0.00,-9998.00,0,
+[per-chip] RANGE ok=1 row(no acquire): 300.00,0.00,0.00,50,-5.71,2.85,0.00,0.00,0.00,0.00,-9998.00,0, counts=4/2
+[per-chip] ORIENT ok=1 row(no acquire): 300.00,0.00,0.00,50,0.00,2.86,0.00,0.00,0.00,0.00,-9998.00,0,
 [median] setDistanceReadings(7)=7 setDistanceReadings(1000)=64
 [median] count=7 mean=309.0000 median=309.0000 std=6.4807 pitchMedian=-5.7106 rollMedian=2.8482
 [groups] default header: rangefinder~apis__mean_of_distance [cm],rangefinder~apis__signal_strength [1],rangefinder~apis_accelerometer__mean_of_pitch_angle [deg],rangefinder~apis_accelerometer__mean_of_roll_angle [deg],rangefinder~apis_accelerometer__standard_deviation_of_pitch_angle [deg],rangefinder~apis_accelerometer__standard_error_of_pitch_angle [deg],rangefinder~apis_accelerometer__standard_deviation_of_roll_angle [deg],rangefinder~apis_accelerometer__standard_error_of_roll_angle [deg],rangefinder~apis_accelerometer__anomaly_of_temperature [Cel],rangefinder~apis_accelerometer__zero_generation [1],

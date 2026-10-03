@@ -20,10 +20,13 @@ void setup() {
     Serial.print("."); Serial.print(rangefinder.getHardwareMinor());
     Serial.print(", firmware patch "); Serial.println(rangefinder.getFirmwareVersion());
 
-    Serial.println(rangefinder.getHeader());
+    rangefinder.printDataHeader(Serial);  // straight to the port: no row is built in RAM
+    Serial.println();
 }
 
 void loop() {
-    Serial.println(rangefinder.getString());
+    rangefinder.updateMeasurements();    // take the readings
+    rangefinder.printDataRow(Serial);    // print what they left
+    Serial.println();
     delay(1000);
 }

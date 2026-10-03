@@ -4,30 +4,16 @@
 Margay Logger(MODEL_3v0);  // update to match your hardware version
 Apis rangefinder;
 
-uint8_t I2CVals[] = {Apis::DEFAULT_ADDRESS};
-String header = "";
 uint32_t updateRate = 60;  // seconds between readings
 
 void setup() {
-    header = rangefinder.getHeader();
-    Logger.begin(I2CVals, sizeof(I2CVals), header);
-    initialize();
+    // One line states the sensor, where it is, and its column order. The logger
+    // writes the file's header and every row from it, and notes a sensor that
+    // refused: this sketch composes nothing and keeps no header.
+    Logger.watch(rangefinder);
+    Logger.begin();
 }
 
 void loop() {
-    Logger.run(update, updateRate);
-}
-
-String update() {
-    bool ok = initialize();
-    if (!ok) Logger.note(rangefinder.beginFailure());  // e.g. NotAnswering
-    String row = rangefinder.getString();  // -9999 where a reading failed
-    if (ok && rangefinder.anyFault()) {
-        Logger.note(rangefinder.reportNote());  // e.g. LiDARTimeout
-    }
-    return row;
-}
-
-bool initialize() {
-    return rangefinder.begin();
+    Logger.run(updateRate);
 }

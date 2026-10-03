@@ -120,13 +120,7 @@ bool    Apis::reportIsFault()  { return _dev.report().isFault(); }
 uint8_t Apis::bootReportKind() { return _dev.bootReport().kind(); }
 void    Apis::clearBootReport() { _dev.clearBootReport(); }
 
-String Apis::reportNote() {
-    // One word for a data-table note: the chip, then the kind ("LiDARTimeout").
-    static const char* const chips[] = {"LiDAR", "Accel"};
-    return _dev.report().note(chips, 2);
-}
 
-String Apis::beginFailure() { return _dev.beginFailure(); }
 
 bool Apis::updateDistance() {
     if (_dev.batchFaulted(0x01)) {        // rest of a batch whose LiDAR did not power up
@@ -305,15 +299,6 @@ float Apis::getPitchSterr() { return _pitchReadings.sterr(); }
 float Apis::getRollStd()    { return _rollReadings.std(); }
 float Apis::getRollSterr()  { return _rollReadings.sterr(); }
 
-String Apis::getString(bool takeNewReadings) {
-    if (takeNewReadings) {
-        updateMeasurements();
-    }
-    String s;
-    NW_StringPrint p(s);
-    printDataRow(p);
-    return s;
-}
 
 int16_t Apis::getAccelerometerTemperatureADC() {
     return _accelerometerTemp;
@@ -361,9 +346,8 @@ size_t Apis::dumpZeros(Print& out) {
     return n;
 }
 
-// The summary interface: the columns a logger writes, streamed. getHeader() and
-// getString() are the same column set collected into a String, which keeps one
-// definition of it. See LIBRARY-DESIGN.md section 14.
+// The summary interface: the columns a logger writes, streamed straight into
+// the open file. See LIBRARY-DESIGN.md section 14.
 size_t Apis::printDataHeader(Print& out) {
     // The summary row: the distance and the angles are means over the readings
     // taken, which is why those carry the mean_of_ operator. The signal
@@ -493,12 +477,6 @@ size_t Apis::printDataRow(Print& out) {
     return n;
 }
 
-String Apis::getHeader() {
-    String h;
-    NW_StringPrint p(h);
-    printDataHeader(p);
-    return h;
-}
 
 void Apis::beginReadings(uint8_t component, uint16_t n) {
     _rawComponent = component;
@@ -517,7 +495,7 @@ void Apis::endReadings() {
 
 size_t Apis::printHeader(Print& out) {
     size_t n = 0;
-    // These carry the bare standard names rather than getHeader()'s mean_of_
+    // These carry the bare standard names rather than printDataHeader()'s mean_of_
     // forms, because each value here is one reading. The two sets differ for
     // that reason and no other: both come from the same rows of the CSV.
     if (_rawComponent & RANGE) {
@@ -634,5 +612,9 @@ bool Apis::acquire() {
 }
 
 size_t Apis::printNote(Print& out, bool beginFailed) {
-    return out.print(beginFailed ? beginFailure() : reportNote());
+    // One word for a data-table note: the chip, then the kind ("LiDARTimeout"),
+    // or which gate begin() refused at. Streamed, so no String is built for it.
+    static const char* const chips[] = {"LiDAR", "Accel"};
+    if (beginFailed) return _dev.printBeginFailure(out);
+    return _dev.report().printNote(out, chips, 2);
 }

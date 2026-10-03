@@ -1,5 +1,5 @@
 // Output-regression test for Apis_Library: compiles src/Apis.cpp against the
-// stubs in this directory and prints getHeader()/getString()/takeRawReading()
+// stubs in this directory and prints printDataHeader()/printDataRow()/takeRawReading()
 // for fixed register images. run.sh diffs the result against baseline.txt.
 #include "Arduino.h"
 #include "Wire.h"
@@ -47,10 +47,46 @@ static void loadZeros(uint16_t generation, const int16_t zeros[3][3], const int8
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"   // the deprecated names are under test on purpose
+// The four String functions are gone (section 15 family B). These helpers hold
+// this harness's output identical by replicating exactly what they did:
+// getString(true) acquired first, getString(false) did not, and the header
+// never did. 1024 because a full-width header of CSDMS standard names runs
+// past 1000 characters here; each helper refuses to hide a truncation.
+static const char* head(Apis& a) {
+    static char b[2048];
+    NW_BufferPrint p(b, sizeof b);
+    a.printDataHeader(p);
+    if (p.truncated()) printf("  TRUNCATED: head() needs a bigger buffer\n");
+    return b;
+}
+
+static const char* row(Apis& a, bool takeNewReadings = true) {
+    if (takeNewReadings) a.updateMeasurements();
+    static char b[2048];
+    NW_BufferPrint p(b, sizeof b);
+    a.printDataRow(p);
+    if (p.truncated()) printf("  TRUNCATED: row() needs a bigger buffer\n");
+    return b;
+}
+
+static const char* note(Apis& a, bool beginFailed = false) {
+    // Two buffers in rotation: one printf takes both a report word and a begin
+    // failure, and a single static would have the second overwrite the first
+    // before either is printed.
+    static char buffers[2][64];
+    static uint8_t which = 0;
+    char* b = buffers[which];
+    which = (uint8_t)(1 - which);
+    NW_BufferPrint p(b, sizeof buffers[0]);
+    a.printNote(p, beginFailed);
+    if (p.truncated()) printf("  TRUNCATED: note() needs a bigger buffer\n");
+    return b;
+}
+
 static void report(const char* name, Apis& a) {
     printf("[%s]\n", name);
-    printf("header: %s\n", a.getHeader().c_str());
-    printf("string: %s\n", a.getString().c_str());
+    printf("header: %s\n", head(a));
+    printf("string: %s\n", row(a));
     char buf[64] = {0}; uint16_t o = 0;
     a.beginRawReadings(NW_READING_ALL); o = a.takeRawReading(buf, 0); a.endRawReadings();
     printf("raw ALL (%u bytes): %s\n", o, buf);
@@ -117,9 +153,9 @@ int main() {
     loadImage(-1, 0, -1, -1, -1, 0, 0, 0);
     { Apis a(3, true, 1, false); a.begin(); report("errors: range<0, accel 0xFFFF", a); }
 
-    // 5. Before any measurement: getString(false) prints the not-measured sentinels.
+    // 5. Before any measurement: a row without acquiring prints the not-measured sentinels.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
-    { Apis a; a.begin(); printf("[not measured]\nstring: %s\n", a.getString(false).c_str()); }
+    { Apis a; a.begin(); printf("[not measured]\nstring: %s\n", row(a, false)); }
 
     // 5b. Per-chip reading: RANGE alone must not touch pitch/roll; counts reported.
     loadImage(400, 50, 100, 50, 1000, 0, 0, 0);
@@ -127,10 +163,10 @@ int main() {
       Wire.image[0x48] = 0x2C; Wire.image[0x49] = 0x01;   // range -> 300
       Wire.image[0x50] = 0x00; Wire.image[0x51] = 0x00;   // ax -> 0 (would change pitch if read)
       bool ok = a.updateMeasurements(Apis::RANGE);
-      printf("[per-chip] RANGE ok=%d string(false): %s counts=%u/%u\n", ok, a.getString(false).c_str(),
+      printf("[per-chip] RANGE ok=%d row(no acquire): %s counts=%u/%u\n", ok, row(a, false),
              a.getDistanceCount(), a.getOrientationCount());
       ok = a.updateMeasurements(Apis::ORIENT);
-      printf("[per-chip] ORIENT ok=%d string(false): %s\n", ok, a.getString(false).c_str()); }
+      printf("[per-chip] ORIENT ok=%d row(no acquire): %s\n", ok, row(a, false)); }
 
     // 5b2. Medians and clamping: 7 range readings 300..318 step 3 (median 309), capacity clamp.
     loadImage(300, 90, 100, 50, 1000, 0, 0, 0);
@@ -148,22 +184,22 @@ int main() {
     loadImage(1234, 77, 200, -150, 980, 10, -5, 1000);
     {
         Apis a(1, false, 3, true); a.begin();
-        printf("[groups] default header: %s\n", a.getHeader().c_str());
+        printf("[groups] default header: %s\n", head(a));
         a.setAccelerationColumns(true); a.setMagnitudeColumns(true); a.setTiltColumns(true);
         a.updateMeasurements();
-        printf("[groups] all on header:  %s\n", a.getHeader().c_str());
-        printf("[groups] all on string:  %s\n", a.getString(false).c_str());
+        printf("[groups] all on header:  %s\n", head(a));
+        printf("[groups] all on string:  %s\n", row(a, false));
         a.setAccelerationColumns(false);
-        printf("[groups] accel off:      %s\n", a.getHeader().c_str());
+        printf("[groups] accel off:      %s\n", head(a));
         // The invariant that matters: a header cell for every value, in every
         // combination of the groups. A file whose columns and labels disagree
         // is worse than one with fewer columns.
         for (int mask = 0; mask < 8; mask++) {
             a.setAccelerationColumns(mask & 1); a.setMagnitudeColumns(mask & 2); a.setTiltColumns(mask & 4);
-            String head = a.getHeader(), line = a.getString(false);   // held: c_str() on a temporary dangles
+            const char* h = head(a); const char* line = row(a, false);
             int hc = 0, sc = 0;
-            for (const char* q = head.c_str(); *q; q++) if (*q == ',') hc++;
-            for (const char* q = line.c_str(); *q; q++) if (*q == ',') sc++;
+            for (const char* q = h; *q; q++) if (*q == ',') hc++;
+            for (const char* q = line; *q; q++) if (*q == ',') sc++;
             printf("[groups] mask %d: %d labels, %d values%s\n", mask, hc, sc, hc == sc ? "" : "  MISMATCH");
         }
     }
@@ -193,23 +229,23 @@ int main() {
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0xE6; };   // clean reading; unit: restarted since configured
       a.updateDistance(); BufferPrint bp2(pb, sizeof pb); a.printReport(bp2);
       printf("[faults] any=%d chip=%u kind=%u text='%s'\n", a.anyFault(), a.reportChip(), a.reportKind(), pb);
-      printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", a.reportNote().c_str(), a.beginFailure().c_str());
+      printf("[faults] note='%s' (unit reset); beginFailure='%s'\n", note(a), note(a, true));
       onReading = [](TwoWire& w) { w.image[0x40] = 0x85; w.image[0x47] = 0x21; };   // accelerometer: not answering
-      a.updateDistance(); printf("[faults] note='%s' (accel no ack)\n", a.reportNote().c_str());
+      a.updateDistance(); printf("[faults] note='%s' (accel no ack)\n", note(a));
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0x29; };   // clean reading; accelerometer: calibration stored (a notice)
-      a.updateDistance(); printf("[notice] any=%d chip=%u kind=%u note='%s' (calibration stored: no status bit, data stand)\n", a.anyFault(), a.reportChip(), a.reportKind(), a.reportNote().c_str());
+      a.updateDistance(); printf("[notice] any=%d chip=%u kind=%u note='%s' (calibration stored: no status bit, data stand)\n", a.anyFault(), a.reportChip(), a.reportKind(), note(a));
       onReading = nullptr; }
     // 5e. The boot report: begin() reads Block 0 before its first write, so a unit reset latched at boot is seen.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x47] = 0xE6;
-    { Apis a; a.begin(); printf("[boot report] note='%s' after begin()", a.reportNote().c_str());
-      a.updateDistance(); printf("; after the first reading: '%s'\n", a.reportNote().c_str()); }
+    { Apis a; a.begin(); printf("[boot report] note='%s' after begin()", note(a));
+      a.updateDistance(); printf("; after the first reading: '%s'\n", note(a)); }
     // 5f. The status line for a logger's status file, after a calibration-stored notice.
     { Apis a; a.begin(); char sb[320];
       onReading = [](TwoWire& w) { w.image[0x40] = 0x01; w.image[0x47] = 0x29; }; a.updateOrientation(); onReading = nullptr;
       BufferPrint sp(sb, sizeof sb); size_t k = a.printStatus(sp); printf("[status] %zu bytes: %s\n", k, sb); }
     { Apis a; a.begin();
       onReading = [](TwoWire& w) { w.image[0x40] = 0x81; w.image[0x47] = 0x51; };   // chip 2, kind 17 (device-specific)
-      a.updateDistance(); printf("[faults] note='%s' (chip 2 kind 17)\n", a.reportNote().c_str());
+      a.updateDistance(); printf("[faults] note='%s' (chip 2 kind 17)\n", note(a));
       onReading = nullptr; }
 
     // 6. Batches: the readings-requested word reaches the device before the readings.
@@ -242,15 +278,15 @@ int main() {
 
     // 8. begin() gates: wrong name, wrong schema, firmware too old, and the versions it reports.
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0); Wire.image[0x01] = 'X';
-    { Apis a; bool ok = a.begin(); printf("[wrong name] begin=%d failure=%s\n", ok, a.beginFailure().c_str()); }
+    { Apis a; bool ok = a.begin(); printf("[wrong name] begin=%d failure=%s\n", ok, note(a, true)); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0x00);
-    { Apis a; bool ok = a.begin(); printf("[schema 0x00] begin=%d fw=%u failure=%s\n", ok, a.getFirmwareVersion(), a.beginFailure().c_str()); }
+    { Apis a; bool ok = a.begin(); printf("[schema 0x00] begin=%d fw=%u failure=%s\n", ok, a.getFirmwareVersion(), note(a, true)); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 1, 0xFF);
-    { Apis a; bool ok = a.begin(); printf("[schema 0xFF unprovisioned] begin=%d failure=%s\n", ok, a.beginFailure().c_str()); }
+    { Apis a; bool ok = a.begin(); printf("[schema 0xFF unprovisioned] begin=%d failure=%s\n", ok, note(a, true)); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0, 0);
-    { Apis a; bool ok = a.begin(); printf("[fw patch 0 < min %d] begin=%d fw=%u failure=%s\n", APIS_FW_MIN_PATCH, ok, a.getFirmwareVersion(), a.beginFailure().c_str()); }
+    { Apis a; bool ok = a.begin(); printf("[fw patch 0 < min %d] begin=%d fw=%u failure=%s\n", APIS_FW_MIN_PATCH, ok, a.getFirmwareVersion(), note(a, true)); }
     loadImage(250, 120, 0, 0, 1024, 0, 0, 0);
-    { Apis a; bool ok = a.begin(); printf("[versions] begin=%d hw=%u.%u fw=%u failure=%s\n", ok, a.getHardwareMajor(), a.getHardwareMinor(), a.getFirmwareVersion(), a.beginFailure().c_str()); }
+    { Apis a; bool ok = a.begin(); printf("[versions] begin=%d hw=%u.%u fw=%u failure=%s\n", ok, a.getHardwareMajor(), a.getHardwareMinor(), a.getFirmwareVersion(), note(a, true)); }
 
     // 9. The record of zeros (firmware patch 5): the generation rides with the reading;
     //    zeroChanged() flags the reading after the image's generation moves, once.
