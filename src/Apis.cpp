@@ -621,8 +621,12 @@ void Apis::endRawReadings() {
 // The logger's three calls on a watched sensor: come back on the bus, take the
 // readings, and give up a word when something happened. See LIBRARY-DESIGN.md
 // section 14 step 4.
-bool Apis::wake() {
-    return begin(_dev.address());
+uint8_t Apis::defaultAddress() const {
+    return DEFAULT_ADDRESS;
+}
+
+bool Apis::wake(uint8_t address) {
+    return begin(address);
 }
 
 bool Apis::acquire() {
