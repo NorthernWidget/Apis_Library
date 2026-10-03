@@ -617,3 +617,18 @@ uint16_t Apis::takeRawReading(char* buf, uint16_t offset) {
 void Apis::endRawReadings() {
     // No cleanup required currently
 }
+
+// The logger's three calls on a watched sensor: come back on the bus, take the
+// readings, and give up a word when something happened. See LIBRARY-DESIGN.md
+// section 14 step 4.
+bool Apis::wake() {
+    return begin(_dev.address());
+}
+
+bool Apis::acquire() {
+    return updateMeasurements();
+}
+
+size_t Apis::printNote(Print& out, bool beginFailed) {
+    return out.print(beginFailed ? beginFailure() : reportNote());
+}
